@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+        Remove this if you use the .htaccess -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <title>accordion</title>
+        <meta name="description" content="" />
+        <meta name="generator" content="Studio 3 http://aptana.com/" />
+        <meta name="author" content="vicanso" />
+
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.theme.css" />
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.accordion.css" />
+        <style type="text/css">
+        *
+        {
+            margin:0;
+            padding:0;
+        }
+        body
+        {
+            font-family: "Times New Roman", "\5B8B\4F53";
+            font-size:14px;
+            line-height:18px;
+        }
+        #infor h3
+        {
+            cursor:pointer;
+        }
+        #infor p.attr
+        {
+            display:none;
+            margin:5px 0;
+        }
+        #infor span.note
+        {
+            color:#a0a0a0;
+            font-size:12px;
+        }
+        #demo1, #demo2, #demo3
+        {
+            width:300px;
+            margin:20px;
+            float:left;
+        }
+        #demo2 .uiAccordionTitleBar, #demo2 .uiTitleBar 
+        {
+        	color:#0f0f0f;
+        }
+        #demo1 p, #demo2 p, #demo3 p
+        {
+            text-indent:2em;
+        }
+        </style>
+    </head>
+    <body>
+        <h3>accordion</h3>
+        <div id="demo1">
+            <div title="WebM格式大提升WebM格式大提升WebM格式大提升WebM格式大提升">
+                <p>
+                    今年早期，Google终于做出了一件众所期待的行动：发布了开源的VP8编码器。它成为WebM项目的一部分，后者在一个Matroshka容器中结合了VP8视频与Vorbis音频。WebM项目的产品管理者John Luther给出了项目进展情况——情势非常好。
+                </p>
+            </div>
+            <div title="WebM格式大提升WebM格式大提升WebM格式大提升WebM格式大提升">
+                <p>
+                    WebM见证了一个非常令人难以置信的接受率。它以这样或那样的方式被所有的桌面浏览器所支持；天生就在Firefox, Opera 和 Chrome可用， IE9和Safari用户安装一个编码器也便可用。它成为了Ffmpeg的一部分，运行在x86, ARM 和 PowerPC上，被Windows, Mac OS X, Linux, 和 Android所支持。还有支持DirectShow, Windows Media Foundation, QuickTime 和 gstreamer的编码器。
+                </p>
+            </div>
+            <div title="WebM格式大提升">
+                <p>
+                    已经有20个新的合作伙伴了，还有更多伙伴待加入。可以想见的是，WebM前头有着一个非常明媚的春光。第一款VP8 ASIC芯片有望在来年第一季问世，几乎所有大的芯片制造商将有提供。
+                </p>
+            </div>
+            <div title="WebM格式大提升">
+                <p>
+                    而且，80% YouTube日常视频已经采用了WebM格式。“我们在努力转码整个YouTube视频库，”Luther说。当然，很少有人看的视频在待转化列表中会排较低优先级。但是最终，它们也会被转码成WebM。
+                </p>
+            </div>
+            <div title="WebM格式大提升">
+                <p>
+                    那，WebM所持的发展前路将有怎样一幅图景呢？主要会是大量的改进。Google正努力提升解码速度——当前版本饱经争议的弱点，使之有平均28%的提高。他们同时致力于改善相关开发工具。
+                </p>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.base.core.js"></script>
+    <script type="text/javascript" src="js/jquery.base.loader.js"></script>
+    <script type="text/javascript" src="js/jquery.base.effect.js"></script>
+    <script type="text/javascript" src="js/jquery.base.widget.js"></script>
+    <script type="text/javascript" src="js/jquery.base.accordion.js"></script>
+    <script type="text/javascript">
+        $(function()
+        {
+            $("#demo1").accordion({
+                titleIcon : "titleIcon",
+                title : "测试一"
+            });
+        });
+    </script>
+</html>

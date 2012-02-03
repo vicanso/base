@@ -1,0 +1,168 @@
+.uiGrid
+{
+
+}
+.uiGrid > .uiTitleBar
+{
+    height:30px;
+    position:relative;
+}
+.uiGrid > .uiTitleBar > .uiTitle
+{
+    height:100%;
+    width:70%;
+    line-height:30px;
+    padding-left:10px;
+    color:#f0f0f0;
+    display:block;
+    overflow:hidden;
+}
+.uiGrid > .uiTitleBar > .uiTitle > .uiTitleIcon
+{
+    width:24px;
+    height:30px;
+    display:block;
+    float:left;
+}
+.uiGrid > .uiTitleBar > .uiGridButtonSet
+{
+    position:absolute;
+    width:48px;
+    right:5px;
+    top:0;
+    height:100%;
+}
+.uiGrid > .uiContent
+{
+    width:100%;
+    position:relative;
+    overflow:hidden;
+}
+.uiGrid > .uiContent > .uiColumnTable .uiSortIcon
+{
+    display:block;
+    float:right;
+    height:30px;
+    margin-right:5px;
+    visibility:hidden;
+}
+.uiGrid > .uiContent > .uiDataContainer
+{
+    overflow:auto;
+}
+.uiGrid > .uiContent > .uiDataContainer tr.uiTrOdd
+{
+    background:#eff2ff;
+}
+.uiGrid > .uiContent > .uiDataContainer tr.uiTrEven
+{
+    background:#f7f7f7;
+}
+.uiGrid > .uiContent > .uiDataContainer tr.uiTrHover
+{
+    background:url(images/gradientBG.png) repeat-x 0 -330px;
+}
+.uiGrid > .uiContent > .uiSeparator
+{
+    position:absolute;
+    top:0;
+    height:100%;
+    width:4px;
+    cursor:col-resize;
+    z-index:9;
+    -moz-user-select:none;
+    -webkit-user-select:none;
+    user-select:none;
+}
+.uiGrid > .uiContent > .uiSeparatorShow, .uiGrid > .uiContent > .uiSeparator:hover
+{
+    background:url(images/separator.png) repeat-y;
+}
+.uiGrid > .uiContent table
+{
+    table-layout:fixed;
+    border-collapse:collapse;
+}
+.uiGrid > .uiContent table td
+{
+    font-weight:500;
+    text-align:center;
+    font-size:18px;
+    line-height:30px;
+    cursor:pointer;
+    border:1px solid #dddddd;
+    vertical-align:middle;
+    text-overflow:ellipsis;
+    word-break:keep-all;
+    white-space:nowrap;
+    overflow:hidden;
+}
+.uiGrid > .uiGridButtonSet
+{
+    height:30px;
+    width:100%;
+}
+.uiGrid > .uiGridButtonSet > .uiBtnSeparator
+{
+    border-left:1px solid #ccc;
+    border-right:1px solid #fff;
+    float:left;
+    height:24px;
+    margin:3px;
+}
+.uiGrid > .uiGridButtonSet > .uiPageShowSelect
+{
+    margin:3px 5px;
+    float:left;
+}
+.uiGrid > .uiGridButtonSet > .uiPageSetting
+{
+    margin:3px 5px;
+    float:left;
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer
+{
+    float:left;
+    margin:3px;
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer:hover
+{
+    margin:2px;
+    border:1px solid #ccc;
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiGridButton
+{
+    cursor:pointer;
+    margin:3px;
+    width:18px;
+    height:18px;
+    background:url(images/angelaSmallIcon.png) no-repeat
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiSearchBtn
+{
+    background:url(images/search.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiPrevBtn
+{
+    background:url(images/goLeft.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiNextBtn
+{
+    background:url(images/goRight.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiGoToFirstBtn
+{
+    background:url(images/goFirst.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiGoToLastBtn
+{
+    background:url(images/goLast.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiRefreshBtn
+{
+    background:url(images/refresh.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiLoading
+{
+    background:url(images/load.gif) no-repeat center;
+}

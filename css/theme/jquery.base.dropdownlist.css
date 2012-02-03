@@ -1,0 +1,6 @@
+.uiDorpDownList{margin:0;padding:0;}.uiDorpDownList>.uiDropDown,.uiDorpDownList>.uiDropDown>span{height:30px;line-height:30px;}
+.uiDorpDownList>.uiDropDown{padding:0 5px;}.uiDorpDownList>.uiDropDown>span{display:block;overflow:hidden;}
+.uiDorpDownList>.uiDropDown>.uiDropDownBtn{float:right;padding:0 3px;width:12px;cursor:pointer;border-style:none;border-left-style:solid;}
+.uiDorpDownList>.uiDropDown>input{display:block;height:24px;line-height:24px;}
+.uiDorpDownList>.uiSelectList{position:absolute;margin:3px 0 0 0;z-index:9;overflow:hidden;padding:2px;list-style:none;text-align:center;}.uiDorpDownList>.uiSelectList>li{height:30px;cursor:pointer;display:block;padding:0 10px;width:100px;line-height:30px;overflow:hidden;}.uiDorpDownList>.uiSelectList>li>.uiSelected{display:none;}
+.uiDorpDownList>.uiSelectList>li.selected>.uiSelected{display:block;float:left;}

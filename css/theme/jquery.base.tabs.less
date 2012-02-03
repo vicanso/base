@@ -1,0 +1,71 @@
+.uiTabs{
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    >.uiTitleBar{
+        height:30px;
+        position:relative;
+        >.uiRightArrow, >.uiLeftArrow{
+            position:absolute;
+            top:0px;
+            width:9px;
+            height:18px;
+            z-index:99;
+            display:none;
+            cursor:pointer;
+        }
+        >.uiRightArrow{
+            right:0px;
+        }
+        >.uiLeftArrow{
+            left:0px;
+        }
+    }
+    >.uiTabsList{
+        overflow:hidden;
+        width:100%;
+        >.uiListContent{
+            position:absolute;
+        	width: 10000%;
+        	overflow:hidden;
+            >.uiTabsItemContainer{
+                overflow:hidden;
+                >.uiTabsItem{
+                    position:relative;
+                    display:inline-block;
+                	text-align:center;
+                	height:25px;
+                	line-height:25px;
+                	width:120px;
+                	margin:6px 0 0 20px;
+                	padding:2px;
+                	cursor:pointer;
+                    overflow:hidden;
+                    >.uiCloseItemBtn{
+                        position:absolute;
+                        height: 18px;
+                        width:18px;
+                        display:block;
+                        right:2px;
+                        top:2px;
+                        display:none;
+                    }
+                }
+                >.selected{
+                   background-color:white;
+                   color:#0f0f0f;
+                    >.uiCloseItemBtn{
+                        display: block;
+                    }
+                }
+                >.uiTabsItem{
+                    *display: inline;
+                }
+            }
+        }
+    }
+    >.uiTabsContent{
+        margin:5px;
+        overflow:auto;
+    }
+}

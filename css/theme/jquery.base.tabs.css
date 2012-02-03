@@ -1,0 +1,7 @@
+.uiTabs{margin:0;padding:0;overflow:hidden;}.uiTabs>.uiTitleBar{height:30px;position:relative;}.uiTabs>.uiTitleBar>.uiRightArrow,.uiTabs>.uiTitleBar>.uiLeftArrow{position:absolute;top:0px;width:9px;height:18px;z-index:99;display:none;cursor:pointer;}
+.uiTabs>.uiTitleBar>.uiRightArrow{right:0px;}
+.uiTabs>.uiTitleBar>.uiLeftArrow{left:0px;}
+.uiTabs>.uiTabsList{overflow:hidden;width:100%;}.uiTabs>.uiTabsList>.uiListContent{position:absolute;width:10000%;overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer{overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem{position:relative;display:inline-block;text-align:center;height:25px;line-height:25px;width:120px;margin:6px 0 0 20px;padding:2px;cursor:pointer;overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem>.uiCloseItemBtn{position:absolute;height:18px;width:18px;display:block;right:2px;top:2px;display:none;}
+.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.selected{background-color:white;color:#0f0f0f;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.selected>.uiCloseItemBtn{display:block;}
+.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem{*display:inline;}
+.uiTabs>.uiTabsContent{margin:5px;overflow:auto;}

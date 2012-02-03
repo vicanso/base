@@ -1,0 +1,65 @@
+@uiButtonHeight : 30px;
+.uiButtonFunc(@height : @uiButtonHeight, @padding : 20px){
+	height:@height;
+	line-height:@height;
+	text-align:center;
+	display:block;
+	cursor:pointer;
+    font-weight:500;
+    overflow:hidden;
+    padding:0 @padding;
+    float:left;
+}
+.uiIconFunc(@width : 24px){
+    float: left;
+    width:@width;
+}
+.uiButtonSet{
+    display:inline-block;
+    margin:0;
+    padding:0;
+    >.uiButton{
+        .uiButtonFunc;
+        >.uiIcon{
+            height: 100%;
+            .uiIconFunc;
+            margin-right: 5px;
+        }
+        >.uiIconFloatRight{
+            float:right;
+            margin-right: 5px;
+        }
+    }
+    >.uiImgButton{
+        .uiButtonFunc
+    }
+    >.uiImgRadio{
+        >.uiIcon{
+            .uiIconFunc;
+        }
+    }
+    >.uiImgRadioChecked
+    {
+        >.uiIcon{
+            .uiIconFunc;
+        }
+    }
+    >.uiImgCheckBox{
+        >.uiIcon{
+            .uiIconFunc;
+        }
+    }
+    >.uiImgCheckBoxChecked{
+        >.uiIcon{
+            .uiIconFunc;
+        }
+    }
+    >.uiButtonPressed{
+        line-height: @uiButtonHeight + 5
+    }
+}
+.uiButtonSet
+{
+   *display:inline;
+}
+

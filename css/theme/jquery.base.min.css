@@ -1,0 +1,440 @@
+.uiBlueGradientBG{color:#f0f0f0;background-color:#0f1e3b;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#315389), to(#0f1e3b));background-image:-moz-linear-gradient(top, #315389, #0f1e3b);background-image:-ms-linear-gradient(top, #315389, #0f1e3b);background-image:-webkit-linear-gradient(top, #315389, #0f1e3b);background-image:-o-linear-gradient(top, #315389, #0f1e3b);background-image:linear-gradient(top, #315389, #0f1e3b);}
+.uiBlackGradientBG{color:#f0f0f0;background-color:#000000;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#4d4c4c), to(#000000));background-image:-moz-linear-gradient(top, #4d4c4c, #000000);background-image:-ms-linear-gradient(top, #4d4c4c, #000000);background-image:-webkit-linear-gradient(top, #4d4c4c, #000000);background-image:-o-linear-gradient(top, #4d4c4c, #000000);background-image:linear-gradient(top, #4d4c4c, #000000);}
+.uiGreyGradientBG{color:#0f0f0f;background-color:#e6e6e6;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#f4f4f4), to(#e6e6e6));background-image:-moz-linear-gradient(top, #f4f4f4, #e6e6e6);background-image:-ms-linear-gradient(top, #f4f4f4, #e6e6e6);background-image:-webkit-linear-gradient(top, #f4f4f4, #e6e6e6);background-image:-o-linear-gradient(top, #f4f4f4, #e6e6e6);background-image:linear-gradient(top, #f4f4f4, #e6e6e6);}
+.uiLightBlueGradientBG{color:#f0f0f0;background-color:#0068e8;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0068e8));background-image:-moz-linear-gradient(top, #049cdb, #0068e8);background-image:-ms-linear-gradient(top, #049cdb, #0068e8);background-image:-webkit-linear-gradient(top, #049cdb, #0068e8);background-image:-o-linear-gradient(top, #049cdb, #0068e8);background-image:linear-gradient(top, #049cdb, #0068e8);}
+.uiRoyalBlueGradientBG{color:#f0f0f0;background-color:#3972bf;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#5f9dde), to(#3972bf));background-image:-moz-linear-gradient(top, #5f9dde, #3972bf);background-image:-ms-linear-gradient(top, #5f9dde, #3972bf);background-image:-webkit-linear-gradient(top, #5f9dde, #3972bf);background-image:-o-linear-gradient(top, #5f9dde, #3972bf);background-image:linear-gradient(top, #5f9dde, #3972bf);}
+.uiGoldenrodGradientBG{color:#f0f0f0;background-color:#2b261a;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#77746c), to(#2b261a));background-image:-moz-linear-gradient(top, #77746c, #2b261a);background-image:-ms-linear-gradient(top, #77746c, #2b261a);background-image:-webkit-linear-gradient(top, #77746c, #2b261a);background-image:-o-linear-gradient(top, #77746c, #2b261a);background-image:linear-gradient(top, #77746c, #2b261a);}
+.uiRedGradientBG{color:#f0f0f0;background-color:#800000;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#cd5c5c), to(#800000));background-image:-moz-linear-gradient(top, #cd5c5c, #800000);background-image:-ms-linear-gradient(top, #cd5c5c, #800000);background-image:-webkit-linear-gradient(top, #cd5c5c, #800000);background-image:-o-linear-gradient(top, #cd5c5c, #800000);background-image:linear-gradient(top, #cd5c5c, #800000);}
+.uiPurpleGradientBG{color:#f0f0f0;background-color:#4b0082;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#ba55d3), to(#4b0082));background-image:-moz-linear-gradient(top, #ba55d3, #4b0082);background-image:-ms-linear-gradient(top, #ba55d3, #4b0082);background-image:-webkit-linear-gradient(top, #ba55d3, #4b0082);background-image:-o-linear-gradient(top, #ba55d3, #4b0082);background-image:linear-gradient(top, #ba55d3, #4b0082);}
+.uiLightPurpleGradientBG{color:#f0f0f0;background-color:#483d8b;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#7b68ee), to(#483d8b));background-image:-moz-linear-gradient(top, #7b68ee, #483d8b);background-image:-ms-linear-gradient(top, #7b68ee, #483d8b);background-image:-webkit-linear-gradient(top, #7b68ee, #483d8b);background-image:-o-linear-gradient(top, #7b68ee, #483d8b);background-image:linear-gradient(top, #7b68ee, #483d8b);}
+.uiBlackBorder{border:1px solid #404040;}
+.uiBlackBigBorder{border:2px solid #404040;}
+.uiBlueBorder{border:1px solid #1d295f;}
+.uiBlueBigBorder{border:2px solid #1d295f;}
+.uiRedBorder{border:1px solid #cd5c5c;}
+.uiRedBigBorder{border:2px solid #cd5c5c;}
+.uiGreenBorder{border:1px solid #006400;}
+.uiGreenBigBorder{border:2px solid #006400;}
+.uiGreyBorder{border:1px solid #cccccc;}
+.uiGreyBigBorder{border:2px solid #cccccc;}
+.uiBorderNoTop{border-top-style:none;}
+.uiBorderNoBottom{border-bottom-style:none;}
+.uiBorderNoLeft{border-left-style:none;}
+.uiBorderNoRight{border-right-style:none;}
+.uiBorderTop{border-style:none;border-top-style:solid;}
+.uiBorderBottom{border-style:none;border-bottom-style:solid;}
+.uiBorderLeft{border-style:none;border-left-style:solid;}
+.uiBorderRight{border-style:none;border-right-style:solid;}
+.uiCornerTl{-moz-border-radius-topleft:4px;-webkit-border-top-left-radius:4px;border-top-left-radius:4px;}
+.uiCornerTr{-moz-border-radius-topright:4px;-webkit-border-top-right-radius:4px;border-top-right-radius:4px;}
+.uiCornerBl{-moz-border-radius-bottomleft:4px;-webkit-border-bottom-left-radius:4px;border-bottom-left-radius:4px;}
+.uiCornerBr{-moz-border-radius-bottomright:4px;-webkit-border-bottom-right-radius:4px;border-bottom-right-radius:4px;}
+.uiCornerTop{-moz-border-radius-topleft:4px;-webkit-border-top-left-radius:4px;border-top-left-radius:4px;-moz-border-radius-topright:4px;-webkit-border-top-right-radius:4px;border-top-right-radius:4px;}
+.uiCornerBottom{-moz-border-radius-bottomleft:4px;-webkit-border-bottom-left-radius:4px;border-bottom-left-radius:4px;-moz-border-radius-bottomright:4px;-webkit-border-bottom-right-radius:4px;border-bottom-right-radius:4px;}
+.uiCornerRight{-moz-border-radius-topright:4px;-webkit-border-top-right-radius:4px;border-top-right-radius:4px;-moz-border-radius-bottomright:4px;-webkit-border-bottom-right-radius:4px;border-bottom-right-radius:4px;}
+.uiCornerLeft{-moz-border-radius-topleft:4px;-webkit-border-top-left-radius:4px;border-top-left-radius:4px;-moz-border-radius-bottomleft:4px;-webkit-border-bottom-left-radius:4px;border-bottom-left-radius:4px;}
+.uiCornerAll{-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
+.uiBlackBoxShadow{-moz-box-shadow:1px 1px 3px #000000;-webkit-box-shadow:1px 1px 3px #000000;box-shadow:1px 1px 3px #000000;}
+.uiGreyBoxShadow{-moz-box-shadow:1px 1px 3px #a0a0a0;-webkit-box-shadow:1px 1px 3px #a0a0a0;box-shadow:1px 1px 3px #a0a0a0;}
+.uiBlueBoxShadow{-moz-box-shadow:1px 1px 3px #343950;-webkit-box-shadow:1px 1px 3px #343950;box-shadow:1px 1px 3px #343950;}
+.uiRedBoxShadow{-moz-box-shadow:1px 1px 3px #cd5c5c;-webkit-box-shadow:1px 1px 3px #cd5c5c;box-shadow:1px 1px 3px #cd5c5c;}
+.uiHidden{display:none;}
+.uiMask{position:fixed;width:100%;height:100%;left:0px;top:0px;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";filter:alpha(opacity=30);opacity:.3;z-index:99;background:#000;_position:absolute;}
+.uiWidgetDisalbed,.uiInactive{-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";filter:alpha(opacity=70);opacity:.7;}
+.uiSmallIcon{width:18px;height:100%;background-image:url(images/smallIcons.png);background-repeat:no-repeat;}
+.uiIcon{width:24px;height:100%;background-image:url(images/icons.png);background-repeat:no-repeat;}
+.uiPlus1Icon{background-position:0px center;}
+.uiPlus3Icon{background-position:-18px center;}
+.uiPlusIcon{background-position:-36px center;}
+.uiMinusIcon{background-position:-54px center;}
+.uiMinus1Icon{background-position:-72px center;}
+.uiMinus3Icon{background-position:-90px center;}
+.uiMinus4Icon{background-position:-108px center;}
+.uiRefreshIcon{background-position:-126px center;}
+.uiSmallcloseButtonIcon{background-position:-144px center;}
+.uiUncheckedIcon{background-position:-162px center;}
+.uiUnChildrenCheckedIcon{background-position:-180px center;}
+.uiSmallcloseButtonHoverIcon,.uiSmallcloseButtonIcon:hover{background-position:-198px center;}
+.uiSearchIcon{background-position:-216px center;}
+.uiSelectedIcon{background-position:-234px center;}
+.uiSeparatorIcon{background-position:-252px center;width:2px;}
+.uiCheckedIcon{background-position:-254px center;}
+.uiDropdownButtonIcon{background-position:-272px center;}
+.uiFileIcon{background-position:-290px center;}
+.uiArrowUpIcon{background-position:-308px center;width:13px;}
+.uiArrowDownIcon{background-position:-321px center;width:13px;}
+.uiArrowLeftIcon{background-position:-334px center;width:9px;}
+.uiArrowRightIcon{background-position:-343px center;width:9px;}
+.uiFolderIcon{background-position:-352px center;}
+.uiLine1Icon{background-position:-370px center;}
+.uiLine2Icon{background-position:-388px center;}
+.uiLine3Icon{background-position:-406px center;}
+.uiGoPrevIcon{background-position:-424px center;}
+.uiGoFirstIcon{background-position:-442px center;}
+.uiGoLastIcon{background-position:-460px center;}
+.uiGoNextIcon{background-position:-478px center;}
+.uiResizeButtonIcon{background-position:0px center;}
+.uiMinButtonIcon{background-position:-24px center;}
+.uiMinButtonHoverIcon,.uiMinButtonIcon:hover{background-position:-48px center;}
+.uiUncheckedButtonIcon{background-position:-72px center;}
+.uiResumeButtonIcon{background-position:-96px center;}
+.uiResumeButtonHoverIcon{background-position:-120px center;}
+.uiCheckedButtonIcon{background-position:-144px center;}
+.uiBackIcon{background-position:-168px center;width:50px;}
+.uiBackhoverIcon,.uiBackIcon:hover{background-position:-218px center;width:50px;}
+.uiCloseButtonIcon{background-position:-268px center;}
+.uiCloseButtonHoverIcon,.uiCloseButtonIcon:hover{background-position:-292px center;}
+.uiCicleIcon{background-position:-316px center;width:23px;}
+.uiUserBtn{cursor:pointer;height:100%;display:inline-block;}
+.uiUserBtn{*display:inline;}
+.uiResizable{position:absolute;bottom:0;right:0;width:24px;height:24px;background:url(images/icons.png) no-repeat 0 center;cursor:nw-resize;}
+.uiInteractionMask{z-index:9999;background:#eeeeee;position:absolute;}
+.uiDraggalbe{cursor:move;}
+.uiMoveCursor{cursor:move;}
+.uiNwResize{cursor:nw-resize;}
+.uiButtonSet{display:inline-block;margin:0;padding:0;}.uiButtonSet>.uiButton{height:30px;line-height:30px;text-align:center;display:block;cursor:pointer;font-weight:500;overflow:hidden;padding:0 20px;float:left;}.uiButtonSet>.uiButton>.uiIcon{height:100%;float:left;width:24px;margin-right:5px;}
+.uiButtonSet>.uiButton>.uiIconFloatRight{float:right;margin-right:5px;}
+.uiButtonSet>.uiImgButton{height:30px;line-height:30px;text-align:center;display:block;cursor:pointer;font-weight:500;overflow:hidden;padding:0 20px;float:left;}
+.uiButtonSet>.uiImgRadio>.uiIcon{float:left;width:24px;}
+.uiButtonSet>.uiImgRadioChecked>.uiIcon{float:left;width:24px;}
+.uiButtonSet>.uiImgCheckBox>.uiIcon{float:left;width:24px;}
+.uiButtonSet>.uiImgCheckBoxChecked>.uiIcon{float:left;width:24px;}
+.uiButtonSet>.uiButtonPressed{line-height:35px;}
+.uiButtonSet{*display:inline;}
+.uiScrollBar{z-index:99;}
+.uiSlide>.uiPanel{margin:0;padding:0;position:relative;height:100%;width:100%;cursor:pointer;}.uiSlide>.uiPanel>.uiSliderCross{position:absolute;overflow:hidden;}
+.uiSlide>.uiPanel>.uiSlider{position:absolute;overflow:hidden;}
+.uiSlide>.uiPanel>.uiImageSlider{width:23px;height:24px;}
+.uiSlide>.uiPanel>.uiDefaultSliderBG{background:white;}
+.uiAccordion{padding:0;margin:0;}.uiAccordion>.uiAccordionTitleBar{height:25px;line-height:25px;overflow:hidden;padding-left:10px;}.uiAccordion>.uiAccordionTitleBar>.uiTitleIcon{width:24px;display:block;height:100%;float:left;}
+.uiAccordion>.uiTitleBar{padding-left:10px;height:30px;line-height:30px;cursor:pointer;overflow:hidden;border-top:1px solid #0f0f0f;}.uiAccordion>.uiTitleBar>.uiUserBtn{float:right;margin:0 5px;}
+.uiAccordion>.uiContent{padding:5px;background:white;overflow:auto;}
+.uiDialog{margin:0;padding:0;overflow:hidden;}.uiDialog>.uiTitleBar{height:30px;line-height:30px;margin:2px;position:relative;}.uiDialog>.uiTitleBar>.uiTitle{height:100%;padding-left:10px;margin-right:48px;display:block;overflow:hidden;}.uiDialog>.uiTitleBar>.uiTitle>.uiTitleIcon{width:24px;height:30px;display:block;float:left;}
+.uiDialog>.uiTitleBar>.uiDialogButtonSet{position:absolute;right:5px;top:0;height:100%;}
+.uiDialog>.uiTitleBar>.uiButtonSet>.uiUserBtn{margin:0 1px;}
+.uiDialog>.uiContent{margin:10px;}
+.uiDialog>.uiButtonSet{float:right;margin:0px 10px 10px;}
+.uiTabs{margin:0;padding:0;overflow:hidden;}.uiTabs>.uiTitleBar{height:30px;position:relative;}.uiTabs>.uiTitleBar>.uiRightArrow,.uiTabs>.uiTitleBar>.uiLeftArrow{position:absolute;top:0px;width:9px;height:18px;z-index:99;display:none;cursor:pointer;}
+.uiTabs>.uiTitleBar>.uiRightArrow{right:0px;}
+.uiTabs>.uiTitleBar>.uiLeftArrow{left:0px;}
+.uiTabs>.uiTabsList{overflow:hidden;width:100%;}.uiTabs>.uiTabsList>.uiListContent{position:absolute;width:10000%;overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer{overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem{position:relative;display:inline-block;text-align:center;height:25px;line-height:25px;width:120px;margin:6px 0 0 20px;padding:2px;cursor:pointer;overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem>.uiCloseItemBtn{position:absolute;height:18px;width:18px;display:block;right:2px;top:2px;display:none;}
+.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.selected{background-color:white;color:#0f0f0f;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.selected>.uiCloseItemBtn{display:block;}
+.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem{*display:inline;}
+.uiTabs>.uiTabsContent{margin:5px;overflow:auto;}
+.uiDorpDownList{margin:0;padding:0;}.uiDorpDownList>.uiDropDown,.uiDorpDownList>.uiDropDown>span{height:30px;line-height:30px;}
+.uiDorpDownList>.uiDropDown{padding:0 5px;}.uiDorpDownList>.uiDropDown>span{display:block;overflow:hidden;}
+.uiDorpDownList>.uiDropDown>.uiDropDownBtn{float:right;padding:0 3px;width:12px;cursor:pointer;border-style:none;border-left-style:solid;}
+.uiDorpDownList>.uiDropDown>input{display:block;height:24px;line-height:24px;}
+.uiDorpDownList>.uiSelectList{position:absolute;margin:3px 0 0 0;z-index:9;overflow:hidden;padding:2px;list-style:none;text-align:center;}.uiDorpDownList>.uiSelectList>li{height:30px;cursor:pointer;display:block;padding:0 10px;width:100px;line-height:30px;overflow:hidden;}.uiDorpDownList>.uiSelectList>li>.uiSelected{display:none;}
+.uiDorpDownList>.uiSelectList>li.selected>.uiSelected{display:block;float:left;}
+.uiMenu{height:30px;}.uiMenu>ul.uiTopLevel{margin:auto;}.uiMenu>ul.uiTopLevel>li{float:left;position:relative;}.uiMenu>ul.uiTopLevel>li>a{padding:0 40px;}
+.uiMenu a{text-decoration:none;outline:none;border:none;cursor:pointer;display:block;white-space:nowrap;}
+.uiMenu li{line-height:30px;list-style:none;}.uiMenu li:hover>ul{display:block;}
+.uiMenu ul.uiSubLevel{position:absolute;display:none;z-index:1000;left:10px;top:29px;}.uiMenu ul.uiSubLevel>li{display:block;padding:0 10px;}.uiMenu ul.uiSubLevel>li a{padding:0 40px;text-align:center;}
+.uiMenu .rightBorder{border-right:1px solid #a0a0a0;}
+.uiMenu .bottomBorder{border-bottom:1px solid #a0a0a0;}
+.uiList{padding:0;margin:0;overflow:hidden;}.uiList ul{width:10%;overflow:auto;float:left;}
+.uiList li{list-style:none;height:30px;padding:0 5px;line-height:30px;border-bottom:1px solid #a0a0a0;cursor:pointer;}
+.uiList li.uiListItem{background:#fafafa;}
+.uiList li.uiListMore>.uiListMoreBtn{display:block;float:right;margin:0 5px;height:100%;}
+.uiList>.uiListContent{width:1000%;}
+.uiList>.uiListTitleBar{height:25px;line-height:25px;overflow:hidden;padding-left:10px;position:relative;}.uiList>.uiListTitleBar>span{margin-right:65px;}.uiList>.uiListTitleBar>span.uiListBack{margin:0;cursor:pointer;position:absolute;text-align:center;width:42px;padding-left:8px;right:5px;overflow:hidden;display:none;}
+.uiList>.uiListTitleBar>.uiTitleIcon{width:24px;display:block;height:100%;float:left;}
+.uiTree
+{
+    cursor:default;
+}
+.uiTree li
+{
+    list-style:none;
+}
+.uiTree .uiTreeItem
+{
+    clear:both;
+    display:block;
+    line-height:16px;
+    overflow:hidden;
+}
+.uiTree .uiTreeItem > ul
+{
+    overflow:hidden;
+}
+.uiTree .uiTreeItem > .uiItem
+{
+    position:relative;
+    cursor:pointer;
+    display:inline-block;
+}
+.uiTree .uiTreeItem > .uiItem > .uiInsertTip
+{
+    width:18px;
+    height:18px;
+    left:-10px;
+    display:block;
+    height:100%;
+    position:absolute;
+    background:url(images/angelaSmallIcon.png) no-repeat -296px center;
+}
+.uiTree .uiTreeItem > .uiItem > .uiInsertBefore
+{
+    top:-5px;
+}
+.uiTree .uiTreeItem > .uiItem > .uiInsertAfter
+{
+    top:5px;
+}
+.uiTree .uiTreeItem .uiItemHover
+{
+    background:#eff2ff;
+}
+.uiTree .uiTreeItem .uiItemInsert
+{
+    background:#c8e1fd;
+}
+.uiTree .uiTreeItem .uiItemSelected
+{
+    background: #315389;
+}
+.uiTree .uiTreeItem  .uiTreeIcon
+{
+    width:18px;
+    height:18px;
+    display:block;
+    float:left;
+    background:url(images/angelaSmallIcon.png) no-repeat;
+}
+.uiTree .uiTreeItem > .uiPlus
+{
+    cursor:pointer;
+    background: url(images/plus.png);
+}
+.uiTree .uiTreeItem > .uiMinus
+{
+    cursor:pointer;
+    background: url(images/minus.png);
+}
+.uiTree .uiTreeItem > .uiUnChecked
+{
+    cursor:pointer;
+    background: url(images/unChecked.png);
+}
+.uiTree .uiTreeItem > .uiChildrenChecked
+{
+    cursor:pointer;
+    background: url(images/unChildrenChecked.png);
+}
+.uiTree .uiTreeItem > .uiChecked
+{
+    cursor:pointer;
+    background: url(images/checked.png)
+}
+.uiTree .uiTreeItem > .uiItem > .uiFolder
+{
+    background: url(images/folder.png);
+}
+.uiTree .uiTreeItem > .uiItem > .uiFile
+{
+    background: url(images/file.png);
+}
+.uiTree .uiTreeItem > .uiLine1
+{
+    background: url(images/line1.png);
+}
+.uiTree .uiTreeItem > .uiLine2
+{
+    background: url(images/line2.png);
+}
+.uiTree .uiTreeItem > .uiLine3
+{
+    background: url(images/line3.png);
+}
+.uiTree .uiTreeItem > .uiSpace
+{
+    background:none;
+}
+.uiTree .uiTreeItem .uiItem
+{
+    *zoom:1
+    *display:inline;
+}
+.uiGrid
+{
+
+}
+.uiGrid > .uiTitleBar
+{
+    height:30px;
+    position:relative;
+}
+.uiGrid > .uiTitleBar > .uiTitle
+{
+    height:100%;
+    width:70%;
+    line-height:30px;
+    padding-left:10px;
+    color:#f0f0f0;
+    display:block;
+    overflow:hidden;
+}
+.uiGrid > .uiTitleBar > .uiTitle > .uiTitleIcon
+{
+    width:24px;
+    height:30px;
+    display:block;
+    float:left;
+}
+.uiGrid > .uiTitleBar > .uiGridButtonSet
+{
+    position:absolute;
+    width:48px;
+    right:5px;
+    top:0;
+    height:100%;
+}
+.uiGrid > .uiContent
+{
+    width:100%;
+    position:relative;
+    overflow:hidden;
+}
+.uiGrid > .uiContent > .uiColumnTable .uiSortIcon
+{
+    display:block;
+    float:right;
+    height:30px;
+    margin-right:5px;
+    visibility:hidden;
+}
+.uiGrid > .uiContent > .uiDataContainer
+{
+    overflow:auto;
+}
+.uiGrid > .uiContent > .uiDataContainer tr.uiTrOdd
+{
+    background:#eff2ff;
+}
+.uiGrid > .uiContent > .uiDataContainer tr.uiTrEven
+{
+    background:#f7f7f7;
+}
+.uiGrid > .uiContent > .uiDataContainer tr.uiTrHover
+{
+    background:url(images/gradientBG.png) repeat-x 0 -330px;
+}
+.uiGrid > .uiContent > .uiSeparator
+{
+    position:absolute;
+    top:0;
+    height:100%;
+    width:4px;
+    cursor:col-resize;
+    z-index:9;
+    -moz-user-select:none;
+    -webkit-user-select:none;
+    user-select:none;
+}
+.uiGrid > .uiContent > .uiSeparatorShow, .uiGrid > .uiContent > .uiSeparator:hover
+{
+    background:url(images/separator.png) repeat-y;
+}
+.uiGrid > .uiContent table
+{
+    table-layout:fixed;
+    border-collapse:collapse;
+}
+.uiGrid > .uiContent table td
+{
+    font-weight:500;
+    text-align:center;
+    font-size:18px;
+    line-height:30px;
+    cursor:pointer;
+    border:1px solid #dddddd;
+    vertical-align:middle;
+    text-overflow:ellipsis;
+    word-break:keep-all;
+    white-space:nowrap;
+    overflow:hidden;
+}
+.uiGrid > .uiGridButtonSet
+{
+    height:30px;
+    width:100%;
+}
+.uiGrid > .uiGridButtonSet > .uiBtnSeparator
+{
+    border-left:1px solid #ccc;
+    border-right:1px solid #fff;
+    float:left;
+    height:24px;
+    margin:3px;
+}
+.uiGrid > .uiGridButtonSet > .uiPageShowSelect
+{
+    margin:3px 5px;
+    float:left;
+}
+.uiGrid > .uiGridButtonSet > .uiPageSetting
+{
+    margin:3px 5px;
+    float:left;
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer
+{
+    float:left;
+    margin:3px;
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer:hover
+{
+    margin:2px;
+    border:1px solid #ccc;
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiGridButton
+{
+    cursor:pointer;
+    margin:3px;
+    width:18px;
+    height:18px;
+    background:url(images/angelaSmallIcon.png) no-repeat
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiSearchBtn
+{
+    background:url(images/search.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiPrevBtn
+{
+    background:url(images/goLeft.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiNextBtn
+{
+    background:url(images/goRight.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiGoToFirstBtn
+{
+    background:url(images/goFirst.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiGoToLastBtn
+{
+    background:url(images/goLast.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiRefreshBtn
+{
+    background:url(images/refresh.png);
+}
+.uiGrid > .uiGridButtonSet > .uiGridButtonContainer > .uiLoading
+{
+    background:url(images/load.gif) no-repeat center;
+}
+.uiDatePicker{overflow:hidden;}.uiDatePicker>.uiDateContainer{margin:3px;overflow:hidden;}.uiDatePicker>.uiDateContainer>.uiDayContainer{width:1000%;z-index:99;}.uiDatePicker>.uiDateContainer>.uiDayContainer>table{border-collapse:collapse;float:left;background:#eeeeee;}
+.uiDatePicker>.uiDateContainer>.uiDayContainer td{width:35px;height:35px;line-height:35px;font-weight:500;text-align:center;cursor:pointer;border:1px solid #cdcdcd;vertical-align:middle;}.uiDatePicker>.uiDateContainer>.uiDayContainer td>div{width:100%;height:100%;}
+.uiDatePicker>.uiDateContainer>.uiDayContainer td.uiWeekTd{height:30px;line-height:30px;}
+.uiDatePicker>.uiDateContainer>.uiDayContainer td.disabled{filter:alpha(opacity=50);opacity:.5;}
+.uiDatePicker>.uiDateContainer>.uiTitle{position:relative;height:30px;line-height:30px;z-index:100;}.uiDatePicker>.uiDateContainer>.uiTitle>.uiPrevMonth,.uiDatePicker>.uiDateContainer>.uiTitle>.uiNextMonth{height:100%;position:absolute;cursor:pointer;}
+.uiDatePicker>.uiDateContainer>.uiTitle>.uiPrevMonth{left:20px;}
+.uiDatePicker>.uiDateContainer>.uiTitle>.uiNextMonth{right:20px;}
+.uiDatePicker>.uiDateContainer>.uiTitle>.uiMonthAndYear{height:100%;position:absolute;left:50px;right:50px;text-align:center;font-size:18px;}.uiDatePicker>.uiDateContainer>.uiTitle>.uiMonthAndYear>.uiMonth,.uiDatePicker>.uiDateContainer>.uiTitle>.uiMonthAndYear>.uiYear{margin:10px;cursor:pointer;position:relative;}
+.uiDatePicker>.uiDateContainer>.uiTitle>.uiMonthAndYear>.uiMonth>.uiMonthList,.uiDatePicker>.uiDateContainer>.uiTitle>.uiMonthAndYear>.uiYear>.uiYearList{position:absolute;left:-15px;top:25px;list-style:none;font-size:16px;height:180px;width:80px;overflow:hidden;display:none;}.uiDatePicker>.uiDateContainer>.uiTitle>.uiMonthAndYear>.uiMonth>.uiMonthList li,.uiDatePicker>.uiDateContainer>.uiTitle>.uiMonthAndYear>.uiYear>.uiYearList li{height:30px;line-height:30px;cursor:pointer;}
+.uiTip{margin:0;padding:0;display:inline-block;position:absolute;line-height:1.5;text-align:center;}.uiTip>.uiTipContent{margin:1px -2px;padding:0 6px;}
+.uiTip>.uiTipArrowStyle1{position:absolute;width:0;height:0;overflow:hidden;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:10px dotted transparent;border-right:10px dotted transparent;}
+.uiTip>.uiTipArrowStyle2{position:absolute;width:0;height:0;overflow:hidden;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px dotted transparent;border-bottom:10px dotted transparent;}
+.uiTip{*display:inline;}

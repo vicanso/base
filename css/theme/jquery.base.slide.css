@@ -1,0 +1,5 @@
+.uiScrollBar{z-index:99;}
+.uiSlide>.uiPanel{margin:0;padding:0;position:relative;height:100%;width:100%;cursor:pointer;}.uiSlide>.uiPanel>.uiSliderCross{position:absolute;overflow:hidden;}
+.uiSlide>.uiPanel>.uiSlider{position:absolute;overflow:hidden;}
+.uiSlide>.uiPanel>.uiImageSlider{width:23px;height:24px;}
+.uiSlide>.uiPanel>.uiDefaultSliderBG{background:white;}

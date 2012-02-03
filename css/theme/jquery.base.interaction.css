@@ -1,0 +1,5 @@
+.uiResizable{position:absolute;bottom:0;right:0;width:24px;height:24px;background:url(images/icons.png) no-repeat 0 center;cursor:nw-resize;}
+.uiInteractionMask{z-index:9999;background:#eeeeee;position:absolute;}
+.uiDraggalbe{cursor:move;}
+.uiMoveCursor{cursor:move;}
+.uiNwResize{cursor:nw-resize;}

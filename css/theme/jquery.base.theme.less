@@ -1,0 +1,362 @@
+.css3GradientBGFunc(@fontColor : #f0f0f0, @backgroundColorStart : #315389, @backgroundColorEnd : #0f1e3b){
+    color:@fontColor;
+    background-color: @backgroundColorEnd;
+    background-repeat:no-repeat;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@{backgroundColorStart}', endColorstr='@{backgroundColorEnd}', GradientType=0);
+    background-image: -khtml-gradient(linear, left top, left bottom, from(@backgroundColorStart), to(@backgroundColorEnd));
+    background-image: -moz-linear-gradient(top, @backgroundColorStart, @backgroundColorEnd);
+    background-image: -ms-linear-gradient(top, @backgroundColorStart, @backgroundColorEnd);
+    background-image: -webkit-linear-gradient(top, @backgroundColorStart, @backgroundColorEnd);
+    background-image: -o-linear-gradient(top, @backgroundColorStart, @backgroundColorEnd);
+    background-image: linear-gradient(top, @backgroundColorStart, @backgroundColorEnd);
+}
+.borderFunc(@borderColor : #404040, @borderWidth : 1px){
+    border:@borderWidth solid @borderColor;
+}
+.boxShadowFunc(@shadowColor : #cd5c5c, @shadowOffset : 1px 1px 3px){
+    -moz-box-shadow: @shadowOffset @shadowColor;
+    -webkit-box-shadow: @shadowOffset @shadowColor;
+    box-shadow: @shadowOffset @shadowColor;
+}
+.uiBlueGradientBG{
+    .css3GradientBGFunc(#f0f0f0, #315389, #0f1e3b);
+}
+.uiBlackGradientBG{
+    .css3GradientBGFunc(#f0f0f0, #4d4c4c, #000000);
+}
+.uiGreyGradientBG{
+    .css3GradientBGFunc(#0f0f0f, #f4f4f4, #e6e6e6);
+}
+.uiLightBlueGradientBG{
+    .css3GradientBGFunc(#f0f0f0, #049cdb, #0068e8);
+}
+.uiRoyalBlueGradientBG{
+    .css3GradientBGFunc(#f0f0f0, #5f9dde, #3972bf);
+}
+.uiGoldenrodGradientBG{
+    .css3GradientBGFunc(#f0f0f0, #77746c, #2b261a);
+}
+.uiRedGradientBG{
+    .css3GradientBGFunc(#f0f0f0, #cd5c5c, #800000);
+}
+.uiPurpleGradientBG{
+    .css3GradientBGFunc(#f0f0f0, #ba55d3, #4b0082);
+}
+.uiLightPurpleGradientBG{
+    .css3GradientBGFunc(#f0f0f0, #7b68ee, #483d8b);
+}
+
+.uiBlackBorder{
+    .borderFunc(#404040);
+}
+.uiBlackBigBorder{
+    .borderFunc(#404040, 2px);
+}
+.uiBlueBorder{
+    .borderFunc(#1d295f);
+}
+.uiBlueBigBorder{
+    .borderFunc(#1d295f, 2px);
+}
+.uiRedBorder{
+    .borderFunc(#cd5c5c);
+}
+.uiRedBigBorder{
+    .borderFunc(#cd5c5c, 2px);
+}
+.uiGreenBorder{
+    .borderFunc(#006400);
+}
+.uiGreenBigBorder{
+    .borderFunc(#006400, 2px);
+}
+.uiGreyBorder{
+    .borderFunc(#ccc);
+}
+.uiGreyBigBorder{
+    .borderFunc(#ccc, 2px);
+}
+
+.uiBorderNoTop{
+    border-top-style:none;
+}
+.uiBorderNoBottom{
+    border-bottom-style:none;
+}
+.uiBorderNoLeft{
+    border-left-style:none;
+}
+.uiBorderNoRight{
+    border-right-style:none;
+}
+.uiBorderTop{
+    border-style:none;
+    border-top-style:solid;
+}
+.uiBorderBottom{
+    border-style:none;
+    border-bottom-style:solid;
+}
+.uiBorderLeft{
+    border-style:none;
+    border-left-style:solid;
+}
+.uiBorderRight{
+    border-style:none;
+    border-right-style:solid;
+}
+
+.uiCornerTl{
+    -moz-border-radius-topleft: 4px;
+    -webkit-border-top-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+.uiCornerTr{
+    -moz-border-radius-topright: 4px;
+    -webkit-border-top-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.uiCornerBl{
+    -moz-border-radius-bottomleft: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.uiCornerBr{
+    -moz-border-radius-bottomright: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.uiCornerTop{
+    -moz-border-radius-topleft: 4px;
+    -webkit-border-top-left-radius: 4px;
+    border-top-left-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    -webkit-border-top-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.uiCornerBottom{
+    -moz-border-radius-bottomleft: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    -moz-border-radius-bottomright: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.uiCornerRight{
+    -moz-border-radius-topright: 4px;
+    -webkit-border-top-right-radius: 4px;
+    border-top-right-radius: 4px;
+    -moz-border-radius-bottomright: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.uiCornerLeft{
+    -moz-border-radius-topleft: 4px;
+    -webkit-border-top-left-radius: 4px;
+    border-top-left-radius: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.uiCornerAll{
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.uiBlackBoxShadow{
+    .boxShadowFunc(#000000);
+}
+.uiGreyBoxShadow{
+    .boxShadowFunc(#a0a0a0);
+}
+.uiBlueBoxShadow{
+    .boxShadowFunc(#343950);
+}
+.uiRedBoxShadow{
+    .boxShadowFunc(#cd5c5c);
+}
+
+.uiHidden{
+    display:none;
+}
+.uiMask{
+    position:fixed;
+    width:100%;
+    height:100%;
+    left:0px;
+    top:0px;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+    filter:alpha(opacity=30);
+    opacity: .3;
+    z-index: 99;
+    background:#000;
+    _position:absolute;
+}
+
+.uiWidgetDisalbed, .uiInactive{
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+    filter:alpha(opacity=70);
+    opacity: .7;
+}
+
+/*UI ICONS*/
+.uiSmallIcon{
+    width:18px;
+    height:100%;
+    background-image: url(images/smallIcons.png);
+    background-repeat: no-repeat;
+}
+.uiIcon
+{
+    width:24px;
+    height:100%;
+    background-image: url(images/icons.png);
+    background-repeat: no-repeat;
+}
+.uiPlus1Icon {
+    background-position: 0px center;
+}
+.uiPlus3Icon {
+    background-position: -18px center;
+}
+.uiPlusIcon {
+    background-position: -36px center;
+}
+.uiMinusIcon {
+    background-position: -54px center;
+}
+.uiMinus1Icon {
+    background-position: -72px center;
+}
+.uiMinus3Icon {
+    background-position: -90px center;
+}
+.uiMinus4Icon {
+    background-position: -108px center;
+}
+.uiRefreshIcon {
+    background-position: -126px center;
+}
+.uiSmallcloseButtonIcon {
+    background-position: -144px center;
+}
+.uiUncheckedIcon {
+    background-position: -162px center;
+}
+.uiUnChildrenCheckedIcon {
+    background-position: -180px center;
+}
+.uiSmallcloseButtonHoverIcon, .uiSmallcloseButtonIcon:hover {
+    background-position: -198px center;
+}
+.uiSearchIcon {
+    background-position: -216px center;
+}
+.uiSelectedIcon {
+    background-position: -234px center;
+}
+.uiSeparatorIcon {
+    background-position: -252px center;
+    width: 2px;
+}
+.uiCheckedIcon {
+    background-position: -254px center;
+}
+.uiDropdownButtonIcon {
+    background-position: -272px center;
+}
+.uiFileIcon {
+    background-position: -290px center;
+}
+.uiArrowUpIcon {
+    background-position: -308px center;
+    width: 13px;
+}
+.uiArrowDownIcon {
+    background-position: -321px center;
+    width: 13px;
+}
+.uiArrowLeftIcon {
+    background-position: -334px center;
+    width: 9px;
+}
+.uiArrowRightIcon {
+    background-position: -343px center;
+    width: 9px;
+}
+.uiFolderIcon {
+    background-position: -352px center;
+}
+.uiLine1Icon {
+    background-position: -370px center;
+}
+.uiLine2Icon {
+    background-position: -388px center;
+}
+.uiLine3Icon {
+    background-position: -406px center;
+}
+.uiGoPrevIcon {
+    background-position: -424px center;
+}
+.uiGoFirstIcon {
+    background-position: -442px center;
+}
+.uiGoLastIcon {
+    background-position: -460px center;
+}
+.uiGoNextIcon {
+    background-position: -478px center;
+}
+
+
+.uiResizeButtonIcon {
+    background-position: 0px center;
+}
+.uiMinButtonIcon {
+    background-position: -24px center;
+}
+.uiMinButtonHoverIcon, .uiMinButtonIcon:hover{
+    background-position: -48px center;
+}
+.uiUncheckedButtonIcon {
+    background-position: -72px center;
+}
+.uiResumeButtonIcon {
+    background-position: -96px center;
+}
+.uiResumeButtonHoverIcon {
+    background-position: -120px center;
+}
+.uiCheckedButtonIcon {
+    background-position: -144px center;
+}
+.uiBackIcon {
+    background-position: -168px center;
+    width: 50px;
+}
+.uiBackhoverIcon, .uiBackIcon:hover{
+    background-position: -218px center;
+    width: 50px;
+}
+.uiCloseButtonIcon {
+    background-position: -268px center;
+}
+.uiCloseButtonHoverIcon, .uiCloseButtonIcon:hover {
+    background-position: -292px center;
+}
+.uiCicleIcon {
+    background-position: -316px center;
+    width: 23px;
+}
+.uiUserBtn{
+    cursor:pointer;
+    height:100%;
+    display:inline-block;
+}
+
+/*hack*/
+.uiUserBtn{
+    *display:inline;
+}

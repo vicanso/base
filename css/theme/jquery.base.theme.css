@@ -1,0 +1,89 @@
+.uiBlueGradientBG{color:#f0f0f0;background-color:#0f1e3b;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#315389), to(#0f1e3b));background-image:-moz-linear-gradient(top, #315389, #0f1e3b);background-image:-ms-linear-gradient(top, #315389, #0f1e3b);background-image:-webkit-linear-gradient(top, #315389, #0f1e3b);background-image:-o-linear-gradient(top, #315389, #0f1e3b);background-image:linear-gradient(top, #315389, #0f1e3b);}
+.uiBlackGradientBG{color:#f0f0f0;background-color:#000000;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#4d4c4c), to(#000000));background-image:-moz-linear-gradient(top, #4d4c4c, #000000);background-image:-ms-linear-gradient(top, #4d4c4c, #000000);background-image:-webkit-linear-gradient(top, #4d4c4c, #000000);background-image:-o-linear-gradient(top, #4d4c4c, #000000);background-image:linear-gradient(top, #4d4c4c, #000000);}
+.uiGreyGradientBG{color:#0f0f0f;background-color:#e6e6e6;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#f4f4f4), to(#e6e6e6));background-image:-moz-linear-gradient(top, #f4f4f4, #e6e6e6);background-image:-ms-linear-gradient(top, #f4f4f4, #e6e6e6);background-image:-webkit-linear-gradient(top, #f4f4f4, #e6e6e6);background-image:-o-linear-gradient(top, #f4f4f4, #e6e6e6);background-image:linear-gradient(top, #f4f4f4, #e6e6e6);}
+.uiLightBlueGradientBG{color:#f0f0f0;background-color:#0068e8;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0068e8));background-image:-moz-linear-gradient(top, #049cdb, #0068e8);background-image:-ms-linear-gradient(top, #049cdb, #0068e8);background-image:-webkit-linear-gradient(top, #049cdb, #0068e8);background-image:-o-linear-gradient(top, #049cdb, #0068e8);background-image:linear-gradient(top, #049cdb, #0068e8);}
+.uiRoyalBlueGradientBG{color:#f0f0f0;background-color:#3972bf;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#5f9dde), to(#3972bf));background-image:-moz-linear-gradient(top, #5f9dde, #3972bf);background-image:-ms-linear-gradient(top, #5f9dde, #3972bf);background-image:-webkit-linear-gradient(top, #5f9dde, #3972bf);background-image:-o-linear-gradient(top, #5f9dde, #3972bf);background-image:linear-gradient(top, #5f9dde, #3972bf);}
+.uiGoldenrodGradientBG{color:#f0f0f0;background-color:#2b261a;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#77746c), to(#2b261a));background-image:-moz-linear-gradient(top, #77746c, #2b261a);background-image:-ms-linear-gradient(top, #77746c, #2b261a);background-image:-webkit-linear-gradient(top, #77746c, #2b261a);background-image:-o-linear-gradient(top, #77746c, #2b261a);background-image:linear-gradient(top, #77746c, #2b261a);}
+.uiRedGradientBG{color:#f0f0f0;background-color:#800000;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#cd5c5c), to(#800000));background-image:-moz-linear-gradient(top, #cd5c5c, #800000);background-image:-ms-linear-gradient(top, #cd5c5c, #800000);background-image:-webkit-linear-gradient(top, #cd5c5c, #800000);background-image:-o-linear-gradient(top, #cd5c5c, #800000);background-image:linear-gradient(top, #cd5c5c, #800000);}
+.uiPurpleGradientBG{color:#f0f0f0;background-color:#4b0082;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#ba55d3), to(#4b0082));background-image:-moz-linear-gradient(top, #ba55d3, #4b0082);background-image:-ms-linear-gradient(top, #ba55d3, #4b0082);background-image:-webkit-linear-gradient(top, #ba55d3, #4b0082);background-image:-o-linear-gradient(top, #ba55d3, #4b0082);background-image:linear-gradient(top, #ba55d3, #4b0082);}
+.uiLightPurpleGradientBG{color:#f0f0f0;background-color:#483d8b;background-repeat:no-repeat;filter:progid:dximagetransform.microsoft.gradient(startColorstr='#315389', endColorstr='#0f1e3b', GradientType=0);background-image:-khtml-gradient(linear, left top, left bottom, from(#7b68ee), to(#483d8b));background-image:-moz-linear-gradient(top, #7b68ee, #483d8b);background-image:-ms-linear-gradient(top, #7b68ee, #483d8b);background-image:-webkit-linear-gradient(top, #7b68ee, #483d8b);background-image:-o-linear-gradient(top, #7b68ee, #483d8b);background-image:linear-gradient(top, #7b68ee, #483d8b);}
+.uiBlackBorder{border:1px solid #404040;}
+.uiBlackBigBorder{border:2px solid #404040;}
+.uiBlueBorder{border:1px solid #1d295f;}
+.uiBlueBigBorder{border:2px solid #1d295f;}
+.uiRedBorder{border:1px solid #cd5c5c;}
+.uiRedBigBorder{border:2px solid #cd5c5c;}
+.uiGreenBorder{border:1px solid #006400;}
+.uiGreenBigBorder{border:2px solid #006400;}
+.uiGreyBorder{border:1px solid #cccccc;}
+.uiGreyBigBorder{border:2px solid #cccccc;}
+.uiBorderNoTop{border-top-style:none;}
+.uiBorderNoBottom{border-bottom-style:none;}
+.uiBorderNoLeft{border-left-style:none;}
+.uiBorderNoRight{border-right-style:none;}
+.uiBorderTop{border-style:none;border-top-style:solid;}
+.uiBorderBottom{border-style:none;border-bottom-style:solid;}
+.uiBorderLeft{border-style:none;border-left-style:solid;}
+.uiBorderRight{border-style:none;border-right-style:solid;}
+.uiCornerTl{-moz-border-radius-topleft:4px;-webkit-border-top-left-radius:4px;border-top-left-radius:4px;}
+.uiCornerTr{-moz-border-radius-topright:4px;-webkit-border-top-right-radius:4px;border-top-right-radius:4px;}
+.uiCornerBl{-moz-border-radius-bottomleft:4px;-webkit-border-bottom-left-radius:4px;border-bottom-left-radius:4px;}
+.uiCornerBr{-moz-border-radius-bottomright:4px;-webkit-border-bottom-right-radius:4px;border-bottom-right-radius:4px;}
+.uiCornerTop{-moz-border-radius-topleft:4px;-webkit-border-top-left-radius:4px;border-top-left-radius:4px;-moz-border-radius-topright:4px;-webkit-border-top-right-radius:4px;border-top-right-radius:4px;}
+.uiCornerBottom{-moz-border-radius-bottomleft:4px;-webkit-border-bottom-left-radius:4px;border-bottom-left-radius:4px;-moz-border-radius-bottomright:4px;-webkit-border-bottom-right-radius:4px;border-bottom-right-radius:4px;}
+.uiCornerRight{-moz-border-radius-topright:4px;-webkit-border-top-right-radius:4px;border-top-right-radius:4px;-moz-border-radius-bottomright:4px;-webkit-border-bottom-right-radius:4px;border-bottom-right-radius:4px;}
+.uiCornerLeft{-moz-border-radius-topleft:4px;-webkit-border-top-left-radius:4px;border-top-left-radius:4px;-moz-border-radius-bottomleft:4px;-webkit-border-bottom-left-radius:4px;border-bottom-left-radius:4px;}
+.uiCornerAll{-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
+.uiBlackBoxShadow{-moz-box-shadow:1px 1px 3px #000000;-webkit-box-shadow:1px 1px 3px #000000;box-shadow:1px 1px 3px #000000;}
+.uiGreyBoxShadow{-moz-box-shadow:1px 1px 3px #a0a0a0;-webkit-box-shadow:1px 1px 3px #a0a0a0;box-shadow:1px 1px 3px #a0a0a0;}
+.uiBlueBoxShadow{-moz-box-shadow:1px 1px 3px #343950;-webkit-box-shadow:1px 1px 3px #343950;box-shadow:1px 1px 3px #343950;}
+.uiRedBoxShadow{-moz-box-shadow:1px 1px 3px #cd5c5c;-webkit-box-shadow:1px 1px 3px #cd5c5c;box-shadow:1px 1px 3px #cd5c5c;}
+.uiHidden{display:none;}
+.uiMask{position:fixed;width:100%;height:100%;left:0px;top:0px;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";filter:alpha(opacity=30);opacity:.3;z-index:99;background:#000;_position:absolute;}
+.uiWidgetDisalbed,.uiInactive{-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";filter:alpha(opacity=70);opacity:.7;}
+.uiSmallIcon{width:18px;height:100%;background-image:url(images/smallIcons.png);background-repeat:no-repeat;}
+.uiIcon{width:24px;height:100%;background-image:url(images/icons.png);background-repeat:no-repeat;}
+.uiPlus1Icon{background-position:0px center;}
+.uiPlus3Icon{background-position:-18px center;}
+.uiPlusIcon{background-position:-36px center;}
+.uiMinusIcon{background-position:-54px center;}
+.uiMinus1Icon{background-position:-72px center;}
+.uiMinus3Icon{background-position:-90px center;}
+.uiMinus4Icon{background-position:-108px center;}
+.uiRefreshIcon{background-position:-126px center;}
+.uiSmallcloseButtonIcon{background-position:-144px center;}
+.uiUncheckedIcon{background-position:-162px center;}
+.uiUnChildrenCheckedIcon{background-position:-180px center;}
+.uiSmallcloseButtonHoverIcon,.uiSmallcloseButtonIcon:hover{background-position:-198px center;}
+.uiSearchIcon{background-position:-216px center;}
+.uiSelectedIcon{background-position:-234px center;}
+.uiSeparatorIcon{background-position:-252px center;width:2px;}
+.uiCheckedIcon{background-position:-254px center;}
+.uiDropdownButtonIcon{background-position:-272px center;}
+.uiFileIcon{background-position:-290px center;}
+.uiArrowUpIcon{background-position:-308px center;width:13px;}
+.uiArrowDownIcon{background-position:-321px center;width:13px;}
+.uiArrowLeftIcon{background-position:-334px center;width:9px;}
+.uiArrowRightIcon{background-position:-343px center;width:9px;}
+.uiFolderIcon{background-position:-352px center;}
+.uiLine1Icon{background-position:-370px center;}
+.uiLine2Icon{background-position:-388px center;}
+.uiLine3Icon{background-position:-406px center;}
+.uiGoPrevIcon{background-position:-424px center;}
+.uiGoFirstIcon{background-position:-442px center;}
+.uiGoLastIcon{background-position:-460px center;}
+.uiGoNextIcon{background-position:-478px center;}
+.uiResizeButtonIcon{background-position:0px center;}
+.uiMinButtonIcon{background-position:-24px center;}
+.uiMinButtonHoverIcon,.uiMinButtonIcon:hover{background-position:-48px center;}
+.uiUncheckedButtonIcon{background-position:-72px center;}
+.uiResumeButtonIcon{background-position:-96px center;}
+.uiResumeButtonHoverIcon{background-position:-120px center;}
+.uiCheckedButtonIcon{background-position:-144px center;}
+.uiBackIcon{background-position:-168px center;width:50px;}
+.uiBackhoverIcon,.uiBackIcon:hover{background-position:-218px center;width:50px;}
+.uiCloseButtonIcon{background-position:-268px center;}
+.uiCloseButtonHoverIcon,.uiCloseButtonIcon:hover{background-position:-292px center;}
+.uiCicleIcon{background-position:-316px center;width:23px;}
+.uiUserBtn{cursor:pointer;height:100%;display:inline-block;}
+.uiUserBtn{*display:inline;}

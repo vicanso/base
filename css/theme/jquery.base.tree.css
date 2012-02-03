@@ -1,0 +1,117 @@
+.uiTree
+{
+    cursor:default;
+}
+.uiTree li
+{
+    list-style:none;
+}
+.uiTree .uiTreeItem
+{
+    clear:both;
+    display:block;
+    line-height:16px;
+    overflow:hidden;
+}
+.uiTree .uiTreeItem > ul
+{
+    overflow:hidden;
+}
+.uiTree .uiTreeItem > .uiItem
+{
+    position:relative;
+    cursor:pointer;
+    display:inline-block;
+}
+.uiTree .uiTreeItem > .uiItem > .uiInsertTip
+{
+    width:18px;
+    height:18px;
+    left:-10px;
+    display:block;
+    height:100%;
+    position:absolute;
+    background:url(images/angelaSmallIcon.png) no-repeat -296px center;
+}
+.uiTree .uiTreeItem > .uiItem > .uiInsertBefore
+{
+    top:-5px;
+}
+.uiTree .uiTreeItem > .uiItem > .uiInsertAfter
+{
+    top:5px;
+}
+.uiTree .uiTreeItem .uiItemHover
+{
+    background:#eff2ff;
+}
+.uiTree .uiTreeItem .uiItemInsert
+{
+    background:#c8e1fd;
+}
+.uiTree .uiTreeItem .uiItemSelected
+{
+    background: #315389;
+}
+.uiTree .uiTreeItem  .uiTreeIcon
+{
+    width:18px;
+    height:18px;
+    display:block;
+    float:left;
+    background:url(images/angelaSmallIcon.png) no-repeat;
+}
+.uiTree .uiTreeItem > .uiPlus
+{
+    cursor:pointer;
+    background: url(images/plus.png);
+}
+.uiTree .uiTreeItem > .uiMinus
+{
+    cursor:pointer;
+    background: url(images/minus.png);
+}
+.uiTree .uiTreeItem > .uiUnChecked
+{
+    cursor:pointer;
+    background: url(images/unChecked.png);
+}
+.uiTree .uiTreeItem > .uiChildrenChecked
+{
+    cursor:pointer;
+    background: url(images/unChildrenChecked.png);
+}
+.uiTree .uiTreeItem > .uiChecked
+{
+    cursor:pointer;
+    background: url(images/checked.png)
+}
+.uiTree .uiTreeItem > .uiItem > .uiFolder
+{
+    background: url(images/folder.png);
+}
+.uiTree .uiTreeItem > .uiItem > .uiFile
+{
+    background: url(images/file.png);
+}
+.uiTree .uiTreeItem > .uiLine1
+{
+    background: url(images/line1.png);
+}
+.uiTree .uiTreeItem > .uiLine2
+{
+    background: url(images/line2.png);
+}
+.uiTree .uiTreeItem > .uiLine3
+{
+    background: url(images/line3.png);
+}
+.uiTree .uiTreeItem > .uiSpace
+{
+    background:none;
+}
+.uiTree .uiTreeItem .uiItem
+{
+    *zoom:1
+    *display:inline;
+}

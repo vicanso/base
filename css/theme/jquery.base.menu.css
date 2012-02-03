@@ -1,0 +1,6 @@
+.uiMenu{height:30px;}.uiMenu>ul.uiTopLevel{margin:auto;}.uiMenu>ul.uiTopLevel>li{float:left;position:relative;}.uiMenu>ul.uiTopLevel>li>a{padding:0 40px;}
+.uiMenu a{text-decoration:none;outline:none;border:none;cursor:pointer;display:block;white-space:nowrap;}
+.uiMenu li{line-height:30px;list-style:none;}.uiMenu li:hover>ul{display:block;}
+.uiMenu ul.uiSubLevel{position:absolute;display:none;z-index:1000;left:10px;top:29px;}.uiMenu ul.uiSubLevel>li{display:block;padding:0 10px;}.uiMenu ul.uiSubLevel>li a{padding:0 40px;text-align:center;}
+.uiMenu .rightBorder{border-right:1px solid #a0a0a0;}
+.uiMenu .bottomBorder{border-bottom:1px solid #a0a0a0;}

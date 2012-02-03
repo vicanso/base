@@ -1,0 +1,49 @@
+.uiMenu{
+    height:30px;
+    >ul.uiTopLevel{
+        margin:auto;
+        >li{
+            float: left;
+            position: relative;
+            >a{
+                padding: 0 40px;
+            }
+        }
+    }
+    a{
+        text-decoration:none;
+        outline:none;
+        border:none;
+        cursor:pointer;
+        display: block;
+        white-space: nowrap;
+    }
+    li{
+    	line-height:30px;
+        list-style:none;
+        &:hover > ul{
+            display: block;
+        }
+    }
+    ul.uiSubLevel{
+        position: absolute;
+        display: none;
+        z-index: 1000;
+        left:10px;
+        top:29px;
+        >li{
+            display: block;
+            padding: 0 10px;
+            a{
+                padding: 0 40px;
+                text-align: center;
+            }
+        }
+    }
+    .rightBorder{
+        border-right: 1px solid #a0a0a0;
+    }
+    .bottomBorder{
+        border-bottom: 1px solid #a0a0a0;
+    }
+}

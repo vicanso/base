@@ -1,0 +1,9 @@
+.uiButtonSet{display:inline-block;margin:0;padding:0;}.uiButtonSet>.uiButton{height:30px;line-height:30px;text-align:center;display:block;cursor:pointer;font-weight:500;overflow:hidden;padding:0 20px;float:left;}.uiButtonSet>.uiButton>.uiIcon{height:100%;float:left;width:24px;margin-right:5px;}
+.uiButtonSet>.uiButton>.uiIconFloatRight{float:right;margin-right:5px;}
+.uiButtonSet>.uiImgButton{height:30px;line-height:30px;text-align:center;display:block;cursor:pointer;font-weight:500;overflow:hidden;padding:0 20px;float:left;}
+.uiButtonSet>.uiImgRadio>.uiIcon{float:left;width:24px;}
+.uiButtonSet>.uiImgRadioChecked>.uiIcon{float:left;width:24px;}
+.uiButtonSet>.uiImgCheckBox>.uiIcon{float:left;width:24px;}
+.uiButtonSet>.uiImgCheckBoxChecked>.uiIcon{float:left;width:24px;}
+.uiButtonSet>.uiButtonPressed{line-height:35px;}
+.uiButtonSet{*display:inline;}

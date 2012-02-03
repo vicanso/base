@@ -1,0 +1,55 @@
+.uiDorpDownList{
+    margin:0;
+    padding:0;
+    >.uiDropDown, &>.uiDropDown > span{
+        height:30px;
+        line-height:30px;
+    }
+    >.uiDropDown{
+        padding: 0 5px;
+        >span{
+            display: block;
+            overflow: hidden;
+        }
+        >.uiDropDownBtn{
+            float:right;
+            padding:0 3px;
+            width:12px;
+            cursor:pointer;
+            border-style:none;
+        	border-left-style:solid;
+        }
+        >input{
+            display:block;
+            height:24px;
+            line-height:24px;
+        }
+    }
+    >.uiSelectList{
+         position:absolute;
+         margin:3px 0 0 0;
+         z-index:9;
+         overflow:hidden;
+         padding:2px;
+         list-style:none;
+         text-align:center;
+         > li{
+             height:30px;
+             cursor:pointer;
+             display:block;
+             padding:0 10px;
+             width:100px;
+             line-height:30px;
+             overflow:hidden;
+             >.uiSelected
+             {
+                 display:none;
+             }
+             &.selected >.uiSelected{
+                display: block;
+                float: left;
+             }
+         }
+    }
+}
+
