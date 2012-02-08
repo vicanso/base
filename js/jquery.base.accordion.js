@@ -1,5 +1,5 @@
 (function() {
-  var $, $$, initAccordion, initEvent,
+  var $, $$, initAccordion, initEvent, setContentHeight,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -193,7 +193,7 @@
   initEvent = function(self, opts) {
     var jQueryEvent;
     jQueryEvent = self.off ? 'on' : 'bind';
-    return self[jQueryEvent]("" + opts.event + ".uiAccordion", function(e) {
+    self[jQueryEvent]("" + opts.event + ".uiAccordion", function(e) {
       var changeObjList, selectedList, target;
       if (opts.disabled || opts.animating) return;
       target = $(e.target);
@@ -212,6 +212,71 @@
         return opts.animating = false;
       });
     });
+    if (posStr !== 'static' && posStr !== 'relative') {
+      if (opts.active && opts.autoOpen) {
+        (($('.uiDialog')).not(self)).each(function() {
+          var obj;
+          obj = $(this);
+          if (obj.css('position' !== 'static' && (obj.css('position' !== 'relative')))) {
+            return ((obj.css('zIndex', opts.zIndex)).children('.uiTitleBar')).addClass('uiInactive');
+          }
+        });
+      }
+      self[jQueryEvent]('mousedown.uiDialog', function(e) {
+        var target;
+        ((self.css('zIndex', opts.zIndex + 1)).children('.uiTitleBar')).addClass('uiInactive');
+        (self.siblings('.uiDialog')).each(function() {
+          var obj;
+          obj = $(this);
+          if (obj.css('position' !== 'static' && (obj.css('position' !== 'relative')))) {
+            return ((obj.css('zIndex', opts.zIndex)).children('.uiTitleBar')).addClass('uiInactive');
+          }
+        });
+        target = $(e.target);
+        if (target.hasClass('uiDraggable' || target.hasClass('uiResizable' || target.parent().hasClass('uiDraggable')))) {
+          return false;
+        }
+      });
+    }
+    return null;
+  };
+
+  setContentHeight = function(self, opts) {
+    var completeLoad, content, contentHeight, imgList, imgTotal, otherItemHeightTotal, outerOffset;
+    otherItemHeightTotal = 0;
+    content = self.children('.uiContent');
+    self.children().each(function() {
+      var obj;
+      obj = $(this);
+      if (!obj.hasClass('uiContent' && !obj.hasClass('uiResizable'))) {
+        return otherItemHeightTotal += ($(this)).outerHeight(true);
+      }
+    });
+    contentHeight = content.outerheight(true);
+    outerOffset = contentHeight - content.height();
+    imgList = self.find('img');
+    if (imgList.length !== 0) {
+      imgTotal = imgList.length;
+      completeLoad = 0;
+      imgList.each(function() {
+        if (this.complete) {
+          completeLoad++;
+          if (completeLoad === imgTotal) {
+            return content.height(self.height() - otherItemHeightTotal - outerOffset);
+          }
+        } else {
+          return ($(this)).load(function() {
+            completeLoad++;
+            if (completeLoad === imgTotal) {
+              return content.height(self.height() - otherItemHeightTotal - outerOffset);
+            }
+          });
+        }
+      });
+    } else {
+      content.height(self.height() - otherItemHeightTotal - outerOffset);
+    }
+    return null;
   };
 
 }).call(this);

@@ -167,3 +167,45 @@ initEvent = (self, opts) ->
       if ($ @).is ':visible'
         opts.change self, target, e
       opts.animating = false
+  if posStr isnt 'static' and posStr isnt 'relative'
+    if opts.active and opts.autoOpen
+      (($ '.uiDialog').not self).each () ->
+        obj = $ @
+        if obj.css 'position' isnt 'static' and (obj.css 'position' isnt 'relative')
+          ((obj.css 'zIndex', opts.zIndex).children '.uiTitleBar').addClass 'uiInactive'
+    self[jQueryEvent] 'mousedown.uiDialog', (e) ->
+      ((self.css 'zIndex', opts.zIndex + 1).children '.uiTitleBar').addClass 'uiInactive'
+      (self.siblings '.uiDialog').each () ->
+        obj = $ @
+        if obj.css 'position' isnt 'static' and (obj.css 'position' isnt 'relative')
+          ((obj.css 'zIndex', opts.zIndex).children '.uiTitleBar').addClass 'uiInactive'
+      target = $ e.target
+      if target.hasClass 'uiDraggable' or target.hasClass 'uiResizable' or target.parent().hasClass 'uiDraggable'
+        return false
+  return null
+setContentHeight = (self, opts) ->
+  otherItemHeightTotal = 0
+  content = self.children '.uiContent'
+  self.children().each () ->
+    obj = $ @
+    if not obj.hasClass 'uiContent' && not obj.hasClass 'uiResizable'
+      otherItemHeightTotal += ($ @).outerHeight true
+  contentHeight = content.outerheight true
+  outerOffset = contentHeight - content.height()
+  imgList = self.find 'img'
+  if imgList.length isnt 0
+    imgTotal = imgList.length
+    completeLoad = 0
+    imgList.each () ->
+      if this.complete
+        completeLoad++
+        if completeLoad is imgTotal
+          content.height self.height() - otherItemHeightTotal - outerOffset
+      else
+          ($ @).load () ->
+            completeLoad++
+            if completeLoad is imgTotal
+              content.height self.height() - otherItemHeightTotal - outerOffset
+  else
+    content.height self.height() - otherItemHeightTotal - outerOffset
+  return null
