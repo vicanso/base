@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+        Remove this if you use the .htaccess -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <title>dropDownList</title>
+        <meta name="description" content="" />
+        <meta name="author" content="vicanso" />
+
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.theme.css" />
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.dropDownList.css" />
+        <style type="text/css">
+        *
+        {
+            margin:0;
+            padding:0;
+        }
+        body
+        {
+            font-family: "Times New Roman", "\5B8B\4F53";
+            font-size:16px;
+        }
+        #infor h3
+        {
+            cursor:pointer;
+        }
+        #infor p.attr
+        {
+            display:none;
+            margin:5px 0;
+        }
+        #infor span.note
+        {
+            color:#a0a0a0;
+            font-size:12px;
+        }
+        #demo1, #demo2, #demo3
+        {
+            width:200px;
+            margin:20px;
+        }
+        </style>
+    </head>
+    <body>
+        <h3></h3>
+        <nav>
+            <div id="navigation">
+            </div>
+        </nav>
+        <div id="infor">
+            <h3>属性参数说明(点击显示隐藏)：</h3>
+            <p class="attr">dropDownListClass : "ui40BlueGradientBG uiCornerAll uiBlueBigBorder",<span class="note">//添加到dropDownList的类</span></p>
+            <p class="attr">selectListClass : "uiBlueCss3GradientBG uiCornerAll uiBlueBigBorder uiBlueBoxShadow",<span class="note">//添加到列表的类</span></p>
+            <p class="attr">pageSize : 5,<span class="note">//显示的数量</span></p>
+            <p class="attr">multiple : false,<span class="note">//是否复选列表</span></p>
+            <p class="attr">dropListType : "normal",<span class="note">//普通模式，可设置为"normal", "search"</span></p>
+            <p class="attr">searchTip : "查找",<span class="note">//当类型为"search"时，输入栏的提示文字</span></p>
+            <p class="attr">listItemHoverClass : "ui40RoyalBlueGradientBG",<span class="note">//列表hover时添加的类</span></p>
+            <p class="attr">click : null,<span class="note">//点击dropDownList的向下按钮时触发</span></p>
+            <p class="attr">change : null<span class="note">//当列表选择变化时触发</span></p>        
+        </div>
+        <div id="output">
+            <h3>状态显示:</h3>
+            <p></p>
+        </div>
+        <div id="demo1">
+            <ul>
+                <li>选项1选项1选项1选项1选项1</li>
+                <li>选项2</li>
+                <li>选项3</li>
+                <li>选项4</li>
+                <li>选项5</li>
+                <li>选项6</li>
+                <li>选项7</li>
+                <li>选项8</li>
+                <li>选项9</li>
+                <li>选项10</li>
+            </ul>
+        </div>
+        
+        <div id="demo2">
+            <ul>
+                <li>选项1选项1选项1选项1选项1</li>
+                <li>选项2</li>
+                <li>选项3</li>
+                <li>选项4</li>
+                <li>选项5</li>
+                <li>选项6</li>
+                <li>选项7</li>
+                <li>选项8</li>
+                <li>选项9</li>
+                <li>选项10</li>
+            </ul>
+        </div>
+        
+        <div id="demo3">
+            <ul>
+                <li>选项1</li>
+                <li>选项2</li>
+                <li>选项3</li>
+                <li>选项4</li>
+                <li>选项5</li>
+                <li>选项6</li>
+                <li>选项7</li>
+                <li>选项8</li>
+                <li>选项9</li>
+                <li>选项10</li>
+            </ul>
+        </div>
+        <footer>
+        </footer>
+    </body>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="js/jquery.base.core.js"></script>
+    <script type="text/javascript" src="js/jquery.base.loader.js"></script>
+    <script type="text/javascript" src="js/jquery.base.widget.js"></script>
+    <script type="text/javascript" src="js/jquery.base.dropdownlist.js"></script>
+    <script type="text/javascript">
+        $(function()
+        {
+            $("#demo1").dropDownList({
+                dropDownListClass : "uiLightBlueGradientBG uiCornerAll uiBlackBigBorder",
+                selectListClass : "uiBlackGradientBG uiCornerAll uiBlackBigBorder uiBlackBoxShadow",
+                pageSize : 8,
+                click : function()
+                {
+                    //msg.html("示例一:click;");
+                },
+                change : function()
+                {
+                    //msg.html("示例一:change;");
+                }
+            });
+            $("#demo2").dropDownList({
+                pageSize : 10,
+                multiple : true
+            });
+            $("#demo3").dropDownList({
+                dropListType : "search",
+                input : function()
+                {
+                    //msg.html("示例三input:" + $(this).val());
+                }
+            });
+        });
+    </script>
+</html>

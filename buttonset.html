@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+        Remove this if you use the .htaccess -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <title>buttonSet</title>
+        <meta name="description" content="" />
+        <meta name="author" content="vicanso" />
+
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.theme.css" />
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.buttonSet.css" />
+        <style type="text/css">
+        *
+        {
+            margin:0;
+            padding:0;
+        }
+        body
+        {
+            font-family: "Times New Roman", "\5B8B\4F53";
+            font-size:16px;
+        }
+        #infor h3
+        {
+            cursor:pointer;
+        }
+        #infor p.attr
+        {
+            display:none;
+            margin:5px 0;
+        }
+        #infor span.note
+        {
+            color:#a0a0a0;
+            font-size:12px;
+        }
+        #demo1, #demo2, #demo3, #demo4, #demo5
+        {
+            margin:10px;
+        }
+        .buttonIcon1
+        {
+            background:url(icon001.png) no-repeat center;
+        }
+        .buttonIcon2
+        {
+            background:url(icon002.png) no-repeat center;
+        }
+        </style>
+    </head>
+    <body>
+        <h3>buttonSet</h3>
+        <nav>
+            <div id="navigation">
+            </div>
+        </nav>
+        <h3>单选按钮:</h3>
+        <div id="demo1">
+            <a href="javascript:;">测试1测测试1测11</a><a href="javascript:;">测试2</a><a href="javascript:;">测试3</a><a href="javascript:;">测试4</a>
+        </div>
+        <br />
+        <h3>复选按钮:</h3>
+        <div id="demo2">
+            <span class="uiCheckBox">测试1</span><span class="uiCheckBox">测试2</span><span class="uiCheckBox">测试3</span>
+        </div>
+        <br />
+        <h3>单选按钮（带图标）:</h3>
+        <div id="demo3">
+            <span class="uiImgRadio" group="abc">测试1测试1测1</span><span class="uiImgRadio" group="abc">测试2</span><span class="uiImgRadio" group="abc">测试3</span>
+        </div>
+        <br />
+        <h3>复选按钮（带图标）:</h3>
+        <div id="demo4">
+            <span class="uiImgCheckBox">测试1</span><span class="uiImgCheckBox">测试2</span><span class="uiImgCheckBox">测试3</span>
+        </div>
+        <br />
+        <h3>普通按钮</h3>
+        <div id="demo5">
+            <span>测试1测试1测试1测1</span><span>测试2</span><span>测试3</span><span>测试4</span><span>测试5</span>
+        </div>
+        <br />
+        <h3>普通按钮</h3>
+        <div id="demo6"><span>测试1</span><span>测试2</span><span>测试3</span><span>测试4</span><span>测试5</span></div>
+        <br />
+        <footer>
+        </footer>
+    </body>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.base.core.js"></script>
+    <script type="text/javascript" src="js/jquery.base.loader.js"></script>
+    <script type="text/javascript" src="js/jquery.base.widget.js"></script>
+    <script type="text/javascript" src="js/jquery.base.buttonset.js"></script>
+    <script type="text/javascript">
+        $(function()
+        {
+            $("#demo1").buttonSet({
+                defaultSelectedItem : 0,
+                btnSetType : "radio"
+            });
+            
+            $("#demo2").buttonSet({
+                btnWidth : 180
+            });
+            
+            $("#demo3").buttonSet({
+                btnMargin : 10
+            });
+            
+            $("#demo4").buttonSet();
+            $("#demo5").buttonSet({
+                iconArray : ["buttonIcon1", "buttonIcon2"],
+                iconFloatArray : ["right", "left", "right"],
+                click : function()
+                {
+                    $("#output p").html("普通按钮　click index:" + $(this).index());
+                }
+            });
+            /*
+            $("#demo5").buttonSet("buttonText", 0, "文本测试");
+            $("#demo5").buttonSet("buttonIcon", 1, "buttonIcon1");
+            */
+            $("#demo6").buttonSet({
+                vertical : true
+            });
+            /*
+            $("#infor h3").click(function()
+            {
+               $(this).nextAll().toggle(); 
+            });
+            $("#demo1").buttonSet("val", 1);
+            $("#demo2").buttonSet("val", 0, true);
+            setTimeout(function(){$("#demo2").buttonSet("val", 0, false); $("#demo3").buttonSet("removeButton", 0);}, 2000);
+            */
+        });
+    </script>
+</html>

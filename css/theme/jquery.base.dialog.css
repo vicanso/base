@@ -1,4 +1,4 @@
-.uiDialog{margin:0;padding:0;overflow:hidden;}.uiDialog>.uiTitleBar{height:30px;line-height:30px;margin:2px;position:relative;}.uiDialog>.uiTitleBar>.uiTitle{height:100%;padding-left:10px;margin-right:48px;display:block;overflow:hidden;}.uiDialog>.uiTitleBar>.uiTitle>.uiTitleIcon{width:24px;height:30px;display:block;float:left;}
+.uiDialog{margin:0;padding:0;overflow:hidden;}.uiDialog>.uiTitleBar{height:30px;line-height:30px;margin:2px;position:relative;}.uiDialog>.uiTitleBar>.uiTitle{height:100%;padding-left:10px;margin-right:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.uiDialog>.uiTitleBar>.uiTitle>.uiTitleIcon{width:24px;height:30px;display:block;float:left;}
 .uiDialog>.uiTitleBar>.uiDialogButtonSet{position:absolute;right:5px;top:0;height:100%;}
 .uiDialog>.uiTitleBar>.uiButtonSet>.uiUserBtn{margin:0 1px;}
 .uiDialog>.uiContent{margin:10px;}
