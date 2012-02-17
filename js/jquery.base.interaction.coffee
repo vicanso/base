@@ -5,10 +5,9 @@ class Interaction
   constructor : (self, options) ->
     interactionObj = @
     interactionObj.jqObj = self
-    opts = interactionObj.opts = {}
-    $.extend opts, Interaction.prototype.defaults, options
-    opts.widgetKey = $$.getRandomKey()
-    return interactionObj
+    interactionObj.opts = {}
+    $.extend interactionObj.opts, Interaction.prototype.defaults, options
+    interactionObj.opts.widgetKey = $$.getRandomKey()
   defaults : {
     disable : false
     getUserMask : null
@@ -32,6 +31,8 @@ class Interaction
     self = interactionObj.jqObj
     opts = interactionObj.opts
     jQueryEvent =  if self.off then 'on' else 'bind'
+
+    console.log opts.type
     if opts.type is 'resize'
       obj = self.find '.uiResizable'
       if obj.length is 0
@@ -43,6 +44,7 @@ class Interaction
       if obj.length is 0
         obj = self.addClass 'uiDraggable'
     mouseDownEvent = "mousedown.#{opts.type}"
+    console.log obj
     obj[jQueryEvent] mouseDownEvent, (e) ->
       setInteractionSetting self, opts, e
       if opts.type is 'resize'
@@ -50,12 +52,14 @@ class Interaction
       return !opts.stopMouseDownPropagation
     mouseMoveEvent = "mousemove.#{opts.widgetKey}"
     mouseUpEvent = "mouseup.#{opts.widgetKey}"
+
     ($ document)[jQueryEvent] mouseMoveEvent, (e) ->
       if opts.start
         if opts.mask is null
           if (setInteractionMask self, opts, e) is false
             return
         maskItem = opts.mask
+        console.log 'mousemove'
         opts.doing = true
         offsetX = e.clientX - opts.originClientX
         offsetY = e.clientY - opts.originClientY
@@ -183,6 +187,73 @@ checkArea = (opts, position, destPositionArr) ->
       crossFlag = true
       break
   return crossFlag
+$.fn.draggable = (options) ->
+  self = this
+  draggableObj = new $$.Draggable self, options
+  draggableObj.init self, draggableObj.opts
+class $$.Draggable extends Interaction
+  constructor: (self, options) ->
+    draggableObj = @
+    if not (draggableObj instanceof $$.Draggable)
+      return new $$.Draggable self, options
+    opts = $.extend {}, $$.Draggable.prototype.defaults, options
+    draggableObj.constructor.__super__.constructor.call draggableObj, self, opts
+    opts = draggableObj.opts
+    if opts.event.stop is $.noop
+      opts.event.stop = (mask, offset) ->
+        self.moveToPos {position : offset}
+        return null
 
+  defaults : {
+    dest : null
+    originPosition : null
+    position : null
+    outerWidth : null
+    outerHeight : null
+    destPosition : null
+    firstCross : false
+    type : "drag"
+    widgetKey : null
+    cross : null
+  }
 
+$.fn.resizable = (options) ->
+  self = @
+  resizableObj = new $$.Resizable self, options
+  resizableObj.init self, resizableObj.opts
 
+class $$.Resizable extends Interaction
+  constructor: (self, options) ->
+    resizableObj = @
+    if not (resizableObj instanceof $$.Resizable)
+      return new $$.Resizable self, options
+    opts = $.extend {}, $$.Resizable.prototype.defaults, options
+    resizableObj.constructor.__super__.constructor.call resizableObj, self, opts
+    opts = resizableObj.opts
+    if opts.event.stop is $.noop
+      opts.event.stop = (resizeObj, mask, width, height) ->
+        if(opts.resizeStop self) is false
+          return false
+        height = Math.min (Math.max opts.minHeight, height), opts.maxHeight
+        width = Math.min (Math.max opts.minWidth, width), opts.maxWidth
+        otherItemHeightTotal = 0
+        content = ((self.width width).height height).children '.uiContent'
+        self.children().each () ->
+          obj = $ @
+          if not obj.hasClass 'uiContent' and not (obj.hasClass 'uiResizable')
+            otherItemHeightTotal += ($ @).outerHeight true
+        outerOffset = (content.outerHeight true) - content.height()
+        content.height height - otherItemHeightTotal - outerOffset
+        return null
+  defaults : {
+    minWidth : null,
+    minHeight : null,
+    maxWidth : 0xffff,
+    maxHeight : 0xffff,
+    originWidth : 0,
+    originHeight : 0,
+    type : "resize",
+    outerWidth : null,
+    outerHeight : null,
+    destPosition : null
+  }

@@ -1,5 +1,5 @@
 (function() {
-  var $, $$, initDialog, initEvent,
+  var $, $$, initDialog, initEvent, setContentHeight,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -186,7 +186,7 @@
     }
     if (opts.resizable) {
       self.append(opts.resizeHTML);
-      if (self.css('position' === 'static')) self.css('position', 'relative');
+      if ((self.css('position')) === 'static') self.css('position', 'relative');
     }
     opts.minHeight = Math.min(self.height(), opts.minHeight);
     opts.minWidth = Math.min(self.width(), opts.minWidth);
@@ -216,7 +216,7 @@
       }
     });
     if (opts.draggable) {
-      dragStopFunction = function(mask, offset) {
+      dragStopFunction = function(dragObj, mask, offset) {
         if ((opts.dragStop(self)) === false) return false;
         return self.offset(offset);
       };
@@ -229,7 +229,7 @@
       });
     }
     if (opts.resizable) {
-      resizeStopFunc = function(mask, width, height) {
+      resizeStopFunc = function(resizeObj, mask, width, height) {
         var content, otherItemHeightTotal, outerOffset;
         if ((opts.resizeStop(self)) === false) return false;
         height = Math.min(Math.max(opts.minHeight, height), opts.maxHeight);
@@ -258,6 +258,43 @@
         maxWidth: opts.maxWidth
       });
     }
+  };
+
+  setContentHeight = function(self, opts) {
+    var completeLoad, content, contentHeight, imgList, imgTotal, otherItemHeightTotal, outerOffset;
+    otherItemHeightTotal = 0;
+    content = self.children('.uiContent');
+    self.children().each(function() {
+      var obj;
+      obj = $(this);
+      if (!obj.hasClass('uiContent' && !(obj.hasClass('uiResizable')))) {
+        return otherItemHeightTotal += ($(this)).outerHeight(true);
+      }
+    });
+    contentHeight = content.outerHeight(true);
+    outerOffset = contentHeight - content.height();
+    imgList = self.find('img');
+    imgTotal = imgList.length;
+    if (imgTotal === 0) {
+      completeLoad = 0;
+      imgList.each(function() {
+        if (this.complete) {
+          completeLoad++;
+          if (completeLoad === imgTotal) {
+            return content.height(self.height() - otherItemHeightTotal - outerOffset);
+          }
+        } else {
+          return ($(this)).load(function() {
+            completeLoad++;
+            if (completeLoad === imgTotal) {
+              return content.height(self.height() - otherItemHeightTotal - outerOffset);
+            }
+          });
+        }
+      });
+    }
+    content.height(self.height() - otherItemHeightTotal - outerOffset);
+    return null;
   };
 
 }).call(this);

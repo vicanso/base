@@ -12,7 +12,7 @@ class RandomString
     len ?= 10
     (@getRandomChar num for num in [1..10]).join ""
   getRandomChar :() ->
-    @legalCharList[Math.floor Math.random * @legalListLength]
+    @legalCharList[Math.floor Math.random() * @legalListLength]
 
 $.extend $$, {
   version :"0.8.1"

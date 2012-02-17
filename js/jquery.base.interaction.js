@@ -1,5 +1,7 @@
 (function() {
-  var $, $$, Interaction, complete, setInteractionMask, setInteractionSetting;
+  var $, $$, Interaction, checkArea, complete, setInteractionMask, setInteractionSetting,
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   $ = window.jQuery;
 
@@ -10,13 +12,12 @@
     Interaction.name = 'Interaction';
 
     function Interaction(self, options) {
-      var interactionObj, opts;
+      var interactionObj;
       interactionObj = this;
       interactionObj.jqObj = self;
-      opts = interactionObj.opts = {};
-      $.extend(opts, Interaction.prototype.defaults, options);
-      opts.widgetKey = $$.getRandomKey();
-      return interactionObj;
+      interactionObj.opts = {};
+      $.extend(interactionObj.opts, Interaction.prototype.defaults, options);
+      interactionObj.opts.widgetKey = $$.getRandomKey();
     }
 
     Interaction.prototype.defaults = {
@@ -44,6 +45,7 @@
       self = interactionObj.jqObj;
       opts = interactionObj.opts;
       jQueryEvent = self.off ? 'on' : 'bind';
+      console.log(opts.type);
       if (opts.type === 'resize') {
         obj = self.find('.uiResizable');
         if (obj.length === 0) {
@@ -55,6 +57,7 @@
         if (obj.length === 0) obj = self.addClass('uiDraggable');
       }
       mouseDownEvent = "mousedown." + opts.type;
+      console.log(obj);
       obj[jQueryEvent](mouseDownEvent, function(e) {
         setInteractionSetting(self, opts, e);
         if (opts.type === 'resize') return false;
@@ -69,6 +72,7 @@
             if ((setInteractionMask(self, opts, e)) === false) return;
           }
           maskItem = opts.mask;
+          console.log('mousemove');
           opts.doing = true;
           offsetX = e.clientX - opts.originClientX;
           offsetY = e.clientY - opts.originClientY;
@@ -208,5 +212,139 @@
     }
     return true;
   };
+
+  checkArea = function(opts, position, destPositionArr) {
+    var bottom, check, crossFlag, left, pos, right, top, _i, _len;
+    left = position.left;
+    top = position.top;
+    right = left + opts.outerWidth;
+    bottom = top + opts.outerHeight;
+    crossFlag = false;
+    check = function(pos) {
+      if (!(left > pos.rightBottom[0] || right < pos.leftTop[0] || bottom < pos.leftTop[0] || top > pos.rightBottom[1])) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    for (_i = 0, _len = destPositionArr.length; _i < _len; _i++) {
+      pos = destPositionArr[_i];
+      if ((check(pos)) === true) {
+        crossFlag = true;
+        break;
+      }
+    }
+    return crossFlag;
+  };
+
+  $.fn.draggable = function(options) {
+    var draggableObj, self;
+    self = this;
+    draggableObj = new $$.Draggable(self, options);
+    return draggableObj.init(self, draggableObj.opts);
+  };
+
+  $$.Draggable = (function(_super) {
+
+    __extends(Draggable, _super);
+
+    Draggable.name = 'Draggable';
+
+    function Draggable(self, options) {
+      var draggableObj, opts;
+      draggableObj = this;
+      if (!(draggableObj instanceof $$.Draggable)) {
+        return new $$.Draggable(self, options);
+      }
+      opts = $.extend({}, $$.Draggable.prototype.defaults, options);
+      draggableObj.constructor.__super__.constructor.call(draggableObj, self, opts);
+      opts = draggableObj.opts;
+      if (opts.event.stop === $.noop) {
+        opts.event.stop = function(mask, offset) {
+          self.moveToPos({
+            position: offset
+          });
+          return null;
+        };
+      }
+    }
+
+    Draggable.prototype.defaults = {
+      dest: null,
+      originPosition: null,
+      position: null,
+      outerWidth: null,
+      outerHeight: null,
+      destPosition: null,
+      firstCross: false,
+      type: "drag",
+      widgetKey: null,
+      cross: null
+    };
+
+    return Draggable;
+
+  })(Interaction);
+
+  $.fn.resizable = function(options) {
+    var resizableObj, self;
+    self = this;
+    resizableObj = new $$.Resizable(self, options);
+    return resizableObj.init(self, resizableObj.opts);
+  };
+
+  $$.Resizable = (function(_super) {
+
+    __extends(Resizable, _super);
+
+    Resizable.name = 'Resizable';
+
+    function Resizable(self, options) {
+      var opts, resizableObj;
+      resizableObj = this;
+      if (!(resizableObj instanceof $$.Resizable)) {
+        return new $$.Resizable(self, options);
+      }
+      opts = $.extend({}, $$.Resizable.prototype.defaults, options);
+      resizableObj.constructor.__super__.constructor.call(resizableObj, self, opts);
+      opts = resizableObj.opts;
+      if (opts.event.stop === $.noop) {
+        opts.event.stop = function(resizeObj, mask, width, height) {
+          var content, otherItemHeightTotal, outerOffset;
+          if ((opts.resizeStop(self)) === false) return false;
+          height = Math.min(Math.max(opts.minHeight, height), opts.maxHeight);
+          width = Math.min(Math.max(opts.minWidth, width), opts.maxWidth);
+          otherItemHeightTotal = 0;
+          content = ((self.width(width)).height(height)).children('.uiContent');
+          self.children().each(function() {
+            var obj;
+            obj = $(this);
+            if (!obj.hasClass('uiContent' && !(obj.hasClass('uiResizable')))) {
+              return otherItemHeightTotal += ($(this)).outerHeight(true);
+            }
+          });
+          outerOffset = (content.outerHeight(true)) - content.height();
+          content.height(height - otherItemHeightTotal - outerOffset);
+          return null;
+        };
+      }
+    }
+
+    Resizable.prototype.defaults = {
+      minWidth: null,
+      minHeight: null,
+      maxWidth: 0xffff,
+      maxHeight: 0xffff,
+      originWidth: 0,
+      originHeight: 0,
+      type: "resize",
+      outerWidth: null,
+      outerHeight: null,
+      destPosition: null
+    };
+
+    return Resizable;
+
+  })(Interaction);
 
 }).call(this);

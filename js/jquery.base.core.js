@@ -34,7 +34,7 @@
     };
 
     RandomString.prototype.getRandomChar = function() {
-      return this.legalCharList[Math.floor(Math.random * this.legalListLength)];
+      return this.legalCharList[Math.floor(Math.random() * this.legalListLength)];
     };
 
     return RandomString;

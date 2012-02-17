@@ -147,7 +147,7 @@ initDialog = (dialogObj, self, opts) ->
     buttonSetObj.appendTo self
   if opts.resizable
     self.append opts.resizeHTML
-    if self.css 'position' is 'static'
+    if (self.css 'position') is 'static'
       self.css 'position', 'relative'
   opts.minHeight = Math.min self.height(), opts.minHeight
   opts.minWidth = Math.min self.width(), opts.minWidth
@@ -172,13 +172,13 @@ initEvent = (dialogObj, self, opts) ->
       dialogObj[func] self, opts, obj, e
       return false
   if opts.draggable
-    dragStopFunction = (mask, offset) ->
+    dragStopFunction = (dragObj, mask, offset) ->
       if (opts.dragStop self ) is false
         return false
       self.offset offset
     self.draggable {event : {start : opts.dragStart, doing : opts.draging,  stop : dragStopFunction}}
   if opts.resizable
-    resizeStopFunc = (mask, width, height) ->
+    resizeStopFunc = (resizeObj, mask, width, height) ->
       if (opts.resizeStop self) is false
         return false
       height = Math.min (Math.max opts.minHeight, height), opts.maxHeight
@@ -202,3 +202,28 @@ initEvent = (dialogObj, self, opts) ->
       minWidth : opts.minWidth
       maxWidth : opts.maxWidth
     }
+setContentHeight = (self, opts) ->
+  otherItemHeightTotal = 0
+  content = self.children '.uiContent'
+  self.children().each () ->
+    obj = $ @
+    if not obj.hasClass 'uiContent' and not (obj.hasClass 'uiResizable')
+      otherItemHeightTotal += ($ @).outerHeight true
+  contentHeight = content.outerHeight true
+  outerOffset = contentHeight - content.height()
+  imgList = self.find 'img'
+  imgTotal = imgList.length
+  if imgTotal is 0
+    completeLoad = 0
+    imgList.each () ->
+      if this.complete
+        completeLoad++
+        if completeLoad is imgTotal
+          content.height self.height() - otherItemHeightTotal - outerOffset
+      else
+        ($ @).load () ->
+          completeLoad++
+          if completeLoad is imgTotal
+            content.height self.height() - otherItemHeightTotal - outerOffset
+  content.height self.height() - otherItemHeightTotal - outerOffset
+  return null
