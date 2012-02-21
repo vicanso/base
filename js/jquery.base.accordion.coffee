@@ -17,7 +17,7 @@ class $$.Accordion extends $$.Widget
       return new $$.Accordion self, options
     opts = $.extend {}, $$.Accordion.prototype.defaults, options
     accordionObj.constructor.__super__.constructor.call accordionObj, self, opts
-    accordionObj.init();
+    accordionObj.init()
   defaults : {
     accordionClass : "#{$$.defaultBorder} uiCornerAll #{$$.defaultBoxShadow}"
     titleBarClass : $$.defaultGradientBG

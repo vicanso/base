@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+        Remove this if you use the .htaccess -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <title>default</title>
+        <meta name="description" content="" />
+        <meta name="generator" content="Studio 3 http://aptana.com/" />
+        <meta name="author" content="vicanso" />
+
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.theme.css" />
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.list.css" />
+        <style type="text/css">
+        *
+        {
+            margin:0;
+            padding:0;
+        }
+        body
+        {
+            font-family: "Times New Roman", "\5B8B\4F53";
+            font-size:16px;
+        }
+        #infor h3
+        {
+            cursor:pointer;
+        }
+        #infor p.attr
+        {
+            display:none;
+            margin:5px 0;
+        }
+        #infor span.note
+        {
+            color:#a0a0a0;
+            font-size:12px;
+        }
+        #demo1
+        {
+            width:300px;
+            height:400px;
+            margin:20px;
+        }
+        </style>
+    </head>
+    <body>
+        <h3></h3>
+        <nav>
+            <div id="navigation">
+            </div>
+        </nav>
+        <div id="output">
+            <h3>状态显示:</h3>
+            <p></p>
+        </div>
+        <div id="demo1" title="音乐列表">
+            <div>
+                <ul data-key="0">
+                    <li data-key="1">列表1</li>
+                    <li data-key="2">列表2</li>
+                    <li>列表3</li>
+                    <li>列表4</li>
+                    <li>列表5</li>
+                    <li>列表6</li>
+                    <li>列表7</li>
+                    <li>列表8</li>
+                    <li>列表9</li>
+                    <li>列表10</li>
+                </ul>
+                <ul data-key="1">
+                    <li data-key="2">列表11</li>
+                    <li>列表11</li>
+                    <li>列表31</li>
+                    <li>列表41</li>
+                    <li>列表5</li>
+                    <li>列表6</li>
+                    <li>列表7</li>
+                    <li>列表8</li>
+                    <li>列表9</li>
+                    <li>列表10</li>
+                </ul>
+                <ul data-key="2">
+                    <li>列表22</li>
+                    <li>列表22</li>
+                    <li>列表31</li>
+                    <li>列表41</li>
+                    <li>列表5</li>
+                    <li>列表6</li>
+                    <li>列表7</li>
+                    <li>列表8</li>
+                    <li>列表9</li>
+                    <li>列表10</li>
+                </ul>
+             </div>
+        </div>
+        <footer>
+        </footer>
+    </body>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.base.core.js"></script>
+    <script type="text/javascript" src="js/jquery.base.loader.js"></script>
+    <script type="text/javascript" src="js/jquery.base.effect.js"></script>
+    <script type="text/javascript" src="js/jquery.base.widget.js"></script>
+    <script type="text/javascript" src="js/jquery.base.list.js"></script>
+    <script type="text/javascript">
+        $(function()
+        {
+            $("#demo1").list();
+        });
+    </script>
+</html>
