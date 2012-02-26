@@ -24,36 +24,35 @@
     Accordion.name = 'Accordion';
 
     function Accordion(self, options) {
-      var accordionObj, opts;
+      var accordionObj, defaults, opts;
       accordionObj = this;
       if (!(accordionObj instanceof $$.Accordion)) {
         return new $$.Accordion(self, options);
       }
-      opts = $.extend({}, $$.Accordion.prototype.defaults, options);
+      defaults = {
+        accordionClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
+        titleBarClass: $$.defaultGradientBG,
+        activeClass: $$.defaultGradientBG,
+        itemTitleBarClass: 'uiBlackGradientBG',
+        active: [0],
+        event: 'click',
+        titleIcon: null,
+        animation: 'toggle',
+        title: null,
+        itemTitleList: null,
+        height: "auto",
+        toggle: false,
+        hideOthers: true,
+        animating: false,
+        titleBarHTML: '<div class="uiAccordionTitleBar uiNoSelectText"><span class="title"></span></div>',
+        itemTitleBarHTML: '<div class="uiTitleBar uiNoSelectText"><span class="uiUserBtn uiSmallIcon uiArrowDownIcon"></span><span class="uiTitle"></span></div>',
+        changeStart: $.noop,
+        change: $.noop
+      };
+      opts = $.extend(defaults, options);
       accordionObj.constructor.__super__.constructor.call(accordionObj, self, opts);
       accordionObj.init();
     }
-
-    Accordion.prototype.defaults = {
-      accordionClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
-      titleBarClass: $$.defaultGradientBG,
-      activeClass: $$.defaultGradientBG,
-      itemTitleBarClass: 'uiBlackGradientBG',
-      active: [0],
-      event: 'click',
-      titleIcon: null,
-      animation: 'toggle',
-      title: null,
-      itemTitleList: null,
-      height: "auto",
-      toggle: false,
-      hideOthers: true,
-      animating: false,
-      titleBarHTML: '<div class="uiAccordionTitleBar uiNoSelectText"><span class="title"></span></div>',
-      itemTitleBarHTML: '<div class="uiTitleBar uiNoSelectText"><span class="uiUserBtn uiSmallIcon uiArrowDownIcon"></span><span class="uiTitle"></span></div>',
-      changeStart: $.noop,
-      change: $.noop
-    };
 
     Accordion.prototype.init = function() {
       var accordionObj;
@@ -72,11 +71,11 @@
         activateArr = [];
         titleBarList = $('> .uiTitleBar', self);
         titleBarList.each(function(n) {
-          if (($(this)).hasClass(opts.activeClass)) return activateArr.push(n);
+          if ($(this).hasClass(opts.activeClass)) return activateArr.push(n);
         });
         return activateArr;
       }
-      obj = ($('> .uiTitleBar', self)).eq(index);
+      obj = $('> .uiTitleBar', self).eq(index);
       if (!obj.hasClass(opts.activeClass)) obj.trigger(opts.event);
       return accordionObj;
     };
@@ -87,7 +86,7 @@
       self = accordionObj.jqObj;
       opts = accordionObj.opts;
       if (index == null) index = 0;
-      titleBarObj = ($('> .uiTitleBar', self)).eq(index);
+      titleBarObj = $('> .uiTitleBar', self).eq(index);
       contentObj = titleBarObj.next();
       if (arguments.length === 1) return contentObj;
       if (arguments.length === 2) {
@@ -97,7 +96,7 @@
         }
         return titleBarObj;
       }
-      (titleBarObj.children('.uiTitle')).html(title);
+      titleBarObj.children('.uiTitle').html(title);
       if (content != null) contentObj.html(content);
       return accordionObj;
     };
@@ -109,14 +108,14 @@
       opts = accordionObj.opts;
       itemObj = $(item);
       if (title == null) title = itemObj.attr('title');
-      titleBarObj = (((($(opts.itemTitleBarHTML)).addClass(opts.itemTitleBarClass)).children('.uiTitle')).html(title)).end();
-      (itemObj.addClass('uiContent uiHidden')).height(opts.height);
+      titleBarObj = $(opts.itemTitleBarHTML).addClass(opts.itemTitleBarClass).children('.uiTitle').html(title).end();
+      itemObj.addClass('uiContent uiHidden').height(opts.height);
       if (arguments.length === 2) {
-        obj = ($('> .uiTitleBar', self)).eq(index);
+        obj = $('> .uiTitleBar', self).eq(index);
         titleBarObj.insertBefore(obj);
         itemObj.insertBefore(obj);
       } else {
-        (self.append(titleBarObj)).append(itemObj);
+        self.append(titleBarObj).append(itemObj);
       }
       return accordionObj;
     };
@@ -127,7 +126,7 @@
       self = accordionObj.jqObj;
       opts = accordionObj.opts;
       if (index == null) index = 0;
-      return (($('>.uiTitleBar', self)).eq(index)).next().andSelf().remove();
+      return $('>.uiTitleBar', self).eq(index).next().andSelf().remove();
     };
 
     Accordion.prototype.title = function(title) {
@@ -148,9 +147,9 @@
       opts = accordionObj.opts;
       if (arguments.length === 0) return opts.titleIcon;
       if (opts.titleIcon === null) {
-        ($('>.uiAccordionTitleBar', self)).prepend($('<span class="uiTitleIcon" />'));
+        $('>.uiAccordionTitleBar', self).prepend($('<span class="uiTitleIcon" />'));
       }
-      obj = (($('> .uiAccordionTitleBar > span.uiTitleIcon', self)).removeClass(opts.titleIcon)).addClass(titleIcon);
+      obj = $('> .uiAccordionTitleBar > span.uiTitleIcon', self).removeClass(opts.titleIcon).addClass(titleIcon);
       opts.titleIcon = titleIcon;
       return accordionObj;
     };
@@ -163,12 +162,12 @@
     var title, titleBar;
     title = opts.title || self.attr('title');
     if (title != null) {
-      titleBar = (((($(opts.titleBarHTML)).addClass(opts.titleBarClass)).children('.title')).html(title)).end();
+      titleBar = $(opts.titleBarHTML).addClass(opts.titleBarClass).children('.title').html(title).end();
       if (opts.titleIcon != null) {
-        (titleBar.prepend($('<span class="uiTitleIcon" />'))).addClass(opts.titleIcon);
+        titleBar.prepend($('<span class="uiTitleIcon" />')).addClass(opts.titleIcon);
       }
     }
-    ((self.addClass('uiAccordion uiWidget ' + opts.accordionClass)).children('div')).each(function(n) {
+    self.addClass("uiAccordion uiWidget " + opts.accordionClass).children('div').each(function(n) {
       var buttonClass, contentClass, itemTitleBarObj, obj, titleBarClass;
       contentClass = 'uiHidden';
       titleBarClass = opts.itemTitleBarClass;
@@ -182,18 +181,16 @@
       title = null;
       if ($.isArray(opts.itemTitleList)) title = opts.itemTitleList[n];
       if (title == null) title = obj.attr('title');
-      itemTitleBarObj = ($(opts.itemTitleBarHTML)).addClass(titleBarClass);
-      (((itemTitleBarObj.children('.uiUserBtn')).toggleClass(buttonClass)).siblings('.uiTitle')).html(title);
-      return itemTitleBarObj.insertBefore((obj.addClass("uiContent " + contentClass)).height(opts.height));
+      itemTitleBarObj = $(opts.itemTitleBarHTML).addClass(titleBarClass);
+      itemTitleBarObj.children('.uiUserBtn').toggleClass(buttonClass).siblings('.uiTitle').html(title);
+      return itemTitleBarObj.insertBefore(obj.addClass("uiContent " + contentClass).height(opts.height));
     });
     self.prepend(titleBar);
     return initEvent(self, opts);
   };
 
   initEvent = function(self, opts) {
-    var jQueryEvent;
-    jQueryEvent = self.off ? 'on' : 'bind';
-    self[jQueryEvent]("" + opts.event + ".uiAccordion", function(e) {
+    self.on("" + opts.event + ".uiAccordion", function(e) {
       var changeObjList, selectedList, target;
       if (opts.disabled || opts.animating) return;
       target = $(e.target);
@@ -204,40 +201,14 @@
       if (!opts.toggle) if (target.hasClass(opts.activeClass)) return;
       if ((opts.changeStart(self, target, e)) === false) return false;
       opts.animating = true;
-      selectedList = opts.hideOthers === true ? ((($(">.uiTitleBar." + opts.activeClass, self)).not(target)).removeClass("" + opts.activeClass + " uiActive")).addClass(opts.itemTitleBarClass) : null;
-      changeObjList = (target.toggleClass("" + opts.itemTitleBarClass + " " + opts.activeClass + " uiActive")).add(selectedList);
-      (changeObjList.children('.uiUserBtn')).toggleClass('uiArrowUpIcon uiArrowDownIcon');
-      return ((changeObjList.next('.uiContent')).stop(true, true))[opts.animation](opts.animateTime, function() {
-        if (($(this)).is(':visible')) opts.change(self, target, e);
+      selectedList = opts.hideOthers === true ? $(">.uiTitleBar." + opts.activeClass, self).not(target).removeClass("" + opts.activeClass + " uiActive").addClass(opts.itemTitleBarClass) : null;
+      changeObjList = target.toggleClass("" + opts.itemTitleBarClass + " " + opts.activeClass + " uiActive").add(selectedList);
+      changeObjList.children('.uiUserBtn').toggleClass('uiArrowUpIcon uiArrowDownIcon');
+      return changeObjList.next('.uiContent').stop(true, true)[opts.animation](opts.animateTime, function() {
+        if ($(this).is(':visible')) opts.change(self, target, e);
         return opts.animating = false;
       });
     });
-    if (posStr !== 'static' && posStr !== 'relative') {
-      if (opts.active && opts.autoOpen) {
-        (($('.uiDialog')).not(self)).each(function() {
-          var obj;
-          obj = $(this);
-          if (obj.css('position' !== 'static' && (obj.css('position' !== 'relative')))) {
-            return ((obj.css('zIndex', opts.zIndex)).children('.uiTitleBar')).addClass('uiInactive');
-          }
-        });
-      }
-      self[jQueryEvent]('mousedown.uiDialog', function(e) {
-        var target;
-        ((self.css('zIndex', opts.zIndex + 1)).children('.uiTitleBar')).addClass('uiInactive');
-        (self.siblings('.uiDialog')).each(function() {
-          var obj;
-          obj = $(this);
-          if (obj.css('position' !== 'static' && (obj.css('position' !== 'relative')))) {
-            return ((obj.css('zIndex', opts.zIndex)).children('.uiTitleBar')).addClass('uiInactive');
-          }
-        });
-        target = $(e.target);
-        if (target.hasClass('uiDraggable' || target.hasClass('uiResizable' || target.parent().hasClass('uiDraggable')))) {
-          return false;
-        }
-      });
-    }
     return null;
   };
 
@@ -265,7 +236,7 @@
             return content.height(self.height() - otherItemHeightTotal - outerOffset);
           }
         } else {
-          return ($(this)).load(function() {
+          return $(this).load(function() {
             completeLoad++;
             if (completeLoad === imgTotal) {
               return content.height(self.height() - otherItemHeightTotal - outerOffset);

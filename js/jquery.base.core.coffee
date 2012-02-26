@@ -23,12 +23,12 @@ $.extend $$, {
   defaultGradientBG :"uiBlueGradientBG"
   hoverGradientBG :"uiLightBlueGradientBG"
   selectedGradientBG :"uiRedGradientBG"
-  cssShow :{
+  cssShow :
     position:"absolute"
     visibility:"hidden"
     display:"block"
-  }
-  widgetType :{
+  
+  widgetType :
     uiDialog :"dialog"
     uiTabs :"tabs"
     uiSlide :"slide"
@@ -41,7 +41,7 @@ $.extend $$, {
     uiDatePicker :"datePicker"
     uiTree :"tree"
     uiGrid :"grid"
-  }
+  
   widgetDictionary :{}
   randomKey :new RandomString()
   getWidget :(key) ->

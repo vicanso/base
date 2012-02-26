@@ -11,23 +11,23 @@ class $$.Position
     if not (positionObj instanceof $$.Position)
       return new $$.Position self, options
     positionObj.opts = {};
-    $.extend positionObj.opts, $$.Position.prototype.defaults, options
+
+    defaults =
+      returnOldPos : false
+      oldPos : null
+    
+    $.extend positionObj.opts, defaults, options
     positionObj.jqObj = self;
-  defaults : {
-    returnOldPos : false
-    oldPos : null
-  }
   moveToPos : (position) ->
     positionObj = @
     self = positionObj.jqObj
     opts = positionObj.opts
-    oldPos = {
+    oldPos = 
       position : null
       left : null
       top : null
       right : null
       bottom : null
-    }
     self.css 'margin', 0
     if opts.returnOldPos
       $.each oldPos, (key) ->
@@ -54,13 +54,12 @@ setPosByStr = (self, posStr) ->
   parentHeight = parentObj.height()
   targetWidth = self.outerWidth()
   targetHeight = self.outerHeight()
-  posSetting = {
+  posSetting = 
     position : 'absolute'
     left : null
     top : null
     right : null
     bottom : null
-  }
   parentOffset = self.parent().offset()
   if (self.css 'position') is 'fixed'
     posSetting.position = 'fixed'
@@ -83,16 +82,14 @@ setPosByStr = (self, posStr) ->
   self.css posSetting
   return null
 setPosByObject = (self, pos) ->
-  posSetting = {
+  posSetting = 
     position : 'absolute'
     left : null
     top : null
     right : null
     bottom : null
-  }
   $.extend posSetting, pos
   if self.css 'position' is 'fixed'
     posSetting.position = "fixed"
   self.css posSetting
   return null
-

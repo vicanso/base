@@ -12,40 +12,37 @@
     Interaction.name = 'Interaction';
 
     function Interaction(self, options) {
-      var interactionObj;
+      var defaults, interactionObj;
       interactionObj = this;
       interactionObj.jqObj = self;
       interactionObj.opts = {};
-      $.extend(interactionObj.opts, Interaction.prototype.defaults, options);
+      defaults = {
+        disable: false,
+        getUserMask: null,
+        originMask: false,
+        stopMouseDownPropagation: false,
+        start: false,
+        originClientX: 0,
+        originClientY: 0,
+        doing: false,
+        type: null,
+        mask: null,
+        event: {
+          start: $.noop,
+          doing: $.noop,
+          stop: $.noop
+        },
+        maskHTML: '<div class="uiInteractionMask uiInactive uiCornerAll uiBlackBigBorder"></div>'
+      };
+      $.extend(interactionObj.opts, defaults, options);
       interactionObj.opts.widgetKey = $$.getRandomKey();
     }
 
-    Interaction.prototype.defaults = {
-      disable: false,
-      getUserMask: null,
-      originMask: false,
-      stopMouseDownPropagation: false,
-      start: false,
-      originClientX: 0,
-      originClientY: 0,
-      doing: false,
-      type: null,
-      mask: null,
-      event: {
-        start: $.noop,
-        doing: $.noop,
-        stop: $.noop
-      },
-      maskHTML: '<div class="uiInteractionMask uiInactive uiCornerAll uiBlackBigBorder"></div>'
-    };
-
     Interaction.prototype.init = function() {
-      var interactionObj, jQueryEvent, mouseDownEvent, mouseMoveEvent, mouseUpEvent, obj, opts, self;
+      var interactionObj, mouseDownEvent, mouseMoveEvent, mouseUpEvent, obj, opts, self;
       interactionObj = this;
       self = interactionObj.jqObj;
       opts = interactionObj.opts;
-      jQueryEvent = self.off ? 'on' : 'bind';
-      console.log(opts.type);
       if (opts.type === 'resize') {
         obj = self.find('.uiResizable');
         if (obj.length === 0) {
@@ -57,22 +54,20 @@
         if (obj.length === 0) obj = self.addClass('uiDraggable');
       }
       mouseDownEvent = "mousedown." + opts.type;
-      console.log(obj);
-      obj[jQueryEvent](mouseDownEvent, function(e) {
+      obj.on(mouseDownEvent, function(e) {
         setInteractionSetting(self, opts, e);
         if (opts.type === 'resize') return false;
         return !opts.stopMouseDownPropagation;
       });
       mouseMoveEvent = "mousemove." + opts.widgetKey;
       mouseUpEvent = "mouseup." + opts.widgetKey;
-      ($(document))[jQueryEvent](mouseMoveEvent, function(e) {
+      $(document).on(mouseMoveEvent, function(e) {
         var maskItem, newHeight, newWidth, offsetX, offsetY, position;
         if (opts.start) {
           if (opts.mask === null) {
             if ((setInteractionMask(self, opts, e)) === false) return;
           }
           maskItem = opts.mask;
-          console.log('mousemove');
           opts.doing = true;
           offsetX = e.clientX - opts.originClientX;
           offsetY = e.clientY - opts.originClientY;
@@ -94,7 +89,7 @@
             if ((opts.event.doing(self, maskItem, newWidth, newHeight)) === false) {
               return;
             }
-            (maskItem.width(newWidth)).height(newHeight);
+            maskItem.width(newWidth).height(newHeight);
           } else if (opts.type === 'drag') {
             position = {
               left: opts.originPosition.left + offsetX,
@@ -119,7 +114,7 @@
           return false;
         }
       });
-      ($(document))[jQueryEvent](mouseUpEvent, function() {
+      $(document).on(mouseUpEvent, function() {
         return complete(self, opts);
       });
       return interactionObj;
@@ -151,7 +146,7 @@
 
   setInteractionSetting = function(self, opts, e) {
     opts.start = true;
-    if ((opts.event.start(self)) === false || (($(e.target)).hasClass('uiUserBtn'))) {
+    if ((opts.event.start(self)) === false || $(e.target).hasClass('uiUserBtn')) {
       opts.start = false;
       return false;
     }
@@ -179,20 +174,20 @@
         opts.position = opts.originPosition = opts.mask.offset();
       }
     } else if (opts.originMask) {
-      opts.mask = (self.clone().css({
+      opts.mask = self.clone().css({
         position: 'absolute',
         left: maskPosition.left,
         top: maskPosition.top
-      })).appendTo('body');
+      }).appendTo('body');
     } else {
       marginLeftValue = self.css('marginLeft');
       marginTopValue = self.css('marginTop');
-      opts.mask = ((((($(opts.maskHTML)).width(maskWidth)).height(maskHeight)).css({
+      opts.mask = $(opts.maskHTML).width(maskWidth).height(maskHeight).css({
         marginLeft: marginLeftValue,
         marginTop: marginTopValue,
         left: maskPosition.left,
         top: maskPosition.top
-      })).hide().addClass('uiBlackBigBorder uiCornerAll')).appendTo('body');
+      }).hide().addClass('uiBlackBigBorder uiCornerAll').appendTo('body');
     }
     opts.mask.show();
     if (opts.type === 'drag' && opts.dest !== null) {
@@ -251,12 +246,24 @@
     Draggable.name = 'Draggable';
 
     function Draggable(self, options) {
-      var draggableObj, opts;
+      var defaults, draggableObj, opts;
       draggableObj = this;
       if (!(draggableObj instanceof $$.Draggable)) {
         return new $$.Draggable(self, options);
       }
-      opts = $.extend({}, $$.Draggable.prototype.defaults, options);
+      defaults = {
+        dest: null,
+        originPosition: null,
+        position: null,
+        outerWidth: null,
+        outerHeight: null,
+        destPosition: null,
+        firstCross: false,
+        type: "drag",
+        widgetKey: null,
+        cross: null
+      };
+      opts = $.extend({}, defaults, options);
       draggableObj.constructor.__super__.constructor.call(draggableObj, self, opts);
       opts = draggableObj.opts;
       if (opts.event.stop === $.noop) {
@@ -268,19 +275,6 @@
         };
       }
     }
-
-    Draggable.prototype.defaults = {
-      dest: null,
-      originPosition: null,
-      position: null,
-      outerWidth: null,
-      outerHeight: null,
-      destPosition: null,
-      firstCross: false,
-      type: "drag",
-      widgetKey: null,
-      cross: null
-    };
 
     return Draggable;
 
@@ -300,12 +294,24 @@
     Resizable.name = 'Resizable';
 
     function Resizable(self, options) {
-      var opts, resizableObj;
+      var defaults, opts, resizableObj;
       resizableObj = this;
       if (!(resizableObj instanceof $$.Resizable)) {
         return new $$.Resizable(self, options);
       }
-      opts = $.extend({}, $$.Resizable.prototype.defaults, options);
+      defaults = {
+        minWidth: null,
+        minHeight: null,
+        maxWidth: 0xffff,
+        maxHeight: 0xffff,
+        originWidth: 0,
+        originHeight: 0,
+        type: "resize",
+        outerWidth: null,
+        outerHeight: null,
+        destPosition: null
+      };
+      opts = $.extend({}, defaults, options);
       resizableObj.constructor.__super__.constructor.call(resizableObj, self, opts);
       opts = resizableObj.opts;
       if (opts.event.stop === $.noop) {
@@ -329,19 +335,6 @@
         };
       }
     }
-
-    Resizable.prototype.defaults = {
-      minWidth: null,
-      minHeight: null,
-      maxWidth: 0xffff,
-      maxHeight: 0xffff,
-      originWidth: 0,
-      originHeight: 0,
-      type: "resize",
-      outerWidth: null,
-      outerHeight: null,
-      destPosition: null
-    };
 
     return Resizable;
 

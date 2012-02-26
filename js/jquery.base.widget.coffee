@@ -7,20 +7,19 @@ class $$.Widget
     if not (widgetObj instanceof $$.Widget)
       return new $$.Widget self, options
     widgetObj.jqObj = self
-    widgetObj.opts = {}
-    $.extend widgetObj.opts, $$.Widget.prototype.defaults, options
-  defaults : {
-    widgetKey : null
-    animateTime: $$.defaultAnimateDuration
-    disabled : false
-    minPosition: "bottom"
-    clone : null
-    }
+
+    defaults =
+      widgetKey : null
+      animateTime: $$.defaultAnimateDuration
+      disabled : false
+      minPosition: "bottom"
+      clone : null
+    widgetObj.opts = $.extend defaults, options
   selectHandle : () ->
     args = Array.prototype.slice.call arguments
     widgetObj = @
     func = args.shift()
-    if ($.isFunction widgetObj[func])
+    if $.isFunction(widgetObj[func])
       return widgetObj[func].apply widgetObj, args
     return null
   self : () ->
@@ -58,7 +57,7 @@ class $$.Widget
     widgetObj = @
     self = widgetObj.jqObj
     opts = widgetObj.opts
-    (self.find '.uiWidget').each ()->
+    self.find('.uiWidget').each ()->
       obj = $ @
       key = obj.attr 'widget'
       widget = widgetObj.widget key
@@ -73,13 +72,13 @@ widgetDestroy = (widget, revert) ->
   opts = widget.opts
   if not (self.hasClass 'uiWidget')
     self = opts.targetWidget
-  if(self.hasClass 'uiDraggable') or (self.find '.uiDraggable').length isnt 0
+  if self.hasClass('uiDraggable') or self.find('.uiDraggable').length isnt 0
       self.draggable 'destroy'
-  if (self.find '.uiResizable').length isnt 0
+  if self.find('.uiResizable').length isnt 0
       self.resizable 'destroy'
   if $.isFunction widget.beforeDestroy
       widget.beforeDestroy()
-  widgetKey = (self.removeClass 'uiWidget').attr 'widget'
+  widgetKey = self.removeClass('uiWidget').attr 'widget'
   widget.removeWidget widgetKey
   if revert
     opts.clone.insertAfter self

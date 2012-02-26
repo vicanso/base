@@ -1,6 +1,5 @@
 .uiList{padding:0;margin:0;overflow:hidden;}.uiList ul{width:10%;overflow:auto;float:left;}
 .uiList li{list-style:none;height:30px;padding:0 5px;line-height:30px;border-bottom:1px solid #a0a0a0;cursor:pointer;}
-.uiList li.uiListItem{background:#fafafa;}
 .uiList li.uiListMore>.uiListMoreBtn{display:block;float:right;margin:0 5px;height:100%;}
 .uiList>.uiListContent{width:1000%;}
 .uiList>.uiListTitleBar{height:25px;line-height:25px;overflow:hidden;padding-left:10px;position:relative;}.uiList>.uiListTitleBar>span{margin-right:65px;}.uiList>.uiListTitleBar>span.uiListBack{margin:0;cursor:pointer;position:absolute;text-align:center;width:42px;padding-left:8px;right:5px;overflow:hidden;display:none;}

@@ -10,21 +10,19 @@
     Widget.name = 'Widget';
 
     function Widget(self, options) {
-      var widgetObj;
+      var defaults, widgetObj;
       widgetObj = this;
       if (!(widgetObj instanceof $$.Widget)) return new $$.Widget(self, options);
       widgetObj.jqObj = self;
-      widgetObj.opts = {};
-      $.extend(widgetObj.opts, $$.Widget.prototype.defaults, options);
+      defaults = {
+        widgetKey: null,
+        animateTime: $$.defaultAnimateDuration,
+        disabled: false,
+        minPosition: "bottom",
+        clone: null
+      };
+      widgetObj.opts = $.extend(defaults, options);
     }
-
-    Widget.prototype.defaults = {
-      widgetKey: null,
-      animateTime: $$.defaultAnimateDuration,
-      disabled: false,
-      minPosition: "bottom",
-      clone: null
-    };
 
     Widget.prototype.selectHandle = function() {
       var args, func, widgetObj;
@@ -88,7 +86,7 @@
       widgetObj = this;
       self = widgetObj.jqObj;
       opts = widgetObj.opts;
-      (self.find('.uiWidget')).each(function() {
+      self.find('.uiWidget').each(function() {
         var key, obj, widget;
         obj = $(this);
         key = obj.attr('widget');
@@ -109,12 +107,12 @@
     self = widget.jqObj;
     opts = widget.opts;
     if (!(self.hasClass('uiWidget'))) self = opts.targetWidget;
-    if ((self.hasClass('uiDraggable')) || (self.find('.uiDraggable')).length !== 0) {
+    if (self.hasClass('uiDraggable') || self.find('.uiDraggable').length !== 0) {
       self.draggable('destroy');
     }
-    if ((self.find('.uiResizable')).length !== 0) self.resizable('destroy');
+    if (self.find('.uiResizable').length !== 0) self.resizable('destroy');
     if ($.isFunction(widget.beforeDestroy)) widget.beforeDestroy();
-    widgetKey = (self.removeClass('uiWidget')).attr('widget');
+    widgetKey = self.removeClass('uiWidget').attr('widget');
     widget.removeWidget(widgetKey);
     if (revert) opts.clone.insertAfter(self);
     self.remove();

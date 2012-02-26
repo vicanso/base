@@ -24,30 +24,29 @@
     List.name = 'List';
 
     function List(self, options) {
-      var listObj, opts;
+      var defaults, listObj, opts;
       listObj = this;
       if (!(listObj instanceof $$.List)) return new $$.List(self, options);
-      opts = $.extend({}, $$.List.prototype.defaults, options);
+      defaults = {
+        title: null,
+        indexKey: "data-key",
+        titleBarClass: $$.defaultGradientBG,
+        titleIcon: null,
+        listClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
+        listItemClass: "uiListItem",
+        listItemHoverClass: "uiLightBlueGradientBG",
+        listItemSelectedClass: "uiBlueGradientBG",
+        click: $.noop,
+        listBackIndexArr: [],
+        showListItem: null,
+        listWidth: 0,
+        titleBarHTML: '<div class="uiListTitleBar uiNoSelectText"><span></span><span class="uiListBack uiIcon uiBackIcon">Back</span></div>',
+        moreItemHTML: '<span class="uiListMoreBtn uiArrowRightIcon uiSmallIcon"></span>'
+      };
+      opts = $.extend(defaults, options);
       listObj.constructor.__super__.constructor.call(listObj, self, opts);
       listObj.init();
     }
-
-    List.prototype.defaults = {
-      title: null,
-      indexKey: "data-key",
-      titleBarClass: $$.defaultGradientBG,
-      titleIcon: null,
-      listClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
-      listItemClass: "uiListItem",
-      listItemHoverClass: "uiLightBlueGradientBG",
-      listItemSelectedClass: "uiBlueGradientBG",
-      click: $.noop,
-      listBackIndexArr: [],
-      showListItem: null,
-      listWidth: 0,
-      titleBarHTML: '<div class="uiListTitleBar uiNoSelectText"><span></span><span class="uiListBack uiIcon uiBackIcon">Back</span></div>',
-      moreItemHTML: '<span class="uiListMoreBtn uiArrowRightIcon uiSmallIcon"></span>'
-    };
 
     List.prototype.init = function() {
       var listObj;
@@ -64,51 +63,49 @@
   initList = function(self, opts) {
     var title, titleBar, ulHeight;
     title = opts.title || (self.attr('title')) || '';
-    ((self.addClass("uiList uiWidget " + opts.listClass)).children('div:first')).addClass('uiListContent');
+    self.addClass("uiList uiWidget " + opts.listClass).children('div:first').addClass('uiListContent');
     if (title) {
-      titleBar = (((($(opts.titleBarHTML)).addClass(opts.titleBarClass)).children('span:first')).html(title)).end();
+      titleBar = $(opts.titleBarHTML).addClass(opts.titleBarClass).children('span:first').html(title).end();
       if (opts.titleIcon) {
-        titleBar.prepend(($('<span class="uiTitleIcon" />')).addClass(opts.titleIcon));
+        titleBar.prepend($('<span class="uiTitleIcon" />').addClass(opts.titleIcon));
       }
       self.prepend(titleBar);
     }
-    (self.find('li')).each(function() {
+    self.find('li').each(function() {
       var obj;
       obj = $(this);
       obj.addClass(opts.listItemClass);
       if (obj.attr(opts.indexKey)) {
-        return (obj.addClass('uiListMore')).prepend(opts.moreItemHTML);
+        return obj.addClass('uiListMore').prepend(opts.moreItemHTML);
       }
     });
-    ulHeight = self.height() - ($('>.uiListTitleBar', self)).outerHeight(true);
-    opts.listWidth = ((($('>.uiListContent > ul', self)).filter(':gt(0)')).hide().end().height(ulHeight)).width();
+    ulHeight = self.height() - $('>.uiListTitleBar', self).outerHeight(true);
+    opts.listWidth = $('>.uiListContent > ul', self).filter(':gt(0)').hide().end().height(ulHeight).width();
     return initEvent(self, opts);
   };
 
   initEvent = function(self, opts) {
-    var jQueryEvent;
-    jQueryEvent = self.off ? 'on' : 'bind';
-    ($('>.uiListTitleBar >.uiListBack', self))[jQueryEvent]('click.uiList', function(e) {
+    $('>.uiListTitleBar >.uiListBack', self).on('click.uiList', function(e) {
       var marginLeftValue, number, obj;
       number = opts.listBackIndexArr.pop();
       if (opts.listBackIndexArr.length === 0) {
-        ($(this)).fadeOut(opts.defaultAnimateDuration);
+        $(this).fadeOut(opts.defaultAnimateDuration);
       }
-      obj = ($('>.uiListContent > ul', self)).filter("[" + opts.indexKey + "=\"" + number + "\"]");
+      obj = $('>.uiListContent > ul', self).filter("[" + opts.indexKey + "=\"" + number + "\"]");
       if (obj.length === 0) return;
       marginLeftValue = obj.css('marginLeft');
-      return (obj.css('marginLeft', -opts.listWidth)).show().animate({
+      return obj.css('marginLeft', -opts.listWidth).show().animate({
         marginLeft: 0
       }, opts.defaultAnimateDuration, function() {
         if (opts.showListItem != null) opts.showListItem.show();
-        return ($(this)).css('marginLeft', marginLeftValue);
+        return $(this).css('marginLeft', marginLeftValue);
       });
     });
-    return ($('>.uiListContent > ul', self))[jQueryEvent]('click.uiList mouseover.uiList mouseout.uiList', function(e) {
+    return $('>.uiListContent > ul', self).on('click.uiList mouseover.uiList mouseout.uiList', function(e) {
       var currentNumber, currentObj, jQueryProp, marginLeftValue, number, obj, target;
       target = $(e.target);
       jQueryProp = self.prop ? 'prop' : 'attr';
-      if ((target[jQueryProp]('tagName')).toUpperCase() !== 'LI') {
+      if (target[jQueryProp]('tagName').toUpperCase() !== 'LI') {
         target = target.parent();
       }
       if (event.type === 'click') {
@@ -116,30 +113,30 @@
           number = target.attr(opts.indexKey);
           currentObj = $(this);
           currentNumber = currentObj.attr(opts.indexKey);
-          obj = (currentObj.siblings("[" + opts.indexKey + "=\"" + number + "\"]")).show();
+          obj = currentObj.siblings("[" + opts.indexKey + "=\"" + number + "\"]").show();
           if (obj.length === 0) return;
-          ($('>.uiListTitleBar >.uiListBack', self)).fadeIn(opts.defaultAnimateDuration);
+          $('>.uiListTitleBar >.uiListBack', self).fadeIn(opts.defaultAnimateDuration);
           opts.listBackIndexArr.push(currentNumber);
-          marginLeftValue = ($(this)).css('marginLeft');
+          marginLeftValue = $(this).css('marginLeft');
           return currentObj.animate({
             marginLeft: -opts.listWidth
           }, opts.defaultAnimateDuration, function() {
             opts.showListItem = obj;
-            ($(this)).hide();
-            return marginLeftValue = ($(this)).css('marginLeft');
+            $(this).hide();
+            return marginLeftValue = $(this).css('marginLeft');
           });
         } else {
-          (target.removeClass(opts.listItemHoverClass)).addClass(opts.listItemSelectedClass);
-          (target.siblings("." + opts.listItemSelectedClass)).toggleClass("" + opts.listItemClass + " " + opts.listItemSelectedClass);
+          target.removeClass(opts.listItemHoverClass).addClass(opts.listItemSelectedClass);
+          target.siblings("." + opts.listItemSelectedClass).toggleClass("" + opts.listItemClass + " " + opts.listItemSelectedClass);
           return opts.click(self, target, e);
         }
       } else if (event.type === 'mouseover') {
         if (target.hasClass(opts.listItemClass)) {
-          return (target.removeClass(opts.listItemClass)).addClass(opts.listItemHoverClass);
+          return target.removeClass(opts.listItemClass).addClass(opts.listItemHoverClass);
         }
       } else if (event.type === 'mouseout') {
         if (target.hasClass(opts.listItemHoverClass)) {
-          return (target.removeClass(opts.listItemHoverClass)).addClass(opts.listItemClass);
+          return target.removeClass(opts.listItemHoverClass).addClass(opts.listItemClass);
         }
       }
     });

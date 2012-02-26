@@ -18,20 +18,19 @@
     Position.name = 'Position';
 
     function Position(self, options) {
-      var positionObj;
+      var defaults, positionObj;
       positionObj = this;
       if (!(positionObj instanceof $$.Position)) {
         return new $$.Position(self, options);
       }
       positionObj.opts = {};
-      $.extend(positionObj.opts, $$.Position.prototype.defaults, options);
+      defaults = {
+        returnOldPos: false,
+        oldPos: null
+      };
+      $.extend(positionObj.opts, defaults, options);
       positionObj.jqObj = self;
     }
-
-    Position.prototype.defaults = {
-      returnOldPos: false,
-      oldPos: null
-    };
 
     Position.prototype.moveToPos = function(position) {
       var oldPos, opts, positionObj, returnValue, self;

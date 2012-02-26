@@ -15,30 +15,30 @@ class $$.Accordion extends $$.Widget
     accordionObj = @
     if not (accordionObj instanceof $$.Accordion)
       return new $$.Accordion self, options
-    opts = $.extend {}, $$.Accordion.prototype.defaults, options
+    defaults = 
+      accordionClass : "#{$$.defaultBorder} uiCornerAll #{$$.defaultBoxShadow}"
+      titleBarClass : $$.defaultGradientBG
+      activeClass : $$.defaultGradientBG
+      itemTitleBarClass : 'uiBlackGradientBG'
+      active : [0]
+      event : 'click'
+      titleIcon : null
+      animation : 'toggle'
+      title : null
+      itemTitleList : null
+      height : "auto"
+      toggle : false
+      hideOthers : true
+      animating : false
+      titleBarHTML : '<div class="uiAccordionTitleBar uiNoSelectText"><span class="title"></span></div>'
+      itemTitleBarHTML : '<div class="uiTitleBar uiNoSelectText"><span class="uiUserBtn uiSmallIcon uiArrowDownIcon"></span><span class="uiTitle"></span></div>'
+
+      changeStart : $.noop
+      change : $.noop
+      
+    opts = $.extend defaults, options
     accordionObj.constructor.__super__.constructor.call accordionObj, self, opts
     accordionObj.init()
-  defaults : {
-    accordionClass : "#{$$.defaultBorder} uiCornerAll #{$$.defaultBoxShadow}"
-    titleBarClass : $$.defaultGradientBG
-    activeClass : $$.defaultGradientBG
-    itemTitleBarClass : 'uiBlackGradientBG'
-    active : [0]
-    event : 'click'
-    titleIcon : null
-    animation : 'toggle'
-    title : null
-    itemTitleList : null
-    height : "auto"
-    toggle : false
-    hideOthers : true
-    animating : false
-    titleBarHTML : '<div class="uiAccordionTitleBar uiNoSelectText"><span class="title"></span></div>'
-    itemTitleBarHTML : '<div class="uiTitleBar uiNoSelectText"><span class="uiUserBtn uiSmallIcon uiArrowDownIcon"></span><span class="uiTitle"></span></div>'
-
-    changeStart : $.noop
-    change : $.noop
-  }
   init : () ->
     accordionObj = @
     accordionObj.createWidget()
@@ -52,10 +52,10 @@ class $$.Accordion extends $$.Widget
       activateArr = []
       titleBarList = $ '> .uiTitleBar', self
       titleBarList.each (n) ->
-        if ($ this).hasClass opts.activeClass
+        if $(@).hasClass opts.activeClass
           activateArr.push n
       return activateArr
-    obj = ($ '> .uiTitleBar', self).eq index
+    obj = $('> .uiTitleBar', self).eq index
     if not obj.hasClass opts.activeClass
       obj.trigger opts.event
     return accordionObj
@@ -64,7 +64,7 @@ class $$.Accordion extends $$.Widget
     self = accordionObj.jqObj
     opts = accordionObj.opts
     index ?= 0
-    titleBarObj = ($ '> .uiTitleBar', self).eq index
+    titleBarObj = $('> .uiTitleBar', self).eq index
     contentObj = titleBarObj.next()
     if arguments.length is 1
       return contentObj
@@ -73,7 +73,7 @@ class $$.Accordion extends $$.Widget
         contentObj.html content
         return accordionObj
       return titleBarObj
-    (titleBarObj.children '.uiTitle').html title
+    titleBarObj.children('.uiTitle').html title
     if content?
       contentObj.html content
     return accordionObj
@@ -83,21 +83,21 @@ class $$.Accordion extends $$.Widget
     opts = accordionObj.opts
     itemObj = $ item
     title ?= itemObj.attr 'title'
-    titleBarObj = (((($ opts.itemTitleBarHTML).addClass opts.itemTitleBarClass).children '.uiTitle').html title).end()
-    (itemObj.addClass 'uiContent uiHidden').height opts.height
+    titleBarObj = $(opts.itemTitleBarHTML).addClass(opts.itemTitleBarClass).children('.uiTitle').html(title).end()
+    itemObj.addClass('uiContent uiHidden').height opts.height
     if arguments.length is 2
-      obj = ($ '> .uiTitleBar', self).eq index
+      obj = $('> .uiTitleBar', self).eq index
       titleBarObj.insertBefore obj
       itemObj.insertBefore obj
     else
-      (self.append titleBarObj).append itemObj
+      self.append(titleBarObj).append itemObj
     return accordionObj
   removeItem : (index) ->
     accordionObj = @
     self = accordionObj.jqObj
     opts = accordionObj.opts
     index ?= 0
-    return (($ '>.uiTitleBar', self).eq index).next().andSelf().remove()
+    return $('>.uiTitleBar', self).eq(index).next().andSelf().remove()
   title : (title) ->
     accordionObj = @
     self = accordionObj.jqObj
@@ -114,18 +114,18 @@ class $$.Accordion extends $$.Widget
     if arguments.length is 0
       return opts.titleIcon
     if opts.titleIcon is null
-      ($ '>.uiAccordionTitleBar', self).prepend ($ '<span class="uiTitleIcon" />')
-    obj = (($ '> .uiAccordionTitleBar > span.uiTitleIcon', self).removeClass opts.titleIcon).addClass titleIcon
+      $('>.uiAccordionTitleBar', self).prepend $('<span class="uiTitleIcon" />')
+    obj = $('> .uiAccordionTitleBar > span.uiTitleIcon', self).removeClass(opts.titleIcon).addClass titleIcon
     opts.titleIcon = titleIcon
     return accordionObj
 
 initAccordion = (self, opts) ->
   title = opts.title || self.attr 'title'
   if title?
-    titleBar = (((($ opts.titleBarHTML).addClass opts.titleBarClass).children '.title').html title).end()
+    titleBar = $(opts.titleBarHTML).addClass(opts.titleBarClass).children('.title').html(title).end()
     if opts.titleIcon?
-      (titleBar.prepend $ '<span class="uiTitleIcon" />').addClass opts.titleIcon
-  ((self.addClass 'uiAccordion uiWidget ' + opts.accordionClass).children 'div').each (n) ->
+      titleBar.prepend($ '<span class="uiTitleIcon" />').addClass opts.titleIcon
+  self.addClass("uiAccordion uiWidget #{opts.accordionClass}").children('div').each (n) ->
     contentClass = 'uiHidden'
     titleBarClass = opts.itemTitleBarClass
     buttonClass = ''
@@ -138,15 +138,14 @@ initAccordion = (self, opts) ->
     if $.isArray opts.itemTitleList
       title = opts.itemTitleList[n]
     title ?= obj.attr 'title'
-    itemTitleBarObj = ($ opts.itemTitleBarHTML).addClass titleBarClass
-    (((itemTitleBarObj.children '.uiUserBtn').toggleClass buttonClass).siblings '.uiTitle').html title
-    itemTitleBarObj.insertBefore ((obj.addClass "uiContent #{contentClass}").height opts.height)
+    itemTitleBarObj = $(opts.itemTitleBarHTML).addClass titleBarClass
+    itemTitleBarObj.children('.uiUserBtn').toggleClass(buttonClass).siblings('.uiTitle').html title
+    itemTitleBarObj.insertBefore obj.addClass("uiContent #{contentClass}").height(opts.height)
   self.prepend titleBar
   initEvent self, opts
 
 initEvent = (self, opts) ->
-  jQueryEvent =  if self.off then 'on' else 'bind'
-  self[jQueryEvent] "#{opts.event}.uiAccordion", (e) ->
+  self.on "#{opts.event}.uiAccordion", (e) ->
     if opts.disabled or opts.animating
       return
     target = $ e.target
@@ -160,28 +159,13 @@ initEvent = (self, opts) ->
     if (opts.changeStart self, target, e) is false
       return false
     opts.animating = true
-    selectedList = if (opts.hideOthers is true) then (((($ ">.uiTitleBar.#{opts.activeClass}", self).not target).removeClass "#{opts.activeClass} uiActive").addClass opts.itemTitleBarClass) else null
-    changeObjList = (target.toggleClass "#{opts.itemTitleBarClass} #{opts.activeClass} uiActive").add selectedList
-    (changeObjList.children '.uiUserBtn').toggleClass 'uiArrowUpIcon uiArrowDownIcon'
-    ((changeObjList.next '.uiContent').stop true, true)[opts.animation] opts.animateTime, () ->
-      if ($ @).is ':visible'
+    selectedList = if (opts.hideOthers is true) then $(">.uiTitleBar.#{opts.activeClass}", self).not(target).removeClass("#{opts.activeClass} uiActive").addClass(opts.itemTitleBarClass) else null
+    changeObjList = target.toggleClass("#{opts.itemTitleBarClass} #{opts.activeClass} uiActive").add selectedList
+    changeObjList.children('.uiUserBtn').toggleClass 'uiArrowUpIcon uiArrowDownIcon'
+    changeObjList.next('.uiContent').stop(true, true)[opts.animation] opts.animateTime, () ->
+      if $(@).is ':visible'
         opts.change self, target, e
       opts.animating = false
-  if posStr isnt 'static' and posStr isnt 'relative'
-    if opts.active and opts.autoOpen
-      (($ '.uiDialog').not self).each () ->
-        obj = $ @
-        if obj.css 'position' isnt 'static' and (obj.css 'position' isnt 'relative')
-          ((obj.css 'zIndex', opts.zIndex).children '.uiTitleBar').addClass 'uiInactive'
-    self[jQueryEvent] 'mousedown.uiDialog', (e) ->
-      ((self.css 'zIndex', opts.zIndex + 1).children '.uiTitleBar').addClass 'uiInactive'
-      (self.siblings '.uiDialog').each () ->
-        obj = $ @
-        if obj.css 'position' isnt 'static' and (obj.css 'position' isnt 'relative')
-          ((obj.css 'zIndex', opts.zIndex).children '.uiTitleBar').addClass 'uiInactive'
-      target = $ e.target
-      if target.hasClass 'uiDraggable' or target.hasClass 'uiResizable' or target.parent().hasClass 'uiDraggable'
-        return false
   return null
 setContentHeight = (self, opts) ->
   otherItemHeightTotal = 0
@@ -202,7 +186,7 @@ setContentHeight = (self, opts) ->
         if completeLoad is imgTotal
           content.height self.height() - otherItemHeightTotal - outerOffset
       else
-          ($ @).load () ->
+          $(@).load () ->
             completeLoad++
             if completeLoad is imgTotal
               content.height self.height() - otherItemHeightTotal - outerOffset

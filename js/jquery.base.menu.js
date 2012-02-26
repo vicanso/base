@@ -24,19 +24,18 @@
     Menu.name = 'Menu';
 
     function Menu(self, options) {
-      var menuObj, opts;
+      var defaults, menuObj, opts;
       menuObj = this;
       if (!(menuObj instanceof $$.Menu)) return new $$.Menu(self, options);
-      opts = $.extend({}, $$.Menu.prototype.defaults, options);
+      defaults = {
+        topMenuClass: $$.defaultGradientBG,
+        subMenuClass: "" + $$.defaultGradientBG + " uiCornerAll " + $$.defaultBorder,
+        hoverClass: $$.hoverGradientBG
+      };
+      opts = $.extend(defaults, options);
       menuObj.constructor.__super__.constructor.call(menuObj, self, opts);
       menuObj.init();
     }
-
-    Menu.prototype.defaults = {
-      topMenuClass: $$.defaultGradientBG,
-      subMenuClass: "" + $$.defaultGradientBG + " uiCornerAll " + $$.defaultBorder,
-      hoverClass: $$.hoverGradientBG
-    };
 
     Menu.prototype.init = function() {
       var menuObj;
@@ -52,11 +51,11 @@
 
   initMenu = function(self, opts) {
     var topLevelListObj, topMenuWidth;
-    topLevelListObj = (self.addClass("uiMenu uiWidget " + opts.topMenuClass)).children('ul');
-    ((topLevelListObj.addClass('uiTopLevel')).children('li:not(:last)')).addClass('uiRightBorder');
-    ((((topLevelListObj.find('ul')).addClass("uiSubLevel " + opts.subMenuClass)).children('li:not(::last-child)')).children('a')).addClass('uiBottomBorder');
+    topLevelListObj = self.addClass("uiMenu uiWidget " + opts.topMenuClass).children('ul');
+    topLevelListObj.addClass('uiTopLevel').children('li:not(:last)').addClass('uiRightBorder');
+    topLevelListObj.find('ul').addClass("uiSubLevel " + opts.subMenuClass).children('li:not(::last-child)').children('a').addClass('uiBottomBorder');
     topMenuWidth = 0;
-    ($('>li', topLevelListObj)).each(function() {
+    $('>li', topLevelListObj).each(function() {
       return topMenuWidth += ($(this)).outerWidth(true);
     });
     topLevelListObj.width(topMenuWidth);
@@ -64,10 +63,10 @@
   };
 
   initEvent = function(self, opts) {
-    return (self.find('li')).hover(function() {
-      return ($(this)).addClass(opts.hoverClass);
+    return self.find('li').hover(function() {
+      return $(this).addClass(opts.hoverClass);
     }, function() {
-      return ($(this)).removeClass(opts.hoverClass);
+      return $(this).removeClass(opts.hoverClass);
     });
   };
 

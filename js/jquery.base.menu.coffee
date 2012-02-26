@@ -15,30 +15,30 @@ class $$.Menu extends $$.Widget
     menuObj = @
     if not (menuObj instanceof $$.Menu)
       return new $$.Menu self, options
-    opts = $.extend {}, $$.Menu.prototype.defaults, options
+    defaults =
+      topMenuClass : $$.defaultGradientBG
+      subMenuClass : "#{$$.defaultGradientBG} uiCornerAll #{$$.defaultBorder}"
+      hoverClass : $$.hoverGradientBG
+    
+    opts = $.extend defaults, options
     menuObj.constructor.__super__.constructor.call menuObj, self, opts
     menuObj.init()
-  defaults : {
-    topMenuClass : $$.defaultGradientBG
-    subMenuClass : "#{$$.defaultGradientBG} uiCornerAll #{$$.defaultBorder}"
-    hoverClass : $$.hoverGradientBG
-  }
   init : () ->
     menuObj = @
     menuObj.createWidget()
     initMenu menuObj.jqObj, menuObj.opts
     return menuObj
 initMenu = (self, opts) ->
-  topLevelListObj = (self.addClass "uiMenu uiWidget #{opts.topMenuClass}").children 'ul'
-  ((topLevelListObj.addClass 'uiTopLevel').children 'li:not(:last)').addClass 'uiRightBorder'
-  ((((topLevelListObj.find 'ul').addClass "uiSubLevel #{opts.subMenuClass}").children 'li:not(::last-child)').children 'a').addClass 'uiBottomBorder'
+  topLevelListObj = self.addClass("uiMenu uiWidget #{opts.topMenuClass}").children 'ul'
+  topLevelListObj.addClass('uiTopLevel').children('li:not(:last)').addClass 'uiRightBorder'
+  topLevelListObj.find('ul').addClass("uiSubLevel #{opts.subMenuClass}").children('li:not(::last-child)').children('a').addClass 'uiBottomBorder'
   topMenuWidth = 0
-  ($ '>li', topLevelListObj).each () ->
+  $('>li', topLevelListObj).each () ->
     topMenuWidth += ($ @).outerWidth true
   topLevelListObj.width topMenuWidth
   initEvent self, opts
 initEvent = (self, opts) ->
-  (self.find 'li').hover ()->
-    ($ @).addClass opts.hoverClass
+  self.find('li').hover ()->
+    $(@).addClass opts.hoverClass
   ,() ->
-    ($ @).removeClass opts.hoverClass
+    $(@).removeClass opts.hoverClass

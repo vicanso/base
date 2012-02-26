@@ -6,33 +6,31 @@ class Interaction
     interactionObj = @
     interactionObj.jqObj = self
     interactionObj.opts = {}
-    $.extend interactionObj.opts, Interaction.prototype.defaults, options
+
+    defaults =
+      disable : false
+      getUserMask : null
+      originMask : false
+      stopMouseDownPropagation : false
+      start : false
+      originClientX : 0
+      originClientY : 0
+      doing : false
+      type : null
+      mask : null
+      event : 
+        start : $.noop
+        doing : $.noop
+        stop : $.noop
+      maskHTML : '<div class="uiInteractionMask uiInactive uiCornerAll uiBlackBigBorder"></div>'
+    
+    $.extend interactionObj.opts, defaults, options
     interactionObj.opts.widgetKey = $$.getRandomKey()
-  defaults : {
-    disable : false
-    getUserMask : null
-    originMask : false
-    stopMouseDownPropagation : false
-    start : false
-    originClientX : 0
-    originClientY : 0
-    doing : false
-    type : null
-    mask : null
-    event : {
-      start : $.noop
-      doing : $.noop
-      stop : $.noop
-    }
-    maskHTML : '<div class="uiInteractionMask uiInactive uiCornerAll uiBlackBigBorder"></div>'
-  }
   init : () ->
     interactionObj = @
     self = interactionObj.jqObj
     opts = interactionObj.opts
-    jQueryEvent =  if self.off then 'on' else 'bind'
 
-    console.log opts.type
     if opts.type is 'resize'
       obj = self.find '.uiResizable'
       if obj.length is 0
@@ -44,8 +42,7 @@ class Interaction
       if obj.length is 0
         obj = self.addClass 'uiDraggable'
     mouseDownEvent = "mousedown.#{opts.type}"
-    console.log obj
-    obj[jQueryEvent] mouseDownEvent, (e) ->
+    obj.on mouseDownEvent, (e) ->
       setInteractionSetting self, opts, e
       if opts.type is 'resize'
         return false
@@ -53,13 +50,12 @@ class Interaction
     mouseMoveEvent = "mousemove.#{opts.widgetKey}"
     mouseUpEvent = "mouseup.#{opts.widgetKey}"
 
-    ($ document)[jQueryEvent] mouseMoveEvent, (e) ->
+    $(document).on mouseMoveEvent, (e) ->
       if opts.start
         if opts.mask is null
           if (setInteractionMask self, opts, e) is false
             return
         maskItem = opts.mask
-        console.log 'mousemove'
         opts.doing = true
         offsetX = e.clientX - opts.originClientX
         offsetY = e.clientY - opts.originClientY
@@ -80,12 +76,11 @@ class Interaction
               newHeight = opts.minHeight
           if (opts.event.doing self, maskItem, newWidth, newHeight) is false
             return
-          (maskItem.width newWidth).height newHeight
+          maskItem.width(newWidth).height newHeight
         else if opts.type is 'drag'
-          position = {
+          position = 
             left : opts.originPosition.left + offsetX
             top : opts.originPosition.top + offsetY
-          }
           if (opts.event.doing self, maskItem, position) is false
             return
           maskItem.css position
@@ -99,7 +94,7 @@ class Interaction
                 opts.cross self, false
                 opts.firstCross = false
         return false
-    ($ document)[jQueryEvent] mouseUpEvent, () ->
+    $(document).on mouseUpEvent, () ->
       complete self, opts
     return interactionObj
 complete = (self, opts) ->
@@ -119,7 +114,7 @@ complete = (self, opts) ->
   opts.mask = null
 setInteractionSetting = (self, opts, e) ->
   opts.start = true
-  if (opts.event.start self) is false or (($ e.target).hasClass 'uiUserBtn')
+  if (opts.event.start self) is false or $(e.target).hasClass('uiUserBtn')
     opts.start = false
     return false
 setInteractionMask = (self, opts, e) ->
@@ -142,7 +137,7 @@ setInteractionMask = (self, opts, e) ->
     else
       opts.position = opts.originPosition = opts.mask.offset()
   else if opts.originMask
-    opts.mask = (self.clone().css {
+    opts.mask = self.clone().css({
       position : 'absolute'
       left : maskPosition.left
       top : maskPosition.top
@@ -151,12 +146,12 @@ setInteractionMask = (self, opts, e) ->
   else
     marginLeftValue = self.css 'marginLeft'
     marginTopValue = self.css 'marginTop'
-    opts.mask = ((((($ opts.maskHTML).width maskWidth).height maskHeight).css {
+    opts.mask = $(opts.maskHTML).width(maskWidth).height(maskHeight).css({
       marginLeft : marginLeftValue
       marginTop : marginTopValue
       left : maskPosition.left
       top : maskPosition.top
-    }).hide().addClass 'uiBlackBigBorder uiCornerAll').appendTo 'body'
+    }).hide().addClass('uiBlackBigBorder uiCornerAll').appendTo 'body'
   opts.mask.show()
   if opts.type is 'drag' and opts.dest isnt null
     dest = $ opts.dest
@@ -196,7 +191,19 @@ class $$.Draggable extends Interaction
     draggableObj = @
     if not (draggableObj instanceof $$.Draggable)
       return new $$.Draggable self, options
-    opts = $.extend {}, $$.Draggable.prototype.defaults, options
+
+    defaults =
+      dest : null
+      originPosition : null
+      position : null
+      outerWidth : null
+      outerHeight : null
+      destPosition : null
+      firstCross : false
+      type : "drag"
+      widgetKey : null
+      cross : null
+    opts = $.extend {}, defaults, options
     draggableObj.constructor.__super__.constructor.call draggableObj, self, opts
     opts = draggableObj.opts
     if opts.event.stop is $.noop
@@ -204,18 +211,6 @@ class $$.Draggable extends Interaction
         self.moveToPos {position : offset}
         return null
 
-  defaults : {
-    dest : null
-    originPosition : null
-    position : null
-    outerWidth : null
-    outerHeight : null
-    destPosition : null
-    firstCross : false
-    type : "drag"
-    widgetKey : null
-    cross : null
-  }
 
 $.fn.resizable = (options) ->
   self = @
@@ -227,7 +222,18 @@ class $$.Resizable extends Interaction
     resizableObj = @
     if not (resizableObj instanceof $$.Resizable)
       return new $$.Resizable self, options
-    opts = $.extend {}, $$.Resizable.prototype.defaults, options
+    defaults =
+      minWidth : null,
+      minHeight : null,
+      maxWidth : 0xffff,
+      maxHeight : 0xffff,
+      originWidth : 0,
+      originHeight : 0,
+      type : "resize",
+      outerWidth : null,
+      outerHeight : null,
+      destPosition : null
+    opts = $.extend {}, defaults, options
     resizableObj.constructor.__super__.constructor.call resizableObj, self, opts
     opts = resizableObj.opts
     if opts.event.stop is $.noop
@@ -245,15 +251,4 @@ class $$.Resizable extends Interaction
         outerOffset = (content.outerHeight true) - content.height()
         content.height height - otherItemHeightTotal - outerOffset
         return null
-  defaults : {
-    minWidth : null,
-    minHeight : null,
-    maxWidth : 0xffff,
-    maxHeight : 0xffff,
-    originWidth : 0,
-    originHeight : 0,
-    type : "resize",
-    outerWidth : null,
-    outerHeight : null,
-    destPosition : null
-  }
+

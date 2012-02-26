@@ -24,64 +24,63 @@
     Dialog.name = 'Dialog';
 
     function Dialog(self, options) {
-      var dialogObj, opts;
+      var defaults, dialogObj, opts;
       dialogObj = this;
       if (!(dialogObj instanceof $$.Dialog)) return new $$.Dialog(self, options);
-      opts = $.extend({}, $$.Dialog.prototype.defaults, options);
+      defaults = {
+        dialogClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
+        titleBarClass: $$.defaultGradientBG,
+        position: null,
+        zIndex: 1000,
+        draggable: false,
+        resizable: false,
+        minStatusWidth: 250,
+        modal: false,
+        buttonSet: null,
+        minHeight: 300,
+        maxHeight: 700,
+        minWidth: 400,
+        maxWidth: 1000,
+        active: true,
+        minimize: false,
+        closable: true,
+        noTitleBar: false,
+        titleIcon: '',
+        title: '',
+        controlButton: true,
+        autoOpen: true,
+        destroyOnClose: true,
+        closeAnimate: 'slideUp',
+        openAnimate: 'slideDown',
+        beforeClose: $.noop,
+        close: $.noop,
+        beforeOpen: $.noop,
+        open: $.noop,
+        beforeMin: $.noop,
+        min: $.noop,
+        beforeResume: $.noop,
+        resume: $.noop,
+        dragStart: $.noop,
+        draging: $.noop,
+        dragStop: $.noop,
+        resizeStart: $.noop,
+        resizing: $.noop,
+        resizeStop: $.noop,
+        minStatusHeight: 0,
+        originHeight: 0,
+        originWidth: 0,
+        originPosition: null,
+        overflowStatus: null,
+        controlButtonSetHTML: '<div class="uiDialogButtonSet"><div class="uiUserBtn uiMinBtn uiIcon uiMinButtonIcon"></div><div class="uiUserBtn uiCloseBtn uiIcon uiCloseButtonIcon"></div></div>',
+        titleBarHTML: '<div class="uiTitleBar"><div class="uiTitle"></div></div>',
+        contentHTML: '<div class="uiContent"></div>',
+        resizeHTML: '<div class="uiResizable"></div>',
+        selectList: null
+      };
+      opts = $.extend(defaults, options);
       dialogObj.constructor.__super__.constructor.call(dialogObj, self, opts);
       dialogObj.init();
     }
-
-    Dialog.prototype.defaults = {
-      dialogClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
-      titleBarClass: $$.defaultGradientBG,
-      position: null,
-      zIndex: 1000,
-      draggable: false,
-      resizable: false,
-      minStatusWidth: 250,
-      modal: false,
-      buttonSet: null,
-      minHeight: 300,
-      maxHeight: 700,
-      minWidth: 400,
-      maxWidth: 1000,
-      active: true,
-      minimize: false,
-      closable: true,
-      noTitleBar: false,
-      titleIcon: '',
-      title: '',
-      controlButton: true,
-      autoOpen: true,
-      destroyOnClose: true,
-      closeAnimate: 'slideUp',
-      openAnimate: 'slideDown',
-      beforeClose: $.noop,
-      close: $.noop,
-      beforeOpen: $.noop,
-      open: $.noop,
-      beforeMin: $.noop,
-      min: $.noop,
-      beforeResume: $.noop,
-      resume: $.noop,
-      dragStart: $.noop,
-      draging: $.noop,
-      dragStop: $.noop,
-      resizeStart: $.noop,
-      resizing: $.noop,
-      resizeStop: $.noop,
-      minStatusHeight: 0,
-      originHeight: 0,
-      originWidth: 0,
-      originPosition: null,
-      overflowStatus: null,
-      controlButtonSetHTML: '<div class="uiDialogButtonSet"><div class="uiUserBtn uiMinBtn uiIcon uiMinButtonIcon"></div><div class="uiUserBtn uiCloseBtn uiIcon uiCloseButtonIcon"></div></div>',
-      titleBarHTML: '<div class="uiTitleBar"><div class="uiTitle"></div></div>',
-      contentHTML: '<div class="uiContent"></div>',
-      resizeHTML: '<div class="uiResizable"></div>',
-      selectList: null
-    };
 
     Dialog.prototype.init = function() {
       var dialogObj;
@@ -108,10 +107,10 @@
       self = dialogObj.jqObj;
       opts = dialogObj.opts;
       if (arguments.length === 0) return opts.titleIcon;
-      if (opts.titleIcon === '') {
-        ($('>.uiTitleBar >.uiTitle', self)).prepend('<span class="uiTitleIcon" />');
+      if (opts.titleIcon !== '') {
+        $('>.uiTitleBar >.uiTitle', self).prepend('<span class="uiTitleIcon" />');
       }
-      obj = (($('>.uiTitleBar >.uiTitle >.uiTitleIcon', self)).removeClass(opts.titleIcon)).addClass(titleIcon);
+      obj = $('>.uiTitleBar >.uiTitle >.uiTitleIcon', self).removeClass(opts.titleIcon).addClass(titleIcon);
       opts.titleIcon = titleIcon;
       return dialogObj;
     };
@@ -134,38 +133,38 @@
   initDialog = function(dialogObj, self, opts) {
     var buttonSetHTML, buttonSetObj, contentObj, controlButton, key, maskObj, titleBar, titleBarClass, value, _ref;
     titleBarClass = "" + opts.titleBarClass + " uiCornerAll";
-    if (opts.title === '') opts.title = self.attr('title' || '');
+    if (opts.title === '') opts.title = (self.attr('title')) || '';
     if (opts.draggable) titleBarClass += ' uiDraggable';
     if (opts.controlButton) {
       controlButton = $(opts.controlButtonSetHTML);
-      if (!opts.minimize) (controlButton.children('.uiMinBtn')).hide();
-      if (!opts.closable) (controlButton.children('.uiCloseBtn')).hide();
+      if (!opts.minimize) controlButton.children('.uiMinBtn').hide();
+      if (!opts.closable) controlButton.children('.uiCloseBtn').hide();
     }
     contentObj = self.children().addClass('uiContent');
     if (!opts.noTitleBar) {
-      titleBar = ((((($(opts.titleBarHTML)).addClass(titleBarClass)).append(controlButton)).children('.uiTitle')).html(opts.title)).end();
-      if (opts.titleIcon !== null) {
-        ((titleBar.children('.uiTitle')).prepend($('<span class="uiTitleIcon" />'))).addClass(opts.titleIcon);
+      titleBar = $(opts.titleBarHTML).addClass(titleBarClass).append(controlButton).children('.uiTitle').html(opts.title).end();
+      if (opts.titleIcon !== '') {
+        titleBar.children('.uiTitle').prepend($('<span class="uiTitleIcon" />')).addClass(opts.titleIcon);
       }
       self.prepend(titleBar);
     }
     self.addClass("uiDialog uiWidget " + opts.dialogClass);
     if (opts.position !== null) {
-      (self.css('zIndex', opts.zIndex + 1)).moveToPos(opts.position);
+      self.css('zIndex', opts.zIndex + 1).moveToPos(opts.position);
     }
     if (opts.modal) {
-      maskObj = (($('<div />')).addClass('uiMask')).appendTo('body');
+      maskObj = $('<div />').addClass('uiMask').appendTo('body');
       if (opts.position === null) {
-        (self.css('zIndex', opts.zIndex + 1)).moveToPos({
+        self.css('zIndex', opts.zIndex + 1).moveToPos({
           position: 'center'
         });
       }
       if ($$.msie6) {
-        opts.selectList = ($('select:visible')).filter(function() {
-          if (($(this)).css('visibility' !== 'hidden')) return true;
+        opts.selectList = $('select:visible').filter(function() {
+          if ($(this).css('visibility' !== 'hidden')) return true;
         });
         opts.selectList.css('visibility', 'hidden');
-        maskObj.height(($(document)).height());
+        maskObj.height($(document).height());
       }
     }
     if (opts.buttonSet !== null) {
@@ -176,7 +175,7 @@
         buttonSetHTML += '<div>' + key + '</div>';
       }
       buttonSetHTML += '</div>';
-      buttonSetObj = ($(buttonSetHTML)).buttonSet({
+      buttonSetObj = $(buttonSetHTML).buttonSet({
         click: function(target) {
           if ((opts.buttonSet[target.text()](this)) === false) return false;
           return dialogObj.close(self, opts, target);
@@ -186,7 +185,7 @@
     }
     if (opts.resizable) {
       self.append(opts.resizeHTML);
-      if ((self.css('position')) === 'static') self.css('position', 'relative');
+      if (self.css('position') === 'static') self.css('position', 'relative');
     }
     opts.minHeight = Math.min(self.height(), opts.minHeight);
     opts.minWidth = Math.min(self.width(), opts.minWidth);
@@ -196,10 +195,9 @@
   };
 
   initEvent = function(dialogObj, self, opts) {
-    var dragStopFunction, jQueryEvent, posStr, resizeStopFunc;
+    var dragStopFunction, posStr, resizeStopFunc;
     posStr = self.css('position');
-    jQueryEvent = self.off ? 'on' : 'bind';
-    (self.find('>.uiTitleBar >.uiDialogButtonSet >.uiUserBtn'))[jQueryEvent]('click.uiDialog', function(e) {
+    self.find('>.uiTitleBar >.uiDialogButtonSet >.uiUserBtn').on('click.uiDialog', function(e) {
       var func, obj;
       obj = $(this);
       if (obj.hasClass('uiMinBtn')) {
@@ -235,7 +233,7 @@
         height = Math.min(Math.max(opts.minHeight, height), opts.maxHeight);
         width = Math.min(Math.max(opts.minWidth, width), opts.maxWidth);
         otherItemHeightTotal = 0;
-        content = ((self.width(width)).height(height)).children('.uiContent');
+        content = self.width(width).height(height).children('.uiContent');
         self.children().each(function() {
           var obj;
           obj = $(this);
@@ -268,7 +266,7 @@
       var obj;
       obj = $(this);
       if (!obj.hasClass('uiContent' && !(obj.hasClass('uiResizable')))) {
-        return otherItemHeightTotal += ($(this)).outerHeight(true);
+        return otherItemHeightTotal += $(this).outerHeight(true);
       }
     });
     contentHeight = content.outerHeight(true);
@@ -284,7 +282,7 @@
             return content.height(self.height() - otherItemHeightTotal - outerOffset);
           }
         } else {
-          return ($(this)).load(function() {
+          return $(this).load(function() {
             completeLoad++;
             if (completeLoad === imgTotal) {
               return content.height(self.height() - otherItemHeightTotal - outerOffset);

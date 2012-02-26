@@ -24,36 +24,35 @@
     ButtonSet.name = 'ButtonSet';
 
     function ButtonSet(self, options) {
-      var buttonSetObj, opts;
+      var buttonSetObj, defaults, opts;
       buttonSetObj = this;
       if (!(buttonSetObj instanceof $$.ButtonSet)) {
         return new $$.ButtonSet(self, options);
       }
-      opts = $.extend({}, $$.ButtonSet.prototype.defaults, options);
+      defaults = {
+        buttonSetClass: "" + $$.defaultBoxShadow + " uiCornerAll",
+        buttonSetType: '',
+        buttonSetGroup: '',
+        buttonClass: $$.defaultGradientBG,
+        buttonSetBorderClass: $$.defaultBorder,
+        buttonBorderClass: 'uiGreyBorder',
+        buttonHoverClass: $$.hoverGradientBG,
+        buttonSelectedClass: "" + $$.selectedGradientBG + " uiActive",
+        buttonPressClass: "" + $$.hoverGradientBG + " uiButtonPressed",
+        buttonWidth: 0,
+        buttonMargin: 0,
+        iconArray: null,
+        iconFloatArray: null,
+        defaultSelectedItem: -1,
+        vertical: false,
+        statusClass: '',
+        imgIconHTML: '<div class="uiIcon uiUncheckedButtonIcon"></div>',
+        click: $.noop
+      };
+      opts = $.extend(defaults, options);
       buttonSetObj.constructor.__super__.constructor.call(buttonSetObj, self, opts);
       buttonSetObj.init();
     }
-
-    ButtonSet.prototype.defaults = {
-      buttonSetClass: "" + $$.defaultBoxShadow + " uiCornerAll",
-      buttonSetType: '',
-      buttonSetGroup: '',
-      buttonClass: $$.defaultGradientBG,
-      buttonSetBorderClass: $$.defaultBorder,
-      buttonBorderClass: 'uiGreyBorder',
-      buttonHoverClass: $$.hoverGradientBG,
-      buttonSelectedClass: "" + $$.selectedGradientBG + " uiActive",
-      buttonPressClass: "" + $$.hoverGradientBG + " uiButtonPressed",
-      buttonWidth: 0,
-      buttonMargin: 0,
-      iconArray: null,
-      iconFloatArray: null,
-      defaultSelectedItem: -1,
-      vertical: false,
-      statusClass: '',
-      imgIconHTML: '<div class="uiIcon uiUncheckedButtonIcon"></div>',
-      click: $.noop
-    };
 
     ButtonSet.prototype.init = function() {
       var buttonSetObj;
@@ -69,7 +68,7 @@
       self = buttonSetObj.jqObj;
       opts = buttonSetObj.opts;
       if (index == null) index = 0;
-      obj = (self.children().eq(index)).click();
+      obj = self.children().eq(index).click();
       return buttonSetObj;
     };
 
@@ -91,7 +90,7 @@
       obj = self.children().eq(index);
       if (arguments.length !== 2) return obj.text();
       iconObj = obj.children('.uiIcon');
-      (obj.html(text)).prepend(iconObj);
+      obj.html(text).prepend(iconObj);
       return buttonSetObj;
     };
 
@@ -107,7 +106,7 @@
       if (index > iconArrayTotal) index = iconArrayTotal;
       iconClass = opts.iconArray[index];
       if (arguments.length < 2) return iconClass;
-      ((obj.children('.uiIcon')).removeClass(iconClass)).addClass(icon);
+      obj.children('.uiIcon').removeClass(iconClass).addClass(icon);
       opts.iconArray[index] = icon;
       return buttonSetObj;
     };
@@ -137,7 +136,7 @@
         }
       } else {
         if (obj.hasClass(opts.buttonSelectedClass)) {
-          (obj.removeClass(opts.buttonSelectedClass)).addClass(opts.buttonClass);
+          obj.removeClass(opts.buttonSelectedClass).addClass(opts.buttonClass);
         }
       }
       return buttonSetObj;
@@ -150,7 +149,7 @@
       opts = buttonSetObj.opts;
       if (index == null) index = 0;
       if ($.isArray(opts.iconArray)) opts.iconArray.splice(index, 1);
-      return ((self.children('.uiButton')).eq(index)).remove();
+      return self.children('.uiButton').eq(index).remove();
     };
 
     return ButtonSet;
@@ -179,9 +178,9 @@
       default:
         buttonTypeClass = '';
     }
-    (self.addClass('uiButtonSet uiWidget uiNoSelectText')).children().each(function(n) {
+    self.addClass('uiButtonSet uiWidget uiNoSelectText').children().each(function(n) {
       var buttonClass, floatClass, index, marginAttr, obj;
-      obj = ($(this)).addClass(buttonTypeClass);
+      obj = $(this).addClass(buttonTypeClass);
       if (groupStr.length !== 0) obj.attr('group', groupStr);
       if (opts.buttonMargin > 0) {
         buttonClass = "uiButton uiCornerAll " + opts.buttonClass + " " + opts.buttonBorderClass;
@@ -189,7 +188,7 @@
         buttonClass = "uiButton " + opts.buttonClass;
       }
       if (obj.hasClass('uiImgRadio' || obj.hasClass('uiImgCheckBox'))) {
-        (obj.wrapInner('<span />')).prepend(opts.imgIconHTML);
+        obj.wrapInner('<span />').prepend(opts.imgIconHTML);
       }
       if (n !== 0) {
         if (opts.buttonMargin > 0) {
@@ -227,7 +226,7 @@
             floatClass = '';
           }
         }
-        (obj.wrapInner('<span />')).prepend("<span class=\"uiIcon " + opts.iconArray[index] + " " + floatClass + "\"></span>");
+        obj.wrapInner('<span />').prepend("<span class=\"uiIcon " + opts.iconArray[index] + " " + floatClass + "\"></span>");
       }
       if (opts.buttonWidth !== 0) return obj.width(opts.buttonWidth);
     });
@@ -243,10 +242,9 @@
   };
 
   initEvent = function(self, opts) {
-    var jQueryEvent, mouseDownFlag;
+    var mouseDownFlag;
     mouseDownFlag = false;
-    jQueryEvent = self.off ? 'on' : 'bind';
-    (self.children('.uiButton, .uiImgButton'))[jQueryEvent]('mouseenter.uiButtonSet mouseleave.uiButtonSet mousedown.uiButtonSet mouseup.uiButtonSet click.uiButtonSet', function(e) {
+    self.children('.uiButton, .uiImgButton').on('mouseenter.uiButtonSet mouseleave.uiButtonSet mousedown.uiButtonSet mouseup.uiButtonSet click.uiButtonSet', function(e) {
       var obj;
       obj = $(this);
       if (e.type === 'click') {
@@ -269,28 +267,28 @@
 
   changeButtonStatus = function(obj, opts) {
     var group, siblingsObj;
-    if ((obj.hasClass('uiRadio')) || obj.hasClass('uiImgRadio')) {
+    if (obj.hasClass('uiRadio') || obj.hasClass('uiImgRadio')) {
       group = obj.attr('group');
       siblingsObj = obj.siblings("[group=\"" + group + "\"]");
-      (obj.removeClass("" + opts.buttonHoverClass + " " + opts.buttonClass)).addClass(opts.buttonSelectedClass);
-      (siblingsObj.removeClass(opts.buttonSelectedClass)).addClass(opts.buttonClass);
+      obj.removeClass("" + opts.buttonHoverClass + " " + opts.buttonClass).addClass(opts.buttonSelectedClass);
+      siblingsObj.removeClass(opts.buttonSelectedClass).addClass(opts.buttonClass);
       if (obj.hasClass('uiImgRadio')) {
-        (((obj.addClass('uiImgRadioChecked')).children('.uiIcon')).removeClass('uiUnCheckedButtonIcon')).addClass('uiCheckedButtonIcon');
-        (((siblingsObj.removeClass('uiImgRadioChecked')).children('.uiIcon')).removeClass('uiCheckedButtonIcon')).addClass('uiUnCheckedButtonIcon');
+        obj.addClass('uiImgRadioChecked').children('.uiIcon').removeClass('uiUnCheckedButtonIcon').addClass('uiCheckedButtonIcon');
+        siblingsObj.removeClass('uiImgRadioChecked').children('.uiIcon').removeClass('uiCheckedButtonIcon').addClass('uiUnCheckedButtonIcon');
       }
-    } else if ((obj.hasClass('uiCheckBox')) || obj.hasClass('uiImgCheckBox')) {
+    } else if (obj.hasClass('uiCheckBox') || obj.hasClass('uiImgCheckBox')) {
       if (opts.statusClass[opts.buttonHoverClass] === null) {
-        (obj.toggleClass(opts.buttonSelectedClass)).toggleClass(opts.buttonClass);
+        obj.toggleClass(opts.buttonSelectedClass).toggleClass(opts.buttonClass);
       } else if (opts.statusClass[opts.buttonHoverClass] !== opts.buttonSelectedClass) {
-        (obj.removeClass(opts.buttonHoverClass)).addClass(opts.buttonSelectedClass);
+        obj.removeClass(opts.buttonHoverClass).addClass(opts.buttonSelectedClass);
       } else {
-        (obj.removeClass(opts.buttonHoverClass)).addClass(opts.buttonClass);
+        obj.removeClass(opts.buttonHoverClass).addClass(opts.buttonClass);
       }
       if (obj.hasClass('uiImgCheckBox')) {
-        ((obj.toggleClass('uiImgCheckBoxChecked')).children('.uiIcon')).toggleClass('uiCheckedButtonIcon uiUnCheckedButtonIcon');
+        obj.toggleClass('uiImgCheckBoxChecked').children('.uiIcon').toggleClass('uiCheckedButtonIcon uiUnCheckedButtonIcon');
       }
     } else {
-      (obj.removeClass(opts.buttonHoverClass)).addClass(opts.buttonClass);
+      obj.removeClass(opts.buttonHoverClass).addClass(opts.buttonClass);
     }
     return $.each(opts.statusClass, function(key, value) {
       return opts.statusClass[key] = null;
