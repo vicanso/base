@@ -193,3 +193,4 @@ setContentHeight = (self, opts) ->
   else
     content.height self.height() - otherItemHeightTotal - outerOffset
   return null
+
