@@ -47,8 +47,9 @@
     }
 
     ProgressBar.prototype.init = function() {
-      var progressBarObj;
+      var opts, progressBarObj;
       progressBarObj = this;
+      opts = progressBarObj.opts;
       progressBarObj.createWidget();
       initProgressBar(progressBarObj.jqObj, progressBarObj.opts);
       progressBarObj.val(opts.scrollValue);

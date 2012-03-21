@@ -46,6 +46,7 @@
         targetObj: null,
         tipStyle: null,
         arrowOffset: 10,
+        offset: null,
         tipHTML: '<div></div><div></div>'
       };
       opts = $.extend(defaults, options);
@@ -135,13 +136,13 @@
   initEvent = function(self, opts) {
     var targetObj;
     targetObj = opts.targetObj;
-    if (targetObj.length === 0) {
+    if (targetObj.length !== 0) {
       targetObj.on("mouseenter." + opts.widgetKey, function(e) {
         var target;
         target = $(this);
         if ((opts.beforeShow(self, target, e)) === false) return false;
         return self.stop(true, true)[opts.showAnimate](opts.animateTime, function() {
-          return opts.show(self, target(e));
+          return opts.show(self, target, e);
         });
       });
       return targetObj.on("mouseleave." + opts.widgetKey, function(e) {
@@ -149,7 +150,7 @@
         target = $(this);
         if ((opts.beforeHide(self, target, e)) === false) return false;
         return self.stop(true, true)[opts.hideAnimate](opts.animateTime, function() {
-          return opts.hide(self, target(e));
+          return opts.hide(self, target, e);
         });
       });
     }
@@ -227,6 +228,10 @@
         arrow1LeftValue = -opts.arrowOffset;
         arrow2LeftValue = arrow1LeftValue + 1;
       }
+    }
+    if ($.isPlainObject(opts.offset)) {
+      leftValue += opts.offset.left || 0;
+      topValue += opts.offset.top || 0;
     }
     self.css({
       left: leftValue,

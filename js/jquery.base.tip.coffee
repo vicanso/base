@@ -35,6 +35,7 @@ class $$.Tip extends $$.Widget
       targetObj : null
       tipStyle : null
       arrowOffset : 10
+      offset : null
       tipHTML : '<div></div><div></div>'
     
     opts = $.extend defaults, options
@@ -100,19 +101,19 @@ initTip = (self, opts) ->
   self.hide()
 initEvent = (self, opts) ->
   targetObj = opts.targetObj
-  if targetObj.length is 0
+  if targetObj.length isnt 0
     targetObj.on "mouseenter.#{opts.widgetKey}", (e) ->
       target = $ @
       if (opts.beforeShow self, target, e) is false
         return false
       self.stop(true, true)[opts.showAnimate] opts.animateTime, ()->
-        opts.show self, target e
+        opts.show self, target, e
     targetObj.on "mouseleave.#{opts.widgetKey}", (e) ->
       target = $ @
       if (opts.beforeHide self, target, e) is false
         return false
       self.stop(true, true)[opts.hideAnimate] opts.animateTime, ()->
-        opts.hide self, target e
+        opts.hide self, target, e
 setPosition = (self, opts) ->
   targetObj = opts.targetObj
   if targetObj.length is 0
@@ -175,6 +176,9 @@ setPosition = (self, opts) ->
       leftValue += (targetWidth + opts.arrowOffset)
       arrow1LeftValue = -opts.arrowOffset
       arrow2LeftValue = arrow1LeftValue + 1
+  if $.isPlainObject opts.offset
+    leftValue += (opts.offset.left || 0)
+    topValue += (opts.offset.top || 0)
   self.css {
     left : leftValue
     top : topValue

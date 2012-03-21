@@ -117,13 +117,12 @@
           if (obj.length === 0) return;
           $('>.uiListTitleBar >.uiListBack', self).fadeIn(opts.defaultAnimateDuration);
           opts.listBackIndexArr.push(currentNumber);
-          marginLeftValue = $(this).css('marginLeft');
+          marginLeftValue = currentObj.css('marginLeft');
           return currentObj.animate({
             marginLeft: -opts.listWidth
           }, opts.defaultAnimateDuration, function() {
             opts.showListItem = obj;
-            $(this).hide();
-            return marginLeftValue = $(this).css('marginLeft');
+            return $(this).hide().css('marginLeft', marginLeftValue);
           });
         } else {
           target.removeClass(opts.listItemHoverClass).addClass(opts.listItemSelectedClass);

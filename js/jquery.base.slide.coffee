@@ -76,7 +76,7 @@ initSlide = (self, opts) ->
     slider.addClass 'uiImageSlider uiIcon uiCicleIcon'
   else
     slider.addClass opts.sliderClass
-  self.addClass("uiSlide uiWidget uiNoSelectText #{opts.slideClass}").append($ opts.panelHTML).append(sliderCross).append slider
+  self.addClass("uiSlide uiWidget uiNoSelectText #{opts.slideClass}").append $(opts.panelHTML).append(sliderCross).append(slider)
   if opts.userImageSlider
     opts.sliderLength = slider.width()
   if opts.mode is 'vertical'
@@ -116,13 +116,13 @@ initEvent = (self, opts) ->
     else
       beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft()
     percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax
-    setSlide self, opts, Math.floor percent * (opts.max - opts.min) + opts.min, opts.animation
+    setSlide self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), opts.animation
   panelObj.on 'mousewheel.uiSlide', (e, delta) ->
     positionStr = 'left'
     if opts.mode is 'vertical'
       positionStr = 'top'
     percent = (parseInt $('>.uiSlider', @).css(positionStr)) / opts.slideMax
-    setSlide self, opts,  Math.floor percent * (opts.max - opts.min) + opts.min, false
+    setSlide self, opts,  Math.floor(percent * (opts.max - opts.min) + opts.min), false
     return false
   $('>.uiSlider', panelObj).on 'mousedown.uiSlide', (e) ->
     opts.slideDrag = true
@@ -136,7 +136,7 @@ initEvent = (self, opts) ->
         else
           beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft()
         percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax
-        setSlide self, opts, Math.floor percent * (opts.max - opts.min) + opts.min, false
+        setSlide self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), false
     mouseUpEvent : (e) ->
       opts.slideDrag = false
   }

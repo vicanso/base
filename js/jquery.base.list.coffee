@@ -84,11 +84,10 @@ initEvent = (self, opts) ->
           return
         $('>.uiListTitleBar >.uiListBack', self).fadeIn opts.defaultAnimateDuration
         opts.listBackIndexArr.push currentNumber
-        marginLeftValue = $(@).css 'marginLeft'
+        marginLeftValue = currentObj.css 'marginLeft'
         currentObj.animate {marginLeft : -opts.listWidth}, opts.defaultAnimateDuration, () ->
           opts.showListItem = obj
-          $(@).hide()
-          marginLeftValue = $(@).css 'marginLeft'
+          $(@).hide().css 'marginLeft', marginLeftValue
       else
         target.removeClass(opts.listItemHoverClass).addClass opts.listItemSelectedClass
         target.siblings(".#{opts.listItemSelectedClass}").toggleClass "#{opts.listItemClass} #{opts.listItemSelectedClass}"

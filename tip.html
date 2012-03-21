@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+        Remove this if you use the .htaccess -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <title>tip</title>
+        <meta name="description" content="" />
+        <meta name="generator" content="Studio 3 http://aptana.com/" />
+        <meta name="author" content="vicanso" />
+
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.theme.css" />
+        <link rel="stylesheet" type="text/css" href="css/theme/jquery.base.tip.css" />
+        <style type="text/css">
+        *
+        {
+            margin:0;
+            padding:0;
+        }
+        body
+        {
+            font-family: "Times New Roman", "\5B8B\4F53";
+            font-size:16px;
+        }
+        #demo1
+        {
+            width:400px;
+            border:1px solid red;
+            margin:250px auto;
+        }
+        #tipTop
+        {
+            color:#f0f0f0;
+        }
+        #tipTop, #tipBottom, #tipLeft, #tipRight
+        {
+            width:60px;
+        }
+        </style>
+    </head>
+    <body>
+        <h3></h3>
+        <div id="demo1">
+            <p>
+                我的tip测试
+            </p>
+        </div>
+        
+        <div id="tipTop">新浪微博
+        </div>
+        <div id="tipBottom">
+            下属性参数说明(点击显示隐藏)消息提示测试
+        </div>
+        <div id="tipLeft">
+            左属性参数说明(点击显示隐藏)消息提示测试
+        </div>
+        <div id="tipRight">
+            右属性参数说明(点击显示隐藏)消息提示测试
+        </div>
+        <footer>
+        </footer>
+    </body>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.base.core.js"></script>
+    <script type="text/javascript" src="js/jquery.base.loader.js"></script>
+    <script type="text/javascript" src="js/jquery.base.widget.js"></script>
+    <script type="text/javascript" src="js/jquery.base.position.js"></script>
+    <script type="text/javascript" src="js/jquery.base.tip.js"></script>
+    <script type="text/javascript">
+        $(function()
+        {
+            $("#tipTop").tip({
+                target : $("#demo1"),
+                direction : "top"
+            });
+            $("#tipBottom").tip({
+                target : $("#demo1"),
+                direction : "bottom"
+            });
+            $("#tipLeft").tip({
+                target : $("#demo1"),
+                direction : "left",
+                offset : {
+                    top : -50
+                }
+            });
+            $("#tipRight").tip({
+                target : $("#demo1"),
+                direction : "right"
+            });
+        });
+    </script>
+</html>

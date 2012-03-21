@@ -102,7 +102,7 @@
     } else {
       slider.addClass(opts.sliderClass);
     }
-    self.addClass("uiSlide uiWidget uiNoSelectText " + opts.slideClass).append($(opts.panelHTML)).append(sliderCross).append(slider);
+    self.addClass("uiSlide uiWidget uiNoSelectText " + opts.slideClass).append($(opts.panelHTML).append(sliderCross).append(slider));
     if (opts.userImageSlider) opts.sliderLength = slider.width();
     if (opts.mode === 'vertical') {
       opts.slideBegin = opts.sliderTop = self.offset().top;
@@ -144,14 +144,14 @@
         beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft();
       }
       percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax;
-      return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min, opts.animation));
+      return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), opts.animation);
     });
     panelObj.on('mousewheel.uiSlide', function(e, delta) {
       var percent, positionStr;
       positionStr = 'left';
       if (opts.mode === 'vertical') positionStr = 'top';
       percent = (parseInt($('>.uiSlider', this).css(positionStr))) / opts.slideMax;
-      setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min, false));
+      setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), false);
       return false;
     });
     $('>.uiSlider', panelObj).on('mousedown.uiSlide', function(e) {
@@ -169,7 +169,7 @@
             beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft();
           }
           percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax;
-          return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min, false));
+          return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), false);
         }
       },
       mouseUpEvent: function(e) {

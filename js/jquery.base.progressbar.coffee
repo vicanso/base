@@ -33,6 +33,7 @@ class $$.ProgressBar extends $$.Widget
     progressBarObj.init()
   init : () ->
     progressBarObj = @
+    opts = progressBarObj.opts
     progressBarObj.createWidget()
     initProgressBar progressBarObj.jqObj, progressBarObj.opts
     progressBarObj.val opts.scrollValue
