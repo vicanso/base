@@ -112,7 +112,7 @@
 .uiDialog{margin:0;padding:0;overflow:hidden;}.uiDialog>.uiTitleBar{height:30px;line-height:30px;margin:2px;position:relative;}.uiDialog>.uiTitleBar>.uiTitle{height:100%;padding-left:10px;margin-right:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.uiDialog>.uiTitleBar>.uiTitle>.uiTitleIcon{width:24px;height:30px;display:block;float:left;}
 .uiDialog>.uiTitleBar>.uiDialogButtonSet{position:absolute;right:5px;top:0;height:100%;}
 .uiDialog>.uiTitleBar>.uiButtonSet>.uiUserBtn{margin:0 1px;}
-.uiDialog>.uiContent{margin:10px;}
+.uiDialog>.uiContent{margin:5px;}
 .uiDialog>.uiButtonSet{float:right;margin:0px 10px 10px;}
 .uiTabs{margin:0;padding:0;overflow:hidden;}.uiTabs>.uiTitleBar{height:30px;position:relative;}.uiTabs>.uiTitleBar>.uiRightArrow,.uiTabs>.uiTitleBar>.uiLeftArrow{position:absolute;top:0px;width:9px;height:18px;z-index:99;display:none;cursor:pointer;}
 .uiTabs>.uiTitleBar>.uiRightArrow{right:0px;}
@@ -136,7 +136,6 @@
 .uiProgressBar{margin:0;padding:0;overflow:hidden;}.uiProgressBar>.progressValue{height:100%;width:0;overflow:hidden;}.uiProgressBar>.progressValue>.progressBlock{height:100%;width:12px;margin:0 2px 0 0;float:left;}
 .uiList{padding:0;margin:0;overflow:hidden;}.uiList ul{width:10%;overflow:auto;float:left;}
 .uiList li{list-style:none;height:30px;padding:0 5px;line-height:30px;border-bottom:1px solid #a0a0a0;cursor:pointer;}
-.uiList li.uiListItem{background:#fafafa;}
 .uiList li.uiListMore>.uiListMoreBtn{display:block;float:right;margin:0 5px;height:100%;}
 .uiList>.uiListContent{width:1000%;}
 .uiList>.uiListTitleBar{height:25px;line-height:25px;overflow:hidden;padding-left:10px;position:relative;}.uiList>.uiListTitleBar>span{margin-right:65px;}.uiList>.uiListTitleBar>span.uiListBack{margin:0;cursor:pointer;position:absolute;text-align:center;width:42px;padding-left:8px;right:5px;overflow:hidden;display:none;}

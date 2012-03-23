@@ -273,7 +273,7 @@
       widgetObj = this;
       self = widgetObj.jqObj;
       opts = widgetObj.opts;
-      (self.find('.uiWidget')).each(function() {
+      self.find('.uiWidget').each(function() {
         var key, obj, widget;
         obj = $(this);
         key = obj.attr('widget');
@@ -294,12 +294,12 @@
     self = widget.jqObj;
     opts = widget.opts;
     if (!(self.hasClass('uiWidget'))) self = opts.targetWidget;
-    if ((self.hasClass('uiDraggable')) || (self.find('.uiDraggable')).length !== 0) {
+    if (self.hasClass('uiDraggable') || self.find('.uiDraggable').length !== 0) {
       self.draggable('destroy');
     }
-    if ((self.find('.uiResizable')).length !== 0) self.resizable('destroy');
+    if (self.find('.uiResizable').length !== 0) self.resizable('destroy');
     if ($.isFunction(widget.beforeDestroy)) widget.beforeDestroy();
-    widgetKey = (self.removeClass('uiWidget')).attr('widget');
+    widgetKey = self.removeClass('uiWidget').attr('widget');
     widget.removeWidget(widgetKey);
     if (revert) opts.clone.insertAfter(self);
     self.remove();
@@ -482,12 +482,10 @@
     }
 
     Interaction.prototype.init = function() {
-      var interactionObj, jQueryEvent, mouseDownEvent, mouseMoveEvent, mouseUpEvent, obj, opts, self;
+      var interactionObj, mouseDownEvent, mouseMoveEvent, mouseUpEvent, obj, opts, self;
       interactionObj = this;
       self = interactionObj.jqObj;
       opts = interactionObj.opts;
-      jQueryEvent = self.off ? 'on' : 'bind';
-      console.log(opts.type);
       if (opts.type === 'resize') {
         obj = self.find('.uiResizable');
         if (obj.length === 0) {
@@ -499,22 +497,20 @@
         if (obj.length === 0) obj = self.addClass('uiDraggable');
       }
       mouseDownEvent = "mousedown." + opts.type;
-      console.log(obj);
-      obj[jQueryEvent](mouseDownEvent, function(e) {
+      obj.on(mouseDownEvent, function(e) {
         setInteractionSetting(self, opts, e);
         if (opts.type === 'resize') return false;
         return !opts.stopMouseDownPropagation;
       });
       mouseMoveEvent = "mousemove." + opts.widgetKey;
       mouseUpEvent = "mouseup." + opts.widgetKey;
-      ($(document))[jQueryEvent](mouseMoveEvent, function(e) {
+      $(document).on(mouseMoveEvent, function(e) {
         var maskItem, newHeight, newWidth, offsetX, offsetY, position;
         if (opts.start) {
           if (opts.mask === null) {
             if ((setInteractionMask(self, opts, e)) === false) return;
           }
           maskItem = opts.mask;
-          console.log('mousemove');
           opts.doing = true;
           offsetX = e.clientX - opts.originClientX;
           offsetY = e.clientY - opts.originClientY;
@@ -536,7 +532,7 @@
             if ((opts.event.doing(self, maskItem, newWidth, newHeight)) === false) {
               return;
             }
-            (maskItem.width(newWidth)).height(newHeight);
+            maskItem.width(newWidth).height(newHeight);
           } else if (opts.type === 'drag') {
             position = {
               left: opts.originPosition.left + offsetX,
@@ -561,7 +557,7 @@
           return false;
         }
       });
-      ($(document))[jQueryEvent](mouseUpEvent, function() {
+      $(document).on(mouseUpEvent, function() {
         return complete(self, opts);
       });
       return interactionObj;
@@ -593,7 +589,7 @@
 
   setInteractionSetting = function(self, opts, e) {
     opts.start = true;
-    if ((opts.event.start(self)) === false || (($(e.target)).hasClass('uiUserBtn'))) {
+    if ((opts.event.start(self)) === false || $(e.target).hasClass('uiUserBtn')) {
       opts.start = false;
       return false;
     }
@@ -621,20 +617,20 @@
         opts.position = opts.originPosition = opts.mask.offset();
       }
     } else if (opts.originMask) {
-      opts.mask = (self.clone().css({
+      opts.mask = self.clone().css({
         position: 'absolute',
         left: maskPosition.left,
         top: maskPosition.top
-      })).appendTo('body');
+      }).appendTo('body');
     } else {
       marginLeftValue = self.css('marginLeft');
       marginTopValue = self.css('marginTop');
-      opts.mask = ((((($(opts.maskHTML)).width(maskWidth)).height(maskHeight)).css({
+      opts.mask = $(opts.maskHTML).width(maskWidth).height(maskHeight).css({
         marginLeft: marginLeftValue,
         marginTop: marginTopValue,
         left: maskPosition.left,
         top: maskPosition.top
-      })).hide().addClass('uiBlackBigBorder uiCornerAll')).appendTo('body');
+      }).hide().addClass('uiBlackBigBorder uiCornerAll').appendTo('body');
     }
     opts.mask.show();
     if (opts.type === 'drag' && opts.dest !== null) {
@@ -693,12 +689,24 @@
     Draggable.name = 'Draggable';
 
     function Draggable(self, options) {
-      var draggableObj, opts;
+      var defaults, draggableObj, opts;
       draggableObj = this;
       if (!(draggableObj instanceof $$.Draggable)) {
         return new $$.Draggable(self, options);
       }
-      opts = $.extend({}, $$.Draggable.prototype.defaults, options);
+      defaults = {
+        dest: null,
+        originPosition: null,
+        position: null,
+        outerWidth: null,
+        outerHeight: null,
+        destPosition: null,
+        firstCross: false,
+        type: "drag",
+        widgetKey: null,
+        cross: null
+      };
+      opts = $.extend({}, defaults, options);
       draggableObj.constructor.__super__.constructor.call(draggableObj, self, opts);
       opts = draggableObj.opts;
       if (opts.event.stop === $.noop) {
@@ -710,19 +718,6 @@
         };
       }
     }
-
-    Draggable.prototype.defaults = {
-      dest: null,
-      originPosition: null,
-      position: null,
-      outerWidth: null,
-      outerHeight: null,
-      destPosition: null,
-      firstCross: false,
-      type: "drag",
-      widgetKey: null,
-      cross: null
-    };
 
     return Draggable;
 
@@ -742,12 +737,24 @@
     Resizable.name = 'Resizable';
 
     function Resizable(self, options) {
-      var opts, resizableObj;
+      var defaults, opts, resizableObj;
       resizableObj = this;
       if (!(resizableObj instanceof $$.Resizable)) {
         return new $$.Resizable(self, options);
       }
-      opts = $.extend({}, $$.Resizable.prototype.defaults, options);
+      defaults = {
+        minWidth: null,
+        minHeight: null,
+        maxWidth: 0xffff,
+        maxHeight: 0xffff,
+        originWidth: 0,
+        originHeight: 0,
+        type: "resize",
+        outerWidth: null,
+        outerHeight: null,
+        destPosition: null
+      };
+      opts = $.extend({}, defaults, options);
       resizableObj.constructor.__super__.constructor.call(resizableObj, self, opts);
       opts = resizableObj.opts;
       if (opts.event.stop === $.noop) {
@@ -771,19 +778,6 @@
         };
       }
     }
-
-    Resizable.prototype.defaults = {
-      minWidth: null,
-      minHeight: null,
-      maxWidth: 0xffff,
-      maxHeight: 0xffff,
-      originWidth: 0,
-      originHeight: 0,
-      type: "resize",
-      outerWidth: null,
-      outerHeight: null,
-      destPosition: null
-    };
 
     return Resizable;
 
@@ -860,7 +854,7 @@
       self = buttonSetObj.jqObj;
       opts = buttonSetObj.opts;
       if (index == null) index = 0;
-      obj = (self.children().eq(index)).click();
+      obj = self.children().eq(index).click();
       return buttonSetObj;
     };
 
@@ -882,7 +876,7 @@
       obj = self.children().eq(index);
       if (arguments.length !== 2) return obj.text();
       iconObj = obj.children('.uiIcon');
-      (obj.html(text)).prepend(iconObj);
+      obj.html(text).prepend(iconObj);
       return buttonSetObj;
     };
 
@@ -898,7 +892,7 @@
       if (index > iconArrayTotal) index = iconArrayTotal;
       iconClass = opts.iconArray[index];
       if (arguments.length < 2) return iconClass;
-      ((obj.children('.uiIcon')).removeClass(iconClass)).addClass(icon);
+      obj.children('.uiIcon').removeClass(iconClass).addClass(icon);
       opts.iconArray[index] = icon;
       return buttonSetObj;
     };
@@ -928,7 +922,7 @@
         }
       } else {
         if (obj.hasClass(opts.buttonSelectedClass)) {
-          (obj.removeClass(opts.buttonSelectedClass)).addClass(opts.buttonClass);
+          obj.removeClass(opts.buttonSelectedClass).addClass(opts.buttonClass);
         }
       }
       return buttonSetObj;
@@ -941,7 +935,7 @@
       opts = buttonSetObj.opts;
       if (index == null) index = 0;
       if ($.isArray(opts.iconArray)) opts.iconArray.splice(index, 1);
-      return ((self.children('.uiButton')).eq(index)).remove();
+      return self.children('.uiButton').eq(index).remove();
     };
 
     return ButtonSet;
@@ -970,9 +964,9 @@
       default:
         buttonTypeClass = '';
     }
-    (self.addClass('uiButtonSet uiWidget uiNoSelectText')).children().each(function(n) {
+    self.addClass('uiButtonSet uiWidget uiNoSelectText').children().each(function(n) {
       var buttonClass, floatClass, index, marginAttr, obj;
-      obj = ($(this)).addClass(buttonTypeClass);
+      obj = $(this).addClass(buttonTypeClass);
       if (groupStr.length !== 0) obj.attr('group', groupStr);
       if (opts.buttonMargin > 0) {
         buttonClass = "uiButton uiCornerAll " + opts.buttonClass + " " + opts.buttonBorderClass;
@@ -980,7 +974,7 @@
         buttonClass = "uiButton " + opts.buttonClass;
       }
       if (obj.hasClass('uiImgRadio' || obj.hasClass('uiImgCheckBox'))) {
-        (obj.wrapInner('<span />')).prepend(opts.imgIconHTML);
+        obj.wrapInner('<span />').prepend(opts.imgIconHTML);
       }
       if (n !== 0) {
         if (opts.buttonMargin > 0) {
@@ -1018,7 +1012,7 @@
             floatClass = '';
           }
         }
-        (obj.wrapInner('<span />')).prepend("<span class=\"uiIcon " + opts.iconArray[index] + " " + floatClass + "\"></span>");
+        obj.wrapInner('<span />').prepend("<span class=\"uiIcon " + opts.iconArray[index] + " " + floatClass + "\"></span>");
       }
       if (opts.buttonWidth !== 0) return obj.width(opts.buttonWidth);
     });
@@ -1034,10 +1028,9 @@
   };
 
   initEvent = function(self, opts) {
-    var jQueryEvent, mouseDownFlag;
+    var mouseDownFlag;
     mouseDownFlag = false;
-    jQueryEvent = self.off ? 'on' : 'bind';
-    (self.children('.uiButton, .uiImgButton'))[jQueryEvent]('mouseenter.uiButtonSet mouseleave.uiButtonSet mousedown.uiButtonSet mouseup.uiButtonSet click.uiButtonSet', function(e) {
+    self.children('.uiButton, .uiImgButton').on('mouseenter.uiButtonSet mouseleave.uiButtonSet mousedown.uiButtonSet mouseup.uiButtonSet click.uiButtonSet', function(e) {
       var obj;
       obj = $(this);
       if (e.type === 'click') {
@@ -1060,28 +1053,28 @@
 
   changeButtonStatus = function(obj, opts) {
     var group, siblingsObj;
-    if ((obj.hasClass('uiRadio')) || obj.hasClass('uiImgRadio')) {
+    if (obj.hasClass('uiRadio') || obj.hasClass('uiImgRadio')) {
       group = obj.attr('group');
       siblingsObj = obj.siblings("[group=\"" + group + "\"]");
-      (obj.removeClass("" + opts.buttonHoverClass + " " + opts.buttonClass)).addClass(opts.buttonSelectedClass);
-      (siblingsObj.removeClass(opts.buttonSelectedClass)).addClass(opts.buttonClass);
+      obj.removeClass("" + opts.buttonHoverClass + " " + opts.buttonClass).addClass(opts.buttonSelectedClass);
+      siblingsObj.removeClass(opts.buttonSelectedClass).addClass(opts.buttonClass);
       if (obj.hasClass('uiImgRadio')) {
-        (((obj.addClass('uiImgRadioChecked')).children('.uiIcon')).removeClass('uiUnCheckedButtonIcon')).addClass('uiCheckedButtonIcon');
-        (((siblingsObj.removeClass('uiImgRadioChecked')).children('.uiIcon')).removeClass('uiCheckedButtonIcon')).addClass('uiUnCheckedButtonIcon');
+        obj.addClass('uiImgRadioChecked').children('.uiIcon').removeClass('uiUnCheckedButtonIcon').addClass('uiCheckedButtonIcon');
+        siblingsObj.removeClass('uiImgRadioChecked').children('.uiIcon').removeClass('uiCheckedButtonIcon').addClass('uiUnCheckedButtonIcon');
       }
-    } else if ((obj.hasClass('uiCheckBox')) || obj.hasClass('uiImgCheckBox')) {
+    } else if (obj.hasClass('uiCheckBox') || obj.hasClass('uiImgCheckBox')) {
       if (opts.statusClass[opts.buttonHoverClass] === null) {
-        (obj.toggleClass(opts.buttonSelectedClass)).toggleClass(opts.buttonClass);
+        obj.toggleClass(opts.buttonSelectedClass).toggleClass(opts.buttonClass);
       } else if (opts.statusClass[opts.buttonHoverClass] !== opts.buttonSelectedClass) {
-        (obj.removeClass(opts.buttonHoverClass)).addClass(opts.buttonSelectedClass);
+        obj.removeClass(opts.buttonHoverClass).addClass(opts.buttonSelectedClass);
       } else {
-        (obj.removeClass(opts.buttonHoverClass)).addClass(opts.buttonClass);
+        obj.removeClass(opts.buttonHoverClass).addClass(opts.buttonClass);
       }
       if (obj.hasClass('uiImgCheckBox')) {
-        ((obj.toggleClass('uiImgCheckBoxChecked')).children('.uiIcon')).toggleClass('uiCheckedButtonIcon uiUnCheckedButtonIcon');
+        obj.toggleClass('uiImgCheckBoxChecked').children('.uiIcon').toggleClass('uiCheckedButtonIcon uiUnCheckedButtonIcon');
       }
     } else {
-      (obj.removeClass(opts.buttonHoverClass)).addClass(opts.buttonClass);
+      obj.removeClass(opts.buttonHoverClass).addClass(opts.buttonClass);
     }
     return $.each(opts.statusClass, function(key, value) {
       return opts.statusClass[key] = null;
@@ -1195,8 +1188,8 @@
         contentTarget = (self.childdren('.uiTabsContent')).eq(index);
         insertFunc = 'insertBefore';
       }
-      (($(opts.tabsItemHTML)).html(title + opts.closeHTML))[insertFunc](itemTarget);
-      ((($(opts.contentHTML)).addClass('uiTabsContent uiHidden')).append(contentObj))[insertFunc](itemTarget);
+      $(opts.tabsItemHTML).html(title + opts.closeHTML)[insertFunc](itemTarget);
+      $(opts.contentHTML).addClass('uiTabsContent uiHidden').append(contentObj)[insertFunc](itemTarget);
       opts.tabsItemTotal++;
       return tabsObj;
     };
@@ -1207,7 +1200,7 @@
       self = tabsObj.jqObj;
       opts = tabsObj.opts;
       if (arguments.length === 0) return opts.activateIndex;
-      (($('>.uiTitleBar >.uiListContent .uiTabsItem', self)).eq(index)).trigger('click.uiTabs');
+      $('>.uiTitleBar >.uiListContent .uiTabsItem', self).eq(index).trigger('click.uiTabs');
       return tabsObj;
     };
 
@@ -1217,8 +1210,8 @@
       self = tabsObj.jqObj;
       opts = tabsObj.opts;
       if (index == null) index = 0;
-      item = ($('>.uiTabsContent', self)).eq(index);
-      titleBar = ($('> .uiTabsList > .uiListContent > .uiTabsItemContainer >.uiTabsItem', self)).eq(index);
+      item = $('>.uiTabsContent', self).eq(index);
+      titleBar = $('> .uiTabsList > .uiListContent > .uiTabsItemContainer >.uiTabsItem', self).eq(index);
       if (typeof content === 'undefined') return item;
       if (content != null) item.html(content);
       if (typeof title === 'undefined') return titleBar;
@@ -1232,8 +1225,8 @@
 
   initTabs = function(self, opts) {
     var contentObj, selfHeight, tabsItemList, titleBarHeight, titleBarObj;
-    titleBarObj = (($(opts.titleBarHTML)).addClass(opts.titleBarClass)).append(opts.controlHTML);
-    (self.addClas("uiTabs uiWidget " + opts.tabsClass)).children().each(function(n) {
+    titleBarObj = $(opts.titleBarHTML).addClass(opts.titleBarClass).append(opts.controlHTML);
+    self.addClas("uiTabs uiWidget " + opts.tabsClass).children().each(function(n) {
       var closeHTML, contentObj, title;
       closeHTML = '';
       if (opts.closableArray === 'all' || (($.isArray(opts.closableArray)) && ($.inArray(n, opts.closableArray)) !== -1)) {
@@ -1242,7 +1235,7 @@
       contentObj = ($(this)).addClass('uiTabsContent uiHidden');
       if ($.isArray(opts.titleList)) title = opts.titleList[n];
       if (title == null) title = content.attr('title');
-      (($(opts.tabsItemHTML)).html(title + closeHTML)).appendTo($('>.uiListContent >.uiTabsItemContainer', titleBarObj));
+      $(opts.tabsItemHTML).html(title + closeHTML).appendTo($('>.uiListContent >.uiTabsItemContainer', titleBarObj));
       return opts.tabsItemTotal++;
     });
     self.prepend(titleBarObj);
@@ -1254,7 +1247,7 @@
     opts.tabsItemOuterWidth = tabsItemList.outerWidth(true);
     opts.tabsItemViewTotal = Math.floor(($('>.uiTabsList', self)).width() / opts.tabsItemOuterWidth);
     if (opts.tabsItemTotal > opts.tabsItemViewTotal) {
-      ($('> .uiTitleBar > .uiRightArrow', self)).show();
+      $('> .uiTitleBar > .uiRightArrow', self).show();
     }
     selfHeight = self.height();
     titleBarHeight = titleBarObj.height();
@@ -1266,7 +1259,7 @@
   };
 
   initEvent = function(self, opts) {
-    ($('> .uiTabsList > .uiListContent > .uiTabsItemContainer', self)).on('click.uiTabs', function(e) {
+    $('> .uiTabsList > .uiListContent > .uiTabsItemContainer', self).on('click.uiTabs', function(e) {
       var content, index, nextObj, obj, target;
       target = $(e.target);
       if (target.hasClass('uiCloseItemBtn')) {
@@ -1279,20 +1272,20 @@
           obj.prev().click();
         }
         index = obj.index();
-        ((self.children('.uiTabsContent')).eq(index)).remove();
+        self.children('.uiTabsContent').eq(index).remove();
         obj.remove();
         opts.tabsItemTotal--;
         checkItemViewStatus(self, opts);
         return false;
       } else if (target.hasClass('uiTabsItem')) {
-        index = (((target.addClass(opts.tabsItemSelectedClass)).siblings('.selected')).removeClass(opts.tabsItemSelectedClass)).end().index();
+        index = target.addClass(opts.tabsItemSelectedClass).siblings('.selected').removeClass(opts.tabsItemSelectedClass).end().index();
         content = (self.children('.uiTabsContent')).eq(index);
         if ((opts.change(self, target, content, e)) === false) return false;
-        ((content.removeClass('uiHidden')).siblings('.uiTabsContent')).addClass('uiHidden');
+        content.removeClass('uiHidden').siblings('.uiTabsContent').addClass('uiHidden');
         return opts.activateIndex = index;
       }
     });
-    ($('>.uiTitleBar', self)).on('click.uiTabs', function(e) {
+    $('>.uiTitleBar', self).on('click.uiTabs', function(e) {
       var clickFunc, scrollLeftValue, target;
       target = $(e.target);
       if (target.hasClass('uiRightArrow')) {
@@ -1312,24 +1305,24 @@
       if (clickFunc != null) {
         if ((opts[clickFunc](self, target, e)) === false) return false;
         scrollLeftValue = opts.tabsItemOuterWidth * opts.tabsItemViewIndex;
-        (target.siblings('.uiListContent')).stop().animate({
+        target.siblings('.uiListContent').stop().animate({
           left: -scrollLeftValue
         }, opts.animateTime);
         return checkItemViewStatus(self, opts);
       }
     });
-    ($('>.uiTabsList', self)).on('mousewheel.uiTabs', function(e, delta) {
+    $('>.uiTabsList', self).on('mousewheel.uiTabs', function(e, delta) {
       if (delta > 0) {
-        ($('>.uiLeftArrow', this)).click();
+        $('>.uiLeftArrow', this).click();
       } else {
-        ($('>.uiRightArrow', this)).click();
+        $('>.uiRightArrow', this).click();
       }
       return false;
     });
-    return ($('> .uiTabsList > .uiListContent > .uiTabsItemContainer > .uiTabsItem', self)).hover(function() {
-      return ($(this)).addClass(opts.tabsItemHoverClass, function() {
-        return ($(this)).removeClass(opts.tabsItemHoverClass);
-      });
+    return $('> .uiTabsList > .uiListContent > .uiTabsItemContainer > .uiTabsItem', self).hover(function() {
+      return $(this).addClass(opts.tabsItemHoverClass);
+    }, function() {
+      return $(this).removeClass(opts.tabsItemHoverClass);
     });
   };
 
@@ -1430,12 +1423,11 @@
     };
 
     Slide.prototype.beforeDestroy = function() {
-      var jQueryEvent, opts, self, slideObj;
+      var opts, self, slideObj;
       slideObj = this;
       self = slideObj.jqObj;
       opts = slideObj.opts;
-      jQueryEvent = self.off ? 'off' : 'unbind';
-      return ($(docuemnt))[jQueryEvent]("." + opts.widgetKey);
+      return $(docuemnt).off("." + opts.widgetKey);
     };
 
     return Slide;
@@ -1449,20 +1441,20 @@
       opts.sliderCrossClass = opts.sliderCrossClassVerticalMode;
     }
     slider = $(opts.sliderHTML);
-    sliderCross = ($(opts.sliderCrossHTML)).addClass(opts.sliderCrossClass);
+    sliderCross = $(opts.sliderCrossHTML).addClass(opts.sliderCrossClass);
     if (opts.userImageSlider) {
       slider.addClass('uiImageSlider uiIcon uiCicleIcon');
     } else {
       slider.addClass(opts.sliderClass);
     }
-    (((self.addClass("uiSlide uiWidget uiNoSelectText " + opts.slideClass)).append($(opts.panelHTML))).append(sliderCross)).append(slider);
+    self.addClass("uiSlide uiWidget uiNoSelectText " + opts.slideClass).append($(opts.panelHTML).append(sliderCross).append(slider));
     if (opts.userImageSlider) opts.sliderLength = slider.width();
     if (opts.mode === 'vertical') {
       opts.slideBegin = opts.sliderTop = self.offset().top;
       slider.css('left', opts.sliderLeft - 1);
       sliderCross.width('100%');
       if (!opts.userImageSlider) {
-        (slider.width(self.width() - 2 * opts.sliderLeft)).height(opts.sliderLength);
+        slider.width(self.width() - 2 * opts.sliderLeft).height(opts.sliderLength);
       } else {
         slider.css('top', -(opts.sliderLength >> 2));
       }
@@ -1471,7 +1463,7 @@
       slider.css('top', opts.sliderTop - 1);
       sliderCross.height('100%');
       if (!opts.userImageSlider) {
-        (slider.height(self.height() - 2 * opts.sliderTop)).width(opts.sliderLength);
+        slider.height(self.height() - 2 * opts.sliderTop).width(opts.sliderLength);
       } else {
         self.css('left', -(opts.sliderLength >> 2));
       }
@@ -1484,44 +1476,45 @@
   };
 
   initEvent = function(self, opts) {
-    var mouseMoveEvent, mouseUpEvent, panelObj;
+    var documentObj, mouseMoveEvent, mouseUpEvent, panelObj;
+    documentObj = $(document);
     panelObj = $('>.uiPanel', self);
     panelObj.on('click.uiSlide', function(e) {
       var beginValue, percent;
-      if (($(e.target)).hasClass('uiSlider')) return false;
+      if ($(e.target).hasClass('uiSlider')) return false;
       if ((opts.click(self, $(this, e))) === false) return false;
       if (opts.mode === 'vertical') {
-        beginValue = e.clientY + ($(document)).scrollTop() + self.parent().scrollTop();
+        beginValue = e.clientY + documentObj.scrollTop() + self.parent().scrollTop();
       } else {
-        beginValue = e.clientX + ($(document)).scrollLeft() + self.parent().scrollLeft();
+        beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft();
       }
       percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax;
-      return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min, opts.animation));
+      return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), opts.animation);
     });
     panelObj.on('mousewheel.uiSlide', function(e, delta) {
       var percent, positionStr;
       positionStr = 'left';
       if (opts.mode === 'vertical') positionStr = 'top';
-      percent = parseInt(($('>.uiSlider', this)).css(positionStr)) / opts.slideMax;
-      setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min, false));
+      percent = (parseInt($('>.uiSlider', this).css(positionStr))) / opts.slideMax;
+      setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), false);
       return false;
     });
-    ($('>.uiSlider', panelObj)).on('mousedown.uiSlide', function(e) {
+    $('>.uiSlider', panelObj).on('mousedown.uiSlide', function(e) {
       return opts.slideDrag = true;
     });
     mouseMoveEvent = "mousemove." + opts.widgetKey;
     mouseUpEvent = "mouseup." + opts.widgetKey;
-    return ($(document)).on({
+    return documentObj.on({
       mouseMoveEvent: function(e) {
         var beginValue, percent;
         if (opts.slideDrag) {
           if (opts.mode === 'vertical') {
-            beginValue = e.clientY + ($(document)).scrollTop() + self.parent().scrollTop();
+            beginValue = e.clientY + documentObj.scrollTop() + self.parent().scrollTop();
           } else {
-            beginValue = e.clientX + ($(document)).scrollLeft() + self.parent().scrollLeft();
+            beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft();
           }
           percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax;
-          return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min, false));
+          return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), false);
         }
       },
       mouseUpEvent: function(e) {
@@ -1557,10 +1550,10 @@
       };
     }
     if (animate) {
-      (obj.stop(true, jumpToEnd)).animate(props, opts.animateTime, function() {
+      obj.stop(true, jumpToEnd).animate(props, opts.animateTime, function() {
         return opts.slide(self, obj, opts.slideValue);
       });
-      return (sliderCross.stop(true, jumpToEnd)).animate(sliderCrossProps, opts.animateTime);
+      return sliderCross.stop(true, jumpToEnd).animate(sliderCrossProps, opts.animateTime);
     } else {
       obj.css(props);
       sliderCross.css(sliderCrossProps);
@@ -1642,11 +1635,11 @@
         activateArr = [];
         titleBarList = $('> .uiTitleBar', self);
         titleBarList.each(function(n) {
-          if (($(this)).hasClass(opts.activeClass)) return activateArr.push(n);
+          if ($(this).hasClass(opts.activeClass)) return activateArr.push(n);
         });
         return activateArr;
       }
-      obj = ($('> .uiTitleBar', self)).eq(index);
+      obj = $('> .uiTitleBar', self).eq(index);
       if (!obj.hasClass(opts.activeClass)) obj.trigger(opts.event);
       return accordionObj;
     };
@@ -1657,7 +1650,7 @@
       self = accordionObj.jqObj;
       opts = accordionObj.opts;
       if (index == null) index = 0;
-      titleBarObj = ($('> .uiTitleBar', self)).eq(index);
+      titleBarObj = $('> .uiTitleBar', self).eq(index);
       contentObj = titleBarObj.next();
       if (arguments.length === 1) return contentObj;
       if (arguments.length === 2) {
@@ -1667,7 +1660,7 @@
         }
         return titleBarObj;
       }
-      (titleBarObj.children('.uiTitle')).html(title);
+      titleBarObj.children('.uiTitle').html(title);
       if (content != null) contentObj.html(content);
       return accordionObj;
     };
@@ -1679,14 +1672,14 @@
       opts = accordionObj.opts;
       itemObj = $(item);
       if (title == null) title = itemObj.attr('title');
-      titleBarObj = (((($(opts.itemTitleBarHTML)).addClass(opts.itemTitleBarClass)).children('.uiTitle')).html(title)).end();
-      (itemObj.addClass('uiContent uiHidden')).height(opts.height);
+      titleBarObj = $(opts.itemTitleBarHTML).addClass(opts.itemTitleBarClass).children('.uiTitle').html(title).end();
+      itemObj.addClass('uiContent uiHidden').height(opts.height);
       if (arguments.length === 2) {
-        obj = ($('> .uiTitleBar', self)).eq(index);
+        obj = $('> .uiTitleBar', self).eq(index);
         titleBarObj.insertBefore(obj);
         itemObj.insertBefore(obj);
       } else {
-        (self.append(titleBarObj)).append(itemObj);
+        self.append(titleBarObj).append(itemObj);
       }
       return accordionObj;
     };
@@ -1697,7 +1690,7 @@
       self = accordionObj.jqObj;
       opts = accordionObj.opts;
       if (index == null) index = 0;
-      return (($('>.uiTitleBar', self)).eq(index)).next().andSelf().remove();
+      return $('>.uiTitleBar', self).eq(index).next().andSelf().remove();
     };
 
     Accordion.prototype.title = function(title) {
@@ -1718,9 +1711,9 @@
       opts = accordionObj.opts;
       if (arguments.length === 0) return opts.titleIcon;
       if (opts.titleIcon === null) {
-        ($('>.uiAccordionTitleBar', self)).prepend($('<span class="uiTitleIcon" />'));
+        $('>.uiAccordionTitleBar', self).prepend($('<span class="uiTitleIcon" />'));
       }
-      obj = (($('> .uiAccordionTitleBar > span.uiTitleIcon', self)).removeClass(opts.titleIcon)).addClass(titleIcon);
+      obj = $('> .uiAccordionTitleBar > span.uiTitleIcon', self).removeClass(opts.titleIcon).addClass(titleIcon);
       opts.titleIcon = titleIcon;
       return accordionObj;
     };
@@ -1733,12 +1726,12 @@
     var title, titleBar;
     title = opts.title || self.attr('title');
     if (title != null) {
-      titleBar = (((($(opts.titleBarHTML)).addClass(opts.titleBarClass)).children('.title')).html(title)).end();
+      titleBar = $(opts.titleBarHTML).addClass(opts.titleBarClass).children('.title').html(title).end();
       if (opts.titleIcon != null) {
-        (titleBar.prepend($('<span class="uiTitleIcon" />'))).addClass(opts.titleIcon);
+        titleBar.prepend($('<span class="uiTitleIcon" />')).addClass(opts.titleIcon);
       }
     }
-    ((self.addClass('uiAccordion uiWidget ' + opts.accordionClass)).children('div')).each(function(n) {
+    self.addClass("uiAccordion uiWidget " + opts.accordionClass).children('div').each(function(n) {
       var buttonClass, contentClass, itemTitleBarObj, obj, titleBarClass;
       contentClass = 'uiHidden';
       titleBarClass = opts.itemTitleBarClass;
@@ -1752,18 +1745,16 @@
       title = null;
       if ($.isArray(opts.itemTitleList)) title = opts.itemTitleList[n];
       if (title == null) title = obj.attr('title');
-      itemTitleBarObj = ($(opts.itemTitleBarHTML)).addClass(titleBarClass);
-      (((itemTitleBarObj.children('.uiUserBtn')).toggleClass(buttonClass)).siblings('.uiTitle')).html(title);
-      return itemTitleBarObj.insertBefore((obj.addClass("uiContent " + contentClass)).height(opts.height));
+      itemTitleBarObj = $(opts.itemTitleBarHTML).addClass(titleBarClass);
+      itemTitleBarObj.children('.uiUserBtn').toggleClass(buttonClass).siblings('.uiTitle').html(title);
+      return itemTitleBarObj.insertBefore(obj.addClass("uiContent " + contentClass).height(opts.height));
     });
     self.prepend(titleBar);
     return initEvent(self, opts);
   };
 
   initEvent = function(self, opts) {
-    var jQueryEvent;
-    jQueryEvent = self.off ? 'on' : 'bind';
-    self[jQueryEvent]("" + opts.event + ".uiAccordion", function(e) {
+    self.on("" + opts.event + ".uiAccordion", function(e) {
       var changeObjList, selectedList, target;
       if (opts.disabled || opts.animating) return;
       target = $(e.target);
@@ -1774,40 +1765,14 @@
       if (!opts.toggle) if (target.hasClass(opts.activeClass)) return;
       if ((opts.changeStart(self, target, e)) === false) return false;
       opts.animating = true;
-      selectedList = opts.hideOthers === true ? ((($(">.uiTitleBar." + opts.activeClass, self)).not(target)).removeClass("" + opts.activeClass + " uiActive")).addClass(opts.itemTitleBarClass) : null;
-      changeObjList = (target.toggleClass("" + opts.itemTitleBarClass + " " + opts.activeClass + " uiActive")).add(selectedList);
-      (changeObjList.children('.uiUserBtn')).toggleClass('uiArrowUpIcon uiArrowDownIcon');
-      return ((changeObjList.next('.uiContent')).stop(true, true))[opts.animation](opts.animateTime, function() {
-        if (($(this)).is(':visible')) opts.change(self, target, e);
+      selectedList = opts.hideOthers === true ? $(">.uiTitleBar." + opts.activeClass, self).not(target).removeClass("" + opts.activeClass + " uiActive").addClass(opts.itemTitleBarClass) : null;
+      changeObjList = target.toggleClass("" + opts.itemTitleBarClass + " " + opts.activeClass + " uiActive").add(selectedList);
+      changeObjList.children('.uiUserBtn').toggleClass('uiArrowUpIcon uiArrowDownIcon');
+      return changeObjList.next('.uiContent').stop(true, true)[opts.animation](opts.animateTime, function() {
+        if ($(this).is(':visible')) opts.change(self, target, e);
         return opts.animating = false;
       });
     });
-    if (posStr !== 'static' && posStr !== 'relative') {
-      if (opts.active && opts.autoOpen) {
-        (($('.uiDialog')).not(self)).each(function() {
-          var obj;
-          obj = $(this);
-          if (obj.css('position' !== 'static' && (obj.css('position' !== 'relative')))) {
-            return ((obj.css('zIndex', opts.zIndex)).children('.uiTitleBar')).addClass('uiInactive');
-          }
-        });
-      }
-      self[jQueryEvent]('mousedown.uiDialog', function(e) {
-        var target;
-        ((self.css('zIndex', opts.zIndex + 1)).children('.uiTitleBar')).addClass('uiInactive');
-        (self.siblings('.uiDialog')).each(function() {
-          var obj;
-          obj = $(this);
-          if (obj.css('position' !== 'static' && (obj.css('position' !== 'relative')))) {
-            return ((obj.css('zIndex', opts.zIndex)).children('.uiTitleBar')).addClass('uiInactive');
-          }
-        });
-        target = $(e.target);
-        if (target.hasClass('uiDraggable' || target.hasClass('uiResizable' || target.parent().hasClass('uiDraggable')))) {
-          return false;
-        }
-      });
-    }
     return null;
   };
 
@@ -1835,7 +1800,7 @@
             return content.height(self.height() - otherItemHeightTotal - outerOffset);
           }
         } else {
-          return ($(this)).load(function() {
+          return $(this).load(function() {
             completeLoad++;
             if (completeLoad === imgTotal) {
               return content.height(self.height() - otherItemHeightTotal - outerOffset);
@@ -1924,7 +1889,7 @@
       self = dropDownListObj.jqObj;
       opts = dropDownListObj.opts;
       if (arguments.length === 0) return $('>.uiSelectList>.selected', self);
-      ($("> .uiSelectList > li:eq(" + index + ")", self)).click();
+      $("> .uiSelectList > li:eq(" + index + ")", self).click();
       return dropDownListObj;
     };
 
@@ -1963,7 +1928,7 @@
         opts.listItemOuterHeight = listItemObj.outerHeight(true);
       }
       selectList.height(opts.listItemOuterHeight * listShowTotal);
-      ($('>.uiSelectList >li', self)).hover(function() {
+      $('>.uiSelectList >li', self).hover(function() {
         return ($(this)).addClass(opts.listItemHoverClass);
       }, function() {
         return ($(this)).removeClass(opts.listItemHoverClass);
@@ -1976,7 +1941,7 @@
       dropDownListObj = this;
       self = dropDownListObj.jqObj;
       opts = dropDownListObj.opts;
-      (self.children('.uiSelectList')).show();
+      self.children('.uiSelectList').show();
       return dropDownListObj;
     };
 
@@ -1985,7 +1950,7 @@
       dropDownListObj = this;
       self = dropDownListObj.jqObj;
       opts = dropDownListObj.opts;
-      (self.children('.uiSelectList')).hide();
+      self.children('.uiSelectList').hide();
       return dropDownListObj;
     };
 
@@ -1995,8 +1960,8 @@
       self = dropDownListObj.jqObj;
       opts = dropDownListObj.opts;
       selectedValue = [];
-      (self.find('>.uiSelectList >.selected')).each(function() {
-        return selectedValue.push(($(this)).text());
+      self.find('>.uiSelectList >.selected').each(function() {
+        return selectedValue.push($(this).text());
       });
       return selectedValue;
     };
@@ -2020,9 +1985,9 @@
     if (opts.multiple) {
       liItemList.prepend('<span class="uiSmallIcon uiSelectedIcon uiSelected"></span>');
     }
-    (self.prepend(dropDown)).addClass("uiDorpDownList uiWidget " + opts.dropDownListClass);
+    self.prepend(dropDown).addClass("uiDorpDownList uiWidget " + opts.dropDownListClass);
     if (opts.dropListType === 'search') {
-      (dropDown.children('input')).width(dropDown.width() - 2 * (parseInt(dropDown.css('paddingLeft'))) - (dropDown.children('.uiDropDownBtn')).outerWidth(true));
+      dropDown.children('input').width(dropDown.width() - 2 * parseInt(dropDown.css('paddingLeft')) - dropDown.children('.uiDropDownBtn').outerWidth(true));
     }
     if (opts.showAll) {
       opts.pageSize = opts.selectItemTotal;
@@ -2036,48 +2001,45 @@
   };
 
   initEvent = function(self, opts) {
-    var jQueryEvent, selectList, selectedContent;
-    jQueryEvent = self.off ? 'on' : 'bind';
+    var selectList, selectedContent;
     selectedContent = $('> .uiDropDown > span, > .uiDropDown > input', self);
-    ($('>.uiDropDown', self))[jQueryEvent]('click.uiDorpDownList', function(e) {
+    $('>.uiDropDown', self).on('click.uiDorpDownList', function(e) {
       var obj;
       obj = $(this);
       if ((opts.click(self, obj, e)) === false) return false;
-      return (obj.siblings('.uiSelectList')).slideToggle(opts.animateTime);
+      return obj.siblings('.uiSelectList').slideToggle(opts.animateTime);
     });
     selectList = $('>.uiSelectList', self);
     if (opts.hasScrollBar) {
       selectList.scrollBar();
     } else {
-      selectList[jQueryEvent]('mousewheel.uiDorpDownList', function(e, delta) {
+      selectList.on('mousewheel.uiDorpDownList', function(e, delta) {
         var obj, showLiItem;
         obj = $(this);
-        if (($('>li', obj)).length <= opts.pageSize) return;
+        if ($('>li', obj).length <= opts.pageSize) return;
         if (delta < 0) {
           showLiItem = $('>li:not(:hidden):first', obj);
-          if ((showLiItem.nextAll('li')).length >= opts.pageSize) {
-            showLiItem.hide();
-          }
+          if (showLiItem.nextAll('li').length >= opts.pageSize) showLiItem.hide();
         } else {
-          ($('>li:hidden:last', obj)).show();
+          $('>li:hidden:last', obj).show();
         }
         return false;
       });
     }
-    selectList[jQueryEvent]('click.uiDorpDownList', function(e) {
+    selectList.on('click.uiDorpDownList', function(e) {
       var obj, propFunc, selectedValue, target;
       obj = $(this);
       target = $(e.target);
       propFunc = $.prop ? 'prop' : 'attr';
-      if ((target[propFunc]('tagName')).toUpperCase() !== 'LI') {
+      if (target[propFunc]('tagName').toUpperCase() !== 'LI') {
         target = target.parent('li');
         if (target.length === 0) return;
       }
-      selectedValue = (target.toggleClass('selected')).text();
+      selectedValue = target.toggleClass('selected').text();
       if (opts.multiple) {
         selectedValue = '';
-        (obj.children('.selected')).each(function() {
-          return selectedValue += ($(this)).text() + opts.divideChar;
+        obj.children('.selected').each(function() {
+          return selectedValue += $(this).text() + opts.divideChar;
         });
         selectedValue = selectedValue.substring(0, selectedValue.length - 1);
       } else {
@@ -2088,12 +2050,12 @@
       } else {
         selectedContent.html(selectedValue);
       }
-      if ((opts.chage(self, obj, selectedValue, e)) === false) return false;
+      if ((opts.change(self, obj, selectedValue, e)) === false) return false;
     });
-    ($('> .uiSelectList > li', self)).hover(function() {
-      return ($(this)).addClass(opts.listItemHoverClass);
+    $('> .uiSelectList > li', self).hover(function() {
+      return $(this).addClass(opts.listItemHoverClass);
     }, function() {
-      return ($(this)).removeClass(opts.listItemHoverClass);
+      return $(this).removeClass(opts.listItemHoverClass);
     });
     return null;
   };
@@ -2209,9 +2171,9 @@
       opts = dialogObj.opts;
       if (arguments.length === 0) return opts.titleIcon;
       if (opts.titleIcon !== '') {
-        ($('>.uiTitleBar >.uiTitle', self)).prepend('<span class="uiTitleIcon" />');
+        $('>.uiTitleBar >.uiTitle', self).prepend('<span class="uiTitleIcon" />');
       }
-      obj = (($('>.uiTitleBar >.uiTitle >.uiTitleIcon', self)).removeClass(opts.titleIcon)).addClass(titleIcon);
+      obj = $('>.uiTitleBar >.uiTitle >.uiTitleIcon', self).removeClass(opts.titleIcon).addClass(titleIcon);
       opts.titleIcon = titleIcon;
       return dialogObj;
     };
@@ -2238,34 +2200,34 @@
     if (opts.draggable) titleBarClass += ' uiDraggable';
     if (opts.controlButton) {
       controlButton = $(opts.controlButtonSetHTML);
-      if (!opts.minimize) (controlButton.children('.uiMinBtn')).hide();
-      if (!opts.closable) (controlButton.children('.uiCloseBtn')).hide();
+      if (!opts.minimize) controlButton.children('.uiMinBtn').hide();
+      if (!opts.closable) controlButton.children('.uiCloseBtn').hide();
     }
     contentObj = self.children().addClass('uiContent');
     if (!opts.noTitleBar) {
-      titleBar = ((((($(opts.titleBarHTML)).addClass(titleBarClass)).append(controlButton)).children('.uiTitle')).html(opts.title)).end();
+      titleBar = $(opts.titleBarHTML).addClass(titleBarClass).append(controlButton).children('.uiTitle').html(opts.title).end();
       if (opts.titleIcon !== '') {
-        ((titleBar.children('.uiTitle')).prepend($('<span class="uiTitleIcon" />'))).addClass(opts.titleIcon);
+        titleBar.children('.uiTitle').prepend($('<span class="uiTitleIcon" />')).addClass(opts.titleIcon);
       }
       self.prepend(titleBar);
     }
     self.addClass("uiDialog uiWidget " + opts.dialogClass);
     if (opts.position !== null) {
-      (self.css('zIndex', opts.zIndex + 1)).moveToPos(opts.position);
+      self.css('zIndex', opts.zIndex + 1).moveToPos(opts.position);
     }
     if (opts.modal) {
-      maskObj = (($('<div />')).addClass('uiMask')).appendTo('body');
+      maskObj = $('<div />').addClass('uiMask').appendTo('body');
       if (opts.position === null) {
-        (self.css('zIndex', opts.zIndex + 1)).moveToPos({
+        self.css('zIndex', opts.zIndex + 1).moveToPos({
           position: 'center'
         });
       }
       if ($$.msie6) {
-        opts.selectList = ($('select:visible')).filter(function() {
-          if (($(this)).css('visibility' !== 'hidden')) return true;
+        opts.selectList = $('select:visible').filter(function() {
+          if ($(this).css('visibility' !== 'hidden')) return true;
         });
         opts.selectList.css('visibility', 'hidden');
-        maskObj.height(($(document)).height());
+        maskObj.height($(document).height());
       }
     }
     if (opts.buttonSet !== null) {
@@ -2276,7 +2238,7 @@
         buttonSetHTML += '<div>' + key + '</div>';
       }
       buttonSetHTML += '</div>';
-      buttonSetObj = ($(buttonSetHTML)).buttonSet({
+      buttonSetObj = $(buttonSetHTML).buttonSet({
         click: function(target) {
           if ((opts.buttonSet[target.text()](this)) === false) return false;
           return dialogObj.close(self, opts, target);
@@ -2286,7 +2248,7 @@
     }
     if (opts.resizable) {
       self.append(opts.resizeHTML);
-      if ((self.css('position')) === 'static') self.css('position', 'relative');
+      if (self.css('position') === 'static') self.css('position', 'relative');
     }
     opts.minHeight = Math.min(self.height(), opts.minHeight);
     opts.minWidth = Math.min(self.width(), opts.minWidth);
@@ -2296,10 +2258,9 @@
   };
 
   initEvent = function(dialogObj, self, opts) {
-    var dragStopFunction, jQueryEvent, posStr, resizeStopFunc;
+    var dragStopFunction, posStr, resizeStopFunc;
     posStr = self.css('position');
-    jQueryEvent = self.off ? 'on' : 'bind';
-    (self.find('>.uiTitleBar >.uiDialogButtonSet >.uiUserBtn'))[jQueryEvent]('click.uiDialog', function(e) {
+    self.find('>.uiTitleBar >.uiDialogButtonSet >.uiUserBtn').on('click.uiDialog', function(e) {
       var func, obj;
       obj = $(this);
       if (obj.hasClass('uiMinBtn')) {
@@ -2335,7 +2296,7 @@
         height = Math.min(Math.max(opts.minHeight, height), opts.maxHeight);
         width = Math.min(Math.max(opts.minWidth, width), opts.maxWidth);
         otherItemHeightTotal = 0;
-        content = ((self.width(width)).height(height)).children('.uiContent');
+        content = self.width(width).height(height).children('.uiContent');
         self.children().each(function() {
           var obj;
           obj = $(this);
@@ -2368,7 +2329,7 @@
       var obj;
       obj = $(this);
       if (!obj.hasClass('uiContent' && !(obj.hasClass('uiResizable')))) {
-        return otherItemHeightTotal += ($(this)).outerHeight(true);
+        return otherItemHeightTotal += $(this).outerHeight(true);
       }
     });
     contentHeight = content.outerHeight(true);
@@ -2384,7 +2345,7 @@
             return content.height(self.height() - otherItemHeightTotal - outerOffset);
           }
         } else {
-          return ($(this)).load(function() {
+          return $(this).load(function() {
             completeLoad++;
             if (completeLoad === imgTotal) {
               return content.height(self.height() - otherItemHeightTotal - outerOffset);
@@ -2451,11 +2412,11 @@
 
   initMenu = function(self, opts) {
     var topLevelListObj, topMenuWidth;
-    topLevelListObj = (self.addClass("uiMenu uiWidget " + opts.topMenuClass)).children('ul');
-    ((topLevelListObj.addClass('uiTopLevel')).children('li:not(:last)')).addClass('uiRightBorder');
-    ((((topLevelListObj.find('ul')).addClass("uiSubLevel " + opts.subMenuClass)).children('li:not(::last-child)')).children('a')).addClass('uiBottomBorder');
+    topLevelListObj = self.addClass("uiMenu uiWidget " + opts.topMenuClass).children('ul');
+    topLevelListObj.addClass('uiTopLevel').children('li:not(:last)').addClass('uiRightBorder');
+    topLevelListObj.find('ul').addClass("uiSubLevel " + opts.subMenuClass).children('li:not(::last-child)').children('a').addClass('uiBottomBorder');
     topMenuWidth = 0;
-    ($('>li', topLevelListObj)).each(function() {
+    $('>li', topLevelListObj).each(function() {
       return topMenuWidth += ($(this)).outerWidth(true);
     });
     topLevelListObj.width(topMenuWidth);
@@ -2463,10 +2424,10 @@
   };
 
   initEvent = function(self, opts) {
-    return (self.find('li')).hover(function() {
-      return ($(this)).addClass(opts.hoverClass);
+    return self.find('li').hover(function() {
+      return $(this).addClass(opts.hoverClass);
     }, function() {
-      return ($(this)).removeClass(opts.hoverClass);
+      return $(this).removeClass(opts.hoverClass);
     });
   };
 
@@ -2520,8 +2481,9 @@
     }
 
     ProgressBar.prototype.init = function() {
-      var progressBarObj;
+      var opts, progressBarObj;
       progressBarObj = this;
+      opts = progressBarObj.opts;
       progressBarObj.createWidget();
       initProgressBar(progressBarObj.jqObj, progressBarObj.opts);
       progressBarObj.val(opts.scrollValue);
@@ -2536,7 +2498,7 @@
       opts = progressBarObj.opts;
       if (arguments.length === 0) return opts.value;
       opts.value = value > 1 ? 1 : (value < 0 ? 0 : value);
-      (self.children('.progressValue')).width(opts.progressBarLength * opts.value);
+      self.children('.progressValue').width(opts.progressBarLength * opts.value);
       return progressBarObj;
     };
 
@@ -2575,11 +2537,11 @@
     marginValue = opts.marginValue || 2;
     blockTotal = Math.ceil(self.width() / (opts.blockWidth + marginValue));
     for (i = _i = 1; 1 <= blockTotal ? _i <= blockTotal : _i >= blockTotal; i = 1 <= blockTotal ? ++_i : --_i) {
-      obj = (($('<div class="progressBlock"></div>')).addClass(opts.progressBlockClass)).width(opts.blockWidth);
+      obj = $('<div class="progressBlock"></div>').addClass(opts.progressBlockClass).width(opts.blockWidth);
       if (opts.marginValue !== null) obj.css('marginRight', opts.marginValue);
       progressValue.append(obj);
     }
-    return opts.progressBarLength = ((self.addClass("uiProgressBar uiWidget " + opts.progressBarClass)).append(progressValue)).width();
+    return opts.progressBarLength = self.addClass("uiProgressBar uiWidget " + opts.progressBarClass).append(progressValue).width();
   };
 
 }).call(this);
@@ -2648,51 +2610,49 @@
   initList = function(self, opts) {
     var title, titleBar, ulHeight;
     title = opts.title || (self.attr('title')) || '';
-    ((self.addClass("uiList uiWidget " + opts.listClass)).children('div:first')).addClass('uiListContent');
+    self.addClass("uiList uiWidget " + opts.listClass).children('div:first').addClass('uiListContent');
     if (title) {
-      titleBar = (((($(opts.titleBarHTML)).addClass(opts.titleBarClass)).children('span:first')).html(title)).end();
+      titleBar = $(opts.titleBarHTML).addClass(opts.titleBarClass).children('span:first').html(title).end();
       if (opts.titleIcon) {
-        titleBar.prepend(($('<span class="uiTitleIcon" />')).addClass(opts.titleIcon));
+        titleBar.prepend($('<span class="uiTitleIcon" />').addClass(opts.titleIcon));
       }
       self.prepend(titleBar);
     }
-    (self.find('li')).each(function() {
+    self.find('li').each(function() {
       var obj;
       obj = $(this);
       obj.addClass(opts.listItemClass);
       if (obj.attr(opts.indexKey)) {
-        return (obj.addClass('uiListMore')).prepend(opts.moreItemHTML);
+        return obj.addClass('uiListMore').prepend(opts.moreItemHTML);
       }
     });
-    ulHeight = self.height() - ($('>.uiListTitleBar', self)).outerHeight(true);
-    opts.listWidth = ((($('>.uiListContent > ul', self)).filter(':gt(0)')).hide().end().height(ulHeight)).width();
+    ulHeight = self.height() - $('>.uiListTitleBar', self).outerHeight(true);
+    opts.listWidth = $('>.uiListContent > ul', self).filter(':gt(0)').hide().end().height(ulHeight).width();
     return initEvent(self, opts);
   };
 
   initEvent = function(self, opts) {
-    var jQueryEvent;
-    jQueryEvent = self.off ? 'on' : 'bind';
-    ($('>.uiListTitleBar >.uiListBack', self))[jQueryEvent]('click.uiList', function(e) {
+    $('>.uiListTitleBar >.uiListBack', self).on('click.uiList', function(e) {
       var marginLeftValue, number, obj;
       number = opts.listBackIndexArr.pop();
       if (opts.listBackIndexArr.length === 0) {
-        ($(this)).fadeOut(opts.defaultAnimateDuration);
+        $(this).fadeOut(opts.defaultAnimateDuration);
       }
-      obj = ($('>.uiListContent > ul', self)).filter("[" + opts.indexKey + "=\"" + number + "\"]");
+      obj = $('>.uiListContent > ul', self).filter("[" + opts.indexKey + "=\"" + number + "\"]");
       if (obj.length === 0) return;
       marginLeftValue = obj.css('marginLeft');
-      return (obj.css('marginLeft', -opts.listWidth)).show().animate({
+      return obj.css('marginLeft', -opts.listWidth).show().animate({
         marginLeft: 0
       }, opts.defaultAnimateDuration, function() {
         if (opts.showListItem != null) opts.showListItem.show();
-        return ($(this)).css('marginLeft', marginLeftValue);
+        return $(this).css('marginLeft', marginLeftValue);
       });
     });
-    return ($('>.uiListContent > ul', self))[jQueryEvent]('click.uiList mouseover.uiList mouseout.uiList', function(e) {
+    return $('>.uiListContent > ul', self).on('click.uiList mouseover.uiList mouseout.uiList', function(e) {
       var currentNumber, currentObj, jQueryProp, marginLeftValue, number, obj, target;
       target = $(e.target);
       jQueryProp = self.prop ? 'prop' : 'attr';
-      if ((target[jQueryProp]('tagName')).toUpperCase() !== 'LI') {
+      if (target[jQueryProp]('tagName').toUpperCase() !== 'LI') {
         target = target.parent();
       }
       if (event.type === 'click') {
@@ -2700,30 +2660,29 @@
           number = target.attr(opts.indexKey);
           currentObj = $(this);
           currentNumber = currentObj.attr(opts.indexKey);
-          obj = (currentObj.siblings("[" + opts.indexKey + "=\"" + number + "\"]")).show();
+          obj = currentObj.siblings("[" + opts.indexKey + "=\"" + number + "\"]").show();
           if (obj.length === 0) return;
-          ($('>.uiListTitleBar >.uiListBack', self)).fadeIn(opts.defaultAnimateDuration);
+          $('>.uiListTitleBar >.uiListBack', self).fadeIn(opts.defaultAnimateDuration);
           opts.listBackIndexArr.push(currentNumber);
-          marginLeftValue = ($(this)).css('marginLeft');
+          marginLeftValue = currentObj.css('marginLeft');
           return currentObj.animate({
             marginLeft: -opts.listWidth
           }, opts.defaultAnimateDuration, function() {
             opts.showListItem = obj;
-            ($(this)).hide();
-            return marginLeftValue = ($(this)).css('marginLeft');
+            return $(this).hide().css('marginLeft', marginLeftValue);
           });
         } else {
-          (target.removeClass(opts.listItemHoverClass)).addClass(opts.listItemSelectedClass);
-          (target.siblings("." + opts.listItemSelectedClass)).toggleClass("" + opts.listItemClass + " " + opts.listItemSelectedClass);
+          target.removeClass(opts.listItemHoverClass).addClass(opts.listItemSelectedClass);
+          target.siblings("." + opts.listItemSelectedClass).toggleClass("" + opts.listItemClass + " " + opts.listItemSelectedClass);
           return opts.click(self, target, e);
         }
       } else if (event.type === 'mouseover') {
         if (target.hasClass(opts.listItemClass)) {
-          return (target.removeClass(opts.listItemClass)).addClass(opts.listItemHoverClass);
+          return target.removeClass(opts.listItemClass).addClass(opts.listItemHoverClass);
         }
       } else if (event.type === 'mouseout') {
         if (target.hasClass(opts.listItemHoverClass)) {
-          return (target.removeClass(opts.listItemHoverClass)).addClass(opts.listItemClass);
+          return target.removeClass(opts.listItemHoverClass).addClass(opts.listItemClass);
         }
       }
     });
@@ -2778,6 +2737,7 @@
         targetObj: null,
         tipStyle: null,
         arrowOffset: 10,
+        offset: null,
         tipHTML: '<div></div><div></div>'
       };
       opts = $.extend(defaults, options);
@@ -2851,7 +2811,7 @@
     } else {
       contentObj.addClass('uiTipContent');
     }
-    (self.addClass("uiTip uiWidget " + opts.tipClass)).prepend(tip);
+    self.addClass("uiTip uiWidget " + opts.tipClass).prepend(tip);
     cssShow = {
       position: 'absolute',
       visibility: 'hidden',
@@ -2867,21 +2827,21 @@
   initEvent = function(self, opts) {
     var targetObj;
     targetObj = opts.targetObj;
-    if (targetObj.length === 0) {
+    if (targetObj.length !== 0) {
       targetObj.on("mouseenter." + opts.widgetKey, function(e) {
         var target;
         target = $(this);
         if ((opts.beforeShow(self, target, e)) === false) return false;
-        return (self.stop(true, true))[opts.showAnimate](opts.animateTime, function() {
-          return opts.show(self, target(e));
+        return self.stop(true, true)[opts.showAnimate](opts.animateTime, function() {
+          return opts.show(self, target, e);
         });
       });
       return targetObj.on("mouseleave." + opts.widgetKey, function(e) {
         var target;
         target = $(this);
         if ((opts.beforeHide(self, target, e)) === false) return false;
-        return (self.stop(true, true))[opts.hideAnimate](opts.animateTime, function() {
-          return opts.hide(self, target(e));
+        return self.stop(true, true)[opts.hideAnimate](opts.animateTime, function() {
+          return opts.hide(self, target, e);
         });
       });
     }
@@ -2959,6 +2919,10 @@
         arrow1LeftValue = -opts.arrowOffset;
         arrow2LeftValue = arrow1LeftValue + 1;
       }
+    }
+    if ($.isPlainObject(opts.offset)) {
+      leftValue += opts.offset.left || 0;
+      topValue += opts.offset.top || 0;
     }
     self.css({
       left: leftValue,
