@@ -36,6 +36,7 @@ class $$.Tip extends $$.Widget
       tipStyle : null
       arrowOffset : 10
       offset : null
+      alawayshow : false,
       tipHTML : '<div></div><div></div>'
     
     opts = $.extend defaults, options
@@ -98,22 +99,24 @@ initTip = (self, opts) ->
   $.swap self[0], cssShow, () ->
     setPosition self, opts
   initEvent self, opts
-  self.hide()
+  if opts.alawayshow is false
+    self.hide()
 initEvent = (self, opts) ->
   targetObj = opts.targetObj
-  if targetObj.length isnt 0
-    targetObj.on "mouseenter.#{opts.widgetKey}", (e) ->
-      target = $ @
-      if (opts.beforeShow self, target, e) is false
-        return false
-      self.stop(true, true)[opts.showAnimate] opts.animateTime, ()->
-        opts.show self, target, e
-    targetObj.on "mouseleave.#{opts.widgetKey}", (e) ->
-      target = $ @
-      if (opts.beforeHide self, target, e) is false
-        return false
-      self.stop(true, true)[opts.hideAnimate] opts.animateTime, ()->
-        opts.hide self, target, e
+  if opts.alawayshow is false
+    if targetObj.length isnt 0
+      targetObj.on "mouseenter.#{opts.widgetKey}", (e) ->
+        target = $ @
+        if (opts.beforeShow self, target, e) is false
+          return false
+        self.stop(true, true)[opts.showAnimate] opts.animateTime, ()->
+          opts.show self, target, e
+      targetObj.on "mouseleave.#{opts.widgetKey}", (e) ->
+        target = $ @
+        if (opts.beforeHide self, target, e) is false
+          return false
+        self.stop(true, true)[opts.hideAnimate] opts.animateTime, ()->
+          opts.hide self, target, e
 setPosition = (self, opts) ->
   targetObj = opts.targetObj
   if targetObj.length is 0
