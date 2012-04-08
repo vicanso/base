@@ -2738,6 +2738,7 @@
         tipStyle: null,
         arrowOffset: 10,
         offset: null,
+        alawayshow: false,
         tipHTML: '<div></div><div></div>'
       };
       opts = $.extend(defaults, options);
@@ -2821,29 +2822,31 @@
       return setPosition(self, opts);
     });
     initEvent(self, opts);
-    return self.hide();
+    if (opts.alawayshow === false) return self.hide();
   };
 
   initEvent = function(self, opts) {
     var targetObj;
     targetObj = opts.targetObj;
-    if (targetObj.length !== 0) {
-      targetObj.on("mouseenter." + opts.widgetKey, function(e) {
-        var target;
-        target = $(this);
-        if ((opts.beforeShow(self, target, e)) === false) return false;
-        return self.stop(true, true)[opts.showAnimate](opts.animateTime, function() {
-          return opts.show(self, target, e);
+    if (opts.alawayshow === false) {
+      if (targetObj.length !== 0) {
+        targetObj.on("mouseenter." + opts.widgetKey, function(e) {
+          var target;
+          target = $(this);
+          if ((opts.beforeShow(self, target, e)) === false) return false;
+          return self.stop(true, true)[opts.showAnimate](opts.animateTime, function() {
+            return opts.show(self, target, e);
+          });
         });
-      });
-      return targetObj.on("mouseleave." + opts.widgetKey, function(e) {
-        var target;
-        target = $(this);
-        if ((opts.beforeHide(self, target, e)) === false) return false;
-        return self.stop(true, true)[opts.hideAnimate](opts.animateTime, function() {
-          return opts.hide(self, target, e);
+        return targetObj.on("mouseleave." + opts.widgetKey, function(e) {
+          var target;
+          target = $(this);
+          if ((opts.beforeHide(self, target, e)) === false) return false;
+          return self.stop(true, true)[opts.hideAnimate](opts.animateTime, function() {
+            return opts.hide(self, target, e);
+          });
         });
-      });
+      }
     }
   };
 
