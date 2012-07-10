@@ -1,6 +1,10 @@
 $ = window.jQuery
 $$ = window.BASE
-
+###*
+ * [accordion description]
+ * @param  {[Object]} {[Optional]} options [description]
+ * @return {[jQuery, Others]}         [description]
+###
 $.fn.accordion = (options) ->
   self = this
   args = Array.prototype.slice.call arguments
@@ -11,6 +15,12 @@ $.fn.accordion = (options) ->
   return result
 
 class $$.Accordion extends $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[Accordion]}         [description]
+  ###
   constructor: (self, options) ->
     accordionObj = @
     if not (accordionObj instanceof $$.Accordion)
@@ -39,11 +49,20 @@ class $$.Accordion extends $$.Widget
     opts = $.extend defaults, options
     accordionObj.constructor.__super__.constructor.call accordionObj, self, opts
     accordionObj.init()
+  ###*
+   * [init description]
+   * @return {[Accordion]} [description]
+  ###
   init : () ->
     accordionObj = @
     accordionObj.createWidget()
     initAccordion accordionObj.jqObj, accordionObj.opts
     return accordionObj
+  ###*
+   * [activate description]
+   * @param  {[Integer]} {[Optional]} index [description]
+   * @return {[Array, Accordion]}       [description]
+  ###
   activate : (index) ->
     accordionObj = @
     self = accordionObj.jqObj
@@ -59,6 +78,13 @@ class $$.Accordion extends $$.Widget
     if not obj.hasClass opts.activeClass
       obj.trigger opts.event
     return accordionObj
+  ###*
+   * [item description]
+   * @param  {[Integer]} {[Optional]} index   [description]
+   * @param  {[String]} {[Optional]} content [description]
+   * @param  {[String]} {[Optional]} title   [description]
+   * @return {[jQuery, Accordion]}         [description]
+  ###
   item : (index, content, title) ->
     accordionObj = @
     self = accordionObj.jqObj
@@ -77,6 +103,13 @@ class $$.Accordion extends $$.Widget
     if content?
       contentObj.html content
     return accordionObj
+  ###*
+   * [addItem description]
+   * @param {[HTML, DOM, jQuery]} item  [description]
+   * @param {[String]} {[Optional]} title [description]
+   * @param {[Integer]} {[Optional]} index [description]
+   * @return {[Accordion]} [description]
+  ###
   addItem : (item, title, index) ->
     accordionObj = @
     self = accordionObj.jqObj
@@ -92,12 +125,22 @@ class $$.Accordion extends $$.Widget
     else
       self.append(titleBarObj).append itemObj
     return accordionObj
+  ###*
+   * [removeItem description]
+   * @param  {[Integer]} {[Optional]} index [description]
+   * @return {[jQuery]}       [description]
+  ###
   removeItem : (index) ->
     accordionObj = @
     self = accordionObj.jqObj
     opts = accordionObj.opts
     index ?= 0
     return $('>.uiTitleBar', self).eq(index).next().andSelf().remove()
+  ###*
+   * [title description]
+   * @param  {[String]} {[Optional]} title [description]
+   * @return {[String, Accordion]}       [description]
+  ###
   title : (title) ->
     accordionObj = @
     self = accordionObj.jqObj
@@ -107,6 +150,11 @@ class $$.Accordion extends $$.Widget
       return obj.text()
     obj.text title
     return accordionObj
+  ###*
+   * [titleIcon description]
+   * @param  {[String]} {[Optional]} titleIcon [description]
+   * @return {[String, Accordion]}           [description]
+  ###
   titleIcon : (titleIcon) ->
     accordionObj = @
     self = accordionObj.jqObj
@@ -118,7 +166,11 @@ class $$.Accordion extends $$.Widget
     obj = $('> .uiAccordionTitleBar > span.uiTitleIcon', self).removeClass(opts.titleIcon).addClass titleIcon
     opts.titleIcon = titleIcon
     return accordionObj
-
+###*
+ * [initAccordion description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initAccordion = (self, opts) ->
   title = opts.title || self.attr 'title'
   if title?
@@ -143,7 +195,12 @@ initAccordion = (self, opts) ->
     itemTitleBarObj.insertBefore obj.addClass("uiContent #{contentClass}").height(opts.height)
   self.prepend titleBar
   initEvent self, opts
-
+  return null
+###*
+ * [initEvent description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initEvent = (self, opts) ->
   self.on "#{opts.event}.uiAccordion", (e) ->
     if opts.disabled or opts.animating
@@ -167,6 +224,11 @@ initEvent = (self, opts) ->
         opts.change self, target, e
       opts.animating = false
   return null
+###*
+ * [setContentHeight description]
+ * @param {[jQuery]} self [description]
+ * @param {[Object]} opts [description]
+###
 setContentHeight = (self, opts) ->
   otherItemHeightTotal = 0
   content = self.children '.uiContent'
@@ -193,4 +255,3 @@ setContentHeight = (self, opts) ->
   else
     content.height self.height() - otherItemHeightTotal - outerOffset
   return null
-

@@ -2,6 +2,12 @@ $ = window.jQuery
 $$ = window.BASE
 
 class Interaction
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} options [description]
+   * @return {[Interaction]}         [description]
+  ###
   constructor : (self, options) ->
     interactionObj = @
     interactionObj.jqObj = self
@@ -26,6 +32,10 @@ class Interaction
     
     $.extend interactionObj.opts, defaults, options
     interactionObj.opts.widgetKey = $$.getRandomKey()
+  ###*
+   * [init description]
+   * @return {[Interaction]} [description]
+  ###
   init : () ->
     interactionObj = @
     self = interactionObj.jqObj
@@ -97,26 +107,46 @@ class Interaction
     $(document).on mouseUpEvent, () ->
       complete self, opts
     return interactionObj
+###*
+ * [complete description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 complete = (self, opts) ->
   if opts.doing is false
     opts.start = false
-    return
+    return null
   maskItem = opts.mask
   opts.start = opts.doing = false
   if opts.type is 'resize'
     if (opts.event.stop self, maskItem, maskItem.width(), maskItem.height()) is false
-      return
+      return null
   else if opts.type is 'drag'
     offset = maskItem.offset()
     if (opts.event.stop self, maskItem, offset) is false
-      return
+      return null
   maskItem.remove()
   opts.mask = null
+  return null
+###*
+ * [setInteractionSetting description]
+ * @param {[jQuery]} self [description]
+ * @param {[Object]} opts [description]
+ * @param {[Event]} e    [description]
+###
 setInteractionSetting = (self, opts, e) ->
   opts.start = true
   if (opts.event.start self) is false or $(e.target).hasClass('uiUserBtn')
     opts.start = false
     return false
+  return null
+###*
+ * [setInteractionMask description]
+ * @param {[jQuery]} self [description]
+ * @param {[Object]} opts [description]
+ * @param {[Event]} e    [description]
+ * @return {[Boolean]}  [description]
+###
 setInteractionMask = (self, opts, e) ->
   maskHeight = self.outerHeight()
   maskWidth = self.outerWidth()
@@ -166,6 +196,13 @@ setInteractionMask = (self, opts, e) ->
         rightBottom : [pos.left + destWidth, pos.top + destHeight]
       }
   return true
+###*
+ * [checkArea description]
+ * @param  {[Object]} opts            [description]
+ * @param  {[Object]} position        [description]
+ * @param  {[Array]} destPositionArr [description]
+ * @return {[Boolean]}                 [description]
+###
 checkArea = (opts, position, destPositionArr) ->
   left = position.left
   top = position.top
@@ -182,11 +219,23 @@ checkArea = (opts, position, destPositionArr) ->
       crossFlag = true
       break
   return crossFlag
+###*
+ * [draggable description]
+ * @param  {[Object]} {[Optional]} options [description]
+ * @return {[jQuery]}         [description]
+###
 $.fn.draggable = (options) ->
-  self = this
+  self = @
   draggableObj = new $$.Draggable self, options
   draggableObj.init self, draggableObj.opts
+  return self
 class $$.Draggable extends Interaction
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[Draggable]}         [description]
+  ###
   constructor: (self, options) ->
     draggableObj = @
     if not (draggableObj instanceof $$.Draggable)
@@ -210,14 +259,24 @@ class $$.Draggable extends Interaction
       opts.event.stop = (mask, offset) ->
         self.moveToPos {position : offset}
         return null
-
-
+###*
+ * [resizable description]
+ * @param  {[Object]} options [description]
+ * @return {[jQuery]}         [description]
+###
 $.fn.resizable = (options) ->
   self = @
   resizableObj = new $$.Resizable self, options
   resizableObj.init self, resizableObj.opts
+  return self
 
 class $$.Resizable extends Interaction
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[Resizable]}         [description]
+  ###
   constructor: (self, options) ->
     resizableObj = @
     if not (resizableObj instanceof $$.Resizable)

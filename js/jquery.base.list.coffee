@@ -1,8 +1,12 @@
 $ = window.jQuery
 $$ = window.BASE
-
+###*
+ * [list description]
+ * @param  {[Object]} {[Optional]} options [description]
+ * @return {[jQuery]}         [description]
+###
 $.fn.list = (options) ->
-  self = this
+  self = @
   args = Array.prototype.slice.call arguments
   args.push $$.List
   result = $$.createWidgetByJQuery.apply self, args
@@ -11,6 +15,12 @@ $.fn.list = (options) ->
   return result
 
 class $$.List extends $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[List]}         [description]
+  ###
   constructor: (self, options) ->
     listObj = @
     if not (listObj instanceof $$.List)
@@ -35,11 +45,20 @@ class $$.List extends $$.Widget
     opts = $.extend defaults, options
     listObj.constructor.__super__.constructor.call listObj, self, opts
     listObj.init()
+  ###*
+   * [init description]
+   * @return {[List]} [description]
+  ###
   init : () ->
     listObj = @
     listObj.createWidget()
     initList listObj.jqObj, listObj.opts
     return listObj
+###*
+ * [initList description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initList = (self, opts) ->
   title = opts.title || (self.attr 'title') || ''
   self.addClass("uiList uiWidget #{opts.listClass}").children('div:first').addClass 'uiListContent'
@@ -56,6 +75,12 @@ initList = (self, opts) ->
   ulHeight = self.height() - $('>.uiListTitleBar', self).outerHeight true
   opts.listWidth = $('>.uiListContent > ul', self).filter(':gt(0)').hide().end().height(ulHeight).width()
   initEvent self, opts
+  return null
+###*
+ * [initEvent description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initEvent = (self, opts) ->
   $('>.uiListTitleBar >.uiListBack', self).on 'click.uiList', (e) ->
     number = opts.listBackIndexArr.pop()
@@ -63,7 +88,7 @@ initEvent = (self, opts) ->
       $(@).fadeOut opts.defaultAnimateDuration
     obj = $('>.uiListContent > ul', self).filter "[#{opts.indexKey}=\"#{number}\"]"
     if obj.length is 0
-      return
+      return 
     marginLeftValue = obj.css 'marginLeft'
     obj.css('marginLeft', -opts.listWidth).show().animate {marginLeft : 0}, opts.defaultAnimateDuration, () ->
       if opts.showListItem?
@@ -98,3 +123,4 @@ initEvent = (self, opts) ->
     else if event.type is 'mouseout'
       if target.hasClass opts.listItemHoverClass
         target.removeClass(opts.listItemHoverClass).addClass opts.listItemClass
+  return null

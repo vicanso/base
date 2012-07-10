@@ -2,6 +2,12 @@ $$ = window.BASE = window.BASE || {}
 $ = window.jQuery
 
 class $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Obejct]} options [description]
+   * @return {[type]}         [description]
+  ###
   constructor : (self, options) ->
     widgetObj = @
     if not (widgetObj instanceof $$.Widget)
@@ -15,6 +21,10 @@ class $$.Widget
       minPosition: "bottom"
       clone : null
     widgetObj.opts = $.extend defaults, options
+  ###*
+   * [selectHandle description]
+   * @return {[type]} [description]
+  ###
   selectHandle : () ->
     args = Array.prototype.slice.call arguments
     widgetObj = @
@@ -22,8 +32,16 @@ class $$.Widget
     if $.isFunction(widgetObj[func])
       return widgetObj[func].apply widgetObj, args
     return null
+  ###*
+   * [self description]
+   * @return {[jQuery]} [description]
+  ###
   self : () ->
-    return @jqObj
+    return @.jqObj
+  ###*
+   * [createWidget description]
+   * @return {[Widget]} [description]
+  ###
   createWidget : () ->
     widgetObj = @
     opts = widgetObj.opts
@@ -33,26 +51,48 @@ class $$.Widget
     self.attr 'widget', opts.widgetKey
     widgetObj.widget opts.widgetKey, widgetObj
     return widgetObj
+  ###*
+   * [widget description]
+   * @return {[Widget]} [description]
+  ###
   widget : () ->
     if arguments.length is 2
       return $$.addWidget arguments[0], arguments[1]
     else if arguments.length is 1
       return $$.getWidget arguments[0]
     return @
+  ###*
+   * [removeWidget description]
+   * @param  {[String]} key [description]
+   * @return {[Boolean]}     [description]
+  ###
   removeWidget : (key) ->
     if key?
       $$.removeWidget key
     return true
+  ###*
+   * [disable description]
+   * @return {[Widget]} [description]
+  ###
   disable : () ->
     widgetObj = @
     widgetObj.opts.disabled = true
     widgetObj.jqObj.addClass 'uiWidgetDisalbed'
     return widgetObj
+  ###*
+   * [enable description]
+   * @return {[Widget]} [description]
+  ###
   enable : () ->
     widgetObj = @
     widgetObj.opts.disabled = false
     widgetObj.jqObj.removeClass 'uiWidgetDisalbed'
     return widgetObj
+  ###*
+   * [destroy description]
+   * @param  {[Boolean]} revert [description]
+   * @return {[Widget]}        [description]
+  ###
   destroy : (revert) ->
     widgetObj = @
     self = widgetObj.jqObj
@@ -64,9 +104,13 @@ class $$.Widget
       if widget?
         widgetDestroy widget, revert
       return true
-    widgetDestroy widgetObj revert
+    widgetDestroy widgetObj, revert
     return widgetObj
-
+###*
+ * [widgetDestroy description]
+ * @param  {[Widget]} widget [description]
+ * @param  {[Boolean]} revert [description]
+###
 widgetDestroy = (widget, revert) ->
   self = widget.jqObj
   opts = widget.opts

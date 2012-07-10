@@ -1,6 +1,10 @@
 $ = window.jQuery
 $$ = window.BASE
-
+###*
+ * [dropDownList description]
+ * @param  {[Obejct]} options [description]
+ * @return {[jQuery, Others]}         [description]
+###
 $.fn.dropDownList = (options) ->
   self = this
   args = Array.prototype.slice.call arguments
@@ -11,6 +15,12 @@ $.fn.dropDownList = (options) ->
   return result
 
 class $$.DropDownList extends $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[DropDownList]}         [description]
+  ###
   constructor: (self, options) ->
     dropDownListObj = @
     if not (dropDownListObj instanceof $$.DropDownList)
@@ -43,11 +53,20 @@ class $$.DropDownList extends $$.Widget
     opts = $.extend {}, defaults, options
     dropDownListObj.constructor.__super__.constructor.call dropDownListObj, self, opts
     dropDownListObj.init()
+  ###*
+   * [init description]
+   * @return {[DropDownList]} [description]
+  ###
   init : () ->
     dropDownListObj = @
     dropDownListObj.createWidget()
     initDropDownList dropDownListObj.jqObj, dropDownListObj.opts
     return dropDownListObj
+  ###*
+   * [selectedItem description]
+   * @param  {[Integer]} {[Optional]} index [description]
+   * @return {[jQuery, DropDownList]}       [description]
+  ###
   selectedItem : (index) ->
     dropDownListObj = @
     self = dropDownListObj.jqObj
@@ -56,6 +75,11 @@ class $$.DropDownList extends $$.Widget
       return $ '>.uiSelectList>.selected', self
     $("> .uiSelectList > li:eq(#{index})", self).click();
     return dropDownListObj
+  ###*
+   * [list description]
+   * @param  {[String, Array, DOM, jQuery]} list [description]
+   * @return {[jQuery, DropDownList]}      [description]
+  ###
   list : (list) ->
     dropDownListObj = @
     self = dropDownListObj.jqObj
@@ -88,18 +112,30 @@ class $$.DropDownList extends $$.Widget
     ,() ->
         ($ @).removeClass opts.listItemHoverClass
     return dropDownListObj
+  ###*
+   * [showSelectList description]
+   * @return {[DropDownList]} [description]
+  ###
   showSelectList : () ->
     dropDownListObj = @
     self = dropDownListObj.jqObj
     opts = dropDownListObj.opts
     self.children('.uiSelectList').show()
     return dropDownListObj
+  ###*
+   * [hideSelectList description]
+   * @return {[DropDownList]} [description]
+  ###
   hideSelectList : () ->
     dropDownListObj = @
     self = dropDownListObj.jqObj
     opts = dropDownListObj.opts
     self.children('.uiSelectList').hide()
     return dropDownListObj
+  ###*
+   * [val description]
+   * @return {[Array]} [description]
+  ###
   val : () ->
     dropDownListObj = @
     self = dropDownListObj.jqObj
@@ -108,6 +144,11 @@ class $$.DropDownList extends $$.Widget
     self.find('>.uiSelectList >.selected').each () ->
       selectedValue.push $(@).text()
     return selectedValue
+###*
+ * [initDropDownList description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initDropDownList = (self, opts) ->
   multiple = if opts.multiple then 'uiMultiple' else ''
   selectList = self.children().addClass "#{multiple} uiSelectList #{opts.selectListClass}"
@@ -131,6 +172,11 @@ initDropDownList = (self, opts) ->
   selectList.hide()
   initEvent self, opts
   return null
+###*
+ * [initEvent description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initEvent = (self, opts) ->
   selectedContent = $ '> .uiDropDown > span, > .uiDropDown > input', self
   $('>.uiDropDown', self).on 'click.uiDorpDownList', (e) ->

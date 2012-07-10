@@ -1,6 +1,10 @@
 $ = window.jQuery
 $$ = window.BASE
-
+###*
+ * [buttonSet description]
+ * @param  {[Object]} {[Optional]} options [description]
+ * @return {[jQuery, Others]}         [description]
+###
 $.fn.buttonSet = (options) ->
   self = this
   args = Array.prototype.slice.call arguments
@@ -11,6 +15,12 @@ $.fn.buttonSet = (options) ->
   return result
 
 class $$.ButtonSet extends $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[ButtonSet]}         [description]
+  ###
   constructor: (self, options) ->
     buttonSetObj = @
     if not (buttonSetObj instanceof $$.ButtonSet)
@@ -39,11 +49,20 @@ class $$.ButtonSet extends $$.Widget
     opts = $.extend defaults, options
     buttonSetObj.constructor.__super__.constructor.call buttonSetObj, self, opts
     buttonSetObj.init()
+  ###*
+   * [init description]
+   * @return {[ButtonSet]} [description]
+  ###
   init : () ->
     buttonSetObj = @
     buttonSetObj.createWidget()
     initButtonSet buttonSetObj.jqObj, buttonSetObj.opts
     return buttonSetObj
+  ###*
+   * [clickButton description]
+   * @param  {[Integer]} {[Optional]} index [description]
+   * @return {[ButtonSet]}       [description]
+  ###
   clickButton : (index) ->
     buttonSetObj = @
     self = buttonSetObj.jqObj
@@ -51,12 +70,23 @@ class $$.ButtonSet extends $$.Widget
     index ?= 0
     obj = self.children().eq(index).click()
     return buttonSetObj
+  ###*
+   * [button description]
+   * @param  {[Integer]} {[Optional]} index [description]
+   * @return {[jQuery]}       [description]
+  ###
   button : (index) ->
     buttonSetObj = @
     self = buttonSetObj.jqObj
     opts = buttonSetObj.opts
     index ?= 0
     return self.children().eq index
+  ###*
+   * [buttonText description]
+   * @param  {[Integer]} {[Optional]} index [description]
+   * @param  {[String]} {[Optional]} text  [description]
+   * @return {[String, ButtonSet]}       [description]
+  ###
   buttonText : (index, text) ->
     buttonSetObj = @
     self = buttonSetObj.jqObj
@@ -68,6 +98,12 @@ class $$.ButtonSet extends $$.Widget
     iconObj = obj.children '.uiIcon'
     obj.html(text).prepend iconObj
     return buttonSetObj
+  ###*
+   * [buttonIcon description]
+   * @param  {[Integer]} {[Optional]} index [description]
+   * @param  {[String]} {[Optional]} icon  [description]
+   * @return {[String, ButtonSet]}       [description]
+  ###
   buttonIcon : (index, icon) ->
     buttonSetObj = @
     self = buttonSetObj.jqObj
@@ -85,6 +121,12 @@ class $$.ButtonSet extends $$.Widget
     obj.children('.uiIcon').removeClass(iconClass).addClass icon
     opts.iconArray[index] = icon
     return buttonSetObj
+  ###*
+   * [val description]
+   * @param  {[Integer]} {[Optional]} index   [description]
+   * @param  {[Boolean]} {[Optional]} checked [description]
+   * @return {[Boolean, ButtonSet]}         [description]
+  ###
   val : (index, checked) ->
     buttonSetObj = @
     self = buttonSetObj.jqObj
@@ -109,6 +151,11 @@ class $$.ButtonSet extends $$.Widget
       if obj.hasClass opts.buttonSelectedClass
         obj.removeClass(opts.buttonSelectedClass).addClass opts.buttonClass
     return buttonSetObj
+  ###*
+   * [removeButton description]
+   * @param  {[Integer]} {[Optional]} index [description]
+   * @return {[JQuery]}       [description]
+  ###
   removeButton : (index) ->
     buttonSetObj = @
     self = buttonSetObj.jqObj
@@ -117,7 +164,11 @@ class $$.ButtonSet extends $$.Widget
     if $.isArray opts.iconArray
       opts.iconArray.splice index, 1
     return self.children('.uiButton').eq(index).remove()
-
+###*
+ * [initButtonSet description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initButtonSet = (self, opts) ->
   opts.statusClass = {}
   groupStr = ''
@@ -184,6 +235,11 @@ initButtonSet = (self, opts) ->
   if opts.defaultSelectedItem > -1
     changeButtonStatus self.children().eq(opts.defaultSelectedItem), opts
   return null
+###*
+ * [initEvent description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initEvent = (self, opts) ->
   mouseDownFlag = false
   self.children('.uiButton, .uiImgButton').on 'mouseenter.uiButtonSet mouseleave.uiButtonSet mousedown.uiButtonSet mouseup.uiButtonSet click.uiButtonSet', (e) ->
@@ -202,6 +258,11 @@ initEvent = (self, opts) ->
       when 'mouseup'
         removeStatusClass obj, opts, opts.buttonPressClass
   return null
+###*
+ * [changeButtonStatus description]
+ * @param  {[jQuery]} obj  [description]
+ * @param  {[Object]} opts [description]
+###
 changeButtonStatus = (obj, opts) ->
   if obj.hasClass('uiRadio') or obj.hasClass 'uiImgRadio'
     group = obj.attr 'group'
@@ -224,20 +285,49 @@ changeButtonStatus = (obj, opts) ->
     obj.removeClass(opts.buttonHoverClass).addClass opts.buttonClass
   $.each opts.statusClass, (key, value) ->
     opts.statusClass[key] = null
+  return null
+###*
+ * [setOriginClass description]
+ * @param {[jQuery]} obj         [description]
+ * @param {[Object]} opts        [description]
+ * @param {[String]} statusClass [description]
+###
 setOriginClass = (obj, opts, statusClass) ->
   $.each [opts.buttonClass, opts.buttonSelectedClass, opts.buttonHoverClass, opts.buttonPressClass], (n, value) ->
     if obj.hasClass value
       opts.statusClass[statusClass] = value
     obj.removeClass value
+  return null
+###*
+ * [getOriginClass description]
+ * @param  {[jQuery]} obj         [description]
+ * @param  {[Object]} opts        [description]
+ * @param  {[String]} statusClass [description]
+###
 getOriginClass = (obj, opts, statusClass) ->
   if opts.statusClass[statusClass] is null
     return
   $.each [opts.buttonClass, opts.buttonSelectedClass, opts.buttonHoverClass, opts.buttonPressClass], (n, value) ->
     obj.removeClass value
   obj.addClass opts.statusClass[statusClass]
+  return null
+###*
+ * [setStatusClass description]
+ * @param {[jQuery]} obj         [description]
+ * @param {[Object]} opts        [description]
+ * @param {[String]} statusClass [description]
+###
 setStatusClass = (obj, opts, statusClass) ->
   setOriginClass obj, opts, statusClass
   obj.addClass statusClass
+  return null
+###*
+ * [removeStatusClass description]
+ * @param  {[jQuery]} obj         [description]
+ * @param  {[Object]} opts        [description]
+ * @param  {[String]} statusClass [description]
+###
 removeStatusClass = (obj, opts, statusClass) ->
   getOriginClass obj, opts, statusClass
+  return null
 

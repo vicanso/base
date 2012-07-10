@@ -1,6 +1,10 @@
 $ = window.jQuery
 $$ = window.BASE
-
+###*
+ * [dialog description]
+ * @param  {[Object]} {[Optional]} options [description]
+ * @return {[jQuery, Others]}         [description]
+###
 $.fn.dialog = (options) ->
   self = this
   args = Array.prototype.slice.call arguments
@@ -10,6 +14,12 @@ $.fn.dialog = (options) ->
     return self
   return result
 class $$.Dialog extends $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[Dialog]}         [description]
+  ###
   constructor: (self, options) ->
     dialogObj = @
     if not (dialogObj instanceof $$.Dialog)
@@ -70,11 +80,20 @@ class $$.Dialog extends $$.Widget
     opts = $.extend defaults, options
     dialogObj.constructor.__super__.constructor.call dialogObj, self, opts
     dialogObj.init()
+  ###*
+   * [init description]
+   * @return {[Dialog]} [description]
+  ###
   init : () ->
     dialogObj = @
     dialogObj.createWidget()
     initDialog dialogObj, dialogObj.jqObj, dialogObj.opts
     return dialogObj
+  ###*
+   * [title description]
+   * @param  {[String]} {[Optional]} title [description]
+   * @return {[String, Dialog]}       [description]
+  ###
   title : (title) ->
     dialogObj = @
     self = dialogObj.jqObj
@@ -84,6 +103,12 @@ class $$.Dialog extends $$.Widget
       return obj.text()
     opts.title = title
     obj.html obj.html().replace(obj.text(), title)
+    return dialogObj
+  ###*
+   * [titleIcon description]
+   * @param  {[String]} {[Optional]} titleIcon [description]
+   * @return {[String, Dialog]}           [description]
+  ###
   titleIcon : (titleIcon) ->
     dialogObj = @
     self = dialogObj.jqObj
@@ -95,6 +120,11 @@ class $$.Dialog extends $$.Widget
     obj = $('>.uiTitleBar >.uiTitle >.uiTitleIcon', self).removeClass(opts.titleIcon).addClass titleIcon
     opts.titleIcon = titleIcon
     return dialogObj
+  ###*
+   * [content description]
+   * @param  {[String]} {[Optional]} content [description]
+   * @return {[jQuery, Dialog]}         [description]
+  ###
   content : (content) ->
     dialogObj = @
     self = dialogObj.jqObj
@@ -104,6 +134,42 @@ class $$.Dialog extends $$.Widget
       return contentObj
     contentObj.empty().append $ content
     return dialogObj
+  ###*
+   * [close description]
+   * @return {[Dialog]} [description]
+  ###
+  close : () ->
+    dialogObj = @
+    self = dialogObj.jqObj
+    opts = dialogObj.opts
+    if opts.beforeClose(self) is false
+      return dialogObj
+    self[opts.closeAnimate] () ->
+      if opts.close(self) is false
+        return 
+      if opts.destroyOnClose
+        dialogObj.destroy()
+    return dialogObj
+  ###*
+   * [open description]
+   * @return {[Dialog]} [description]
+  ###
+  open : () ->
+    dialogObj = @
+    self = dialogObj.jqObj
+    opts = dialogObj.opts
+    if opts.beforeOpen(self) is false
+      return dialogObj
+    self[opts.openAnimate] () ->
+      if opts.open(self) is false
+        return 
+    return dialogObj
+###*
+ * [initDialog description]
+ * @param  {[Dialog]} dialogObj [description]
+ * @param  {[jQuery]} self      [description]
+ * @param  {[Object]} opts      [description]
+###
 initDialog = (dialogObj, self, opts) ->
   titleBarClass = "#{opts.titleBarClass} uiCornerAll"
   if opts.title is ''
@@ -156,6 +222,13 @@ initDialog = (dialogObj, self, opts) ->
   initEvent dialogObj, self, opts
   if not opts.autoOpen
     self.hide()
+  return null
+###*
+ * [initEvent description]
+ * @param  {[Dialog]} dialogObj [description]
+ * @param  {[jQuery]} self      [description]
+ * @param  {[Object]} opts      [description]
+###
 initEvent = (dialogObj, self, opts) ->
   posStr = self.css 'position'
   self.find('>.uiTitleBar >.uiDialogButtonSet >.uiUserBtn').on 'click.uiDialog', (e) ->
@@ -201,6 +274,12 @@ initEvent = (dialogObj, self, opts) ->
       minWidth : opts.minWidth
       maxWidth : opts.maxWidth
     }
+  return null
+###*
+ * [setContentHeight description]
+ * @param {[jQuery]} self [description]
+ * @param {[Object]} opts [description]
+###
 setContentHeight = (self, opts) ->
   otherItemHeightTotal = 0
   content = self.children '.uiContent'
