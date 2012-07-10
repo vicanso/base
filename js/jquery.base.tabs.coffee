@@ -1,6 +1,10 @@
 $ = window.jQuery
 $$ = window.BASE
-
+###*
+ * [tabs description]
+ * @param  {[Object]} options [description]
+ * @return {[jQuery]}         [description]
+###
 $.fn.tabs = (options) ->
   self = this
   args = Array.prototype.slice.call arguments
@@ -11,6 +15,12 @@ $.fn.tabs = (options) ->
   return result
 
 class $$.Tabs extends $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[Tabs]}         [description]
+  ###
   constructor: (self, options) ->
     tabsObj = @
     if not (tabsObj instanceof $$.Tabs)
@@ -43,16 +53,27 @@ class $$.Tabs extends $$.Widget
     opts = $.extend defaults, options
     tabsObj.constructor.__super__.constructor.call tabsObj, self, opts
     tabsObj.init()
+  ###*
+   * [init description]
+   * @return {[Tabs]} [description]
+  ###
   init : () ->
     tabsObj = @
     tabsObj.createWidget()
     initTabs tabsObj.jqObj, tabsObj.opts
     return tabsObj
+  ###*
+   * [addItem description]
+   * @param {[String, DOM, jQuery]} content [description]
+   * @param {[String]} {[Optional]} title   [description]
+   * @param {[Integer]} {[Optional]} index   [description]
+   * @return {[Tabs]} [description]
+  ###
   addItem : (content, title, index) ->
     tabsObj = @
     self = tabsObj.jqObj
     opts = tabsObj.opts
-    contentObj = @ content
+    contentObj = $ content
     title ?= contentObj.attr 'title'
     if isNaN parseInt(index)
       itemTarget = $ '> .uiTabsList > .uiListContent > .uiTabsItemContainer', self
@@ -66,6 +87,11 @@ class $$.Tabs extends $$.Widget
     $(opts.contentHTML).addClass('uiTabsContent uiHidden').append(contentObj)[insertFunc] itemTarget
     opts.tabsItemTotal++
     return tabsObj
+  ###*
+   * [activate description]
+   * @param  {[Integer]} {[Optional]} index [description]
+   * @return {[Tabs]}       [description]
+  ###
   activate : (index) ->
     tabsObj = @
     self = tabsObj.jqObj
@@ -74,6 +100,13 @@ class $$.Tabs extends $$.Widget
       return opts.activateIndex
     $('>.uiTitleBar >.uiListContent .uiTabsItem', self).eq(index).trigger 'click.uiTabs'
     return tabsObj
+  ###*
+   * [item description]
+   * @param  {[Integer]} {[Optional]} index   [description]
+   * @param  {[String]} {[Optional]} content [description]
+   * @param  {[String]} {[Optional]} title   [description]
+   * @return {[jQuery, Tabs]}         [description]
+  ###
   item : (index, content, title) ->
     tabsObj = @
     self = tabsObj.jqObj
@@ -89,6 +122,11 @@ class $$.Tabs extends $$.Widget
       return titleBar
     titleBar.html title
     return tabsObj
+###*
+ * [initTabs description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initTabs = (self, opts) ->
   titleBarObj = $(opts.titleBarHTML).addClass(opts.titleBarClass).append opts.controlHTML
   self.addClas("uiTabs uiWidget #{opts.tabsClass}").children().each (n) ->
@@ -117,6 +155,12 @@ initTabs = (self, opts) ->
     contentObj = self.children '.uiTabsContent'
     contentObj.height selfHeight - titleBarHeight - (parseInt contentObj.css 'marginTop') - (parseInt contentObj.css 'marginBotto')
   initEvent self, opts
+  return null
+###*
+ * [initEvent description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initEvent = (self, opts) ->
   $('> .uiTabsList > .uiListContent > .uiTabsItemContainer', self).on 'click.uiTabs', (e) ->
     target = $ e.target
@@ -172,6 +216,12 @@ initEvent = (self, opts) ->
     $(@).addClass opts.tabsItemHoverClass
   ,() ->
     $(@).removeClass opts.tabsItemHoverClass
+  return null
+###*
+ * [checkItemViewStatus description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 checkItemViewStatus = (self, opts) ->
   arrowRightObj = $ '> .uiTitleBar > .uiRightArrow', self
   arrowLeftObj = $ '> .uiTitleBar > .uiLeftArrow', self
@@ -183,3 +233,4 @@ checkItemViewStatus = (self, opts) ->
     arrowLeftObj.hide()
   else
     arrowLeftObj.show()
+  return null

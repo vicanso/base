@@ -1,11 +1,22 @@
 $ = window.jQuery
 $$ = window.BASE
+###*
+ * [moveToPos description]
+ * @param  {[Object]} options [description]
+ * @return {[jQuery]}         [description]
+###
 $.fn.moveToPos = (options) ->
   self = @
   positionObj = new $$.Position self
   positionObj.moveToPos options
   return self
 class $$.Position
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[Position]}         [description]
+  ###
   constructor : (self, options) ->
     positionObj = @
     if not (positionObj instanceof $$.Position)
@@ -18,6 +29,11 @@ class $$.Position
     
     $.extend positionObj.opts, defaults, options
     positionObj.jqObj = self;
+  ###*
+   * [moveToPos description]
+   * @param  {[Object]} position [description]
+   * @return {[Object]}          [description]
+  ###
   moveToPos : (position) ->
     positionObj = @
     self = positionObj.jqObj
@@ -42,6 +58,11 @@ class $$.Position
     else if $.isPlainObject position
       setPosByObject self, position
     return returnValue
+###*
+ * [setPosByStr description]
+ * @param {[jQuery]} self   [description]
+ * @param {[String]} posStr [description]
+###
 setPosByStr = (self, posStr) ->
   windowObj = $ window
   parentObj = self.parent()
@@ -81,6 +102,11 @@ setPosByStr = (self, posStr) ->
       posSetting[posStr] = 0
   self.css posSetting
   return null
+###*
+ * [setPosByObject description]
+ * @param {[jQuery]} self [description]
+ * @param {[Object]} pos  [description]
+###
 setPosByObject = (self, pos) ->
   posSetting = 
     position : 'absolute'

@@ -1,6 +1,10 @@
 $ = window.jQuery
 $$ = window.BASE
-
+###*
+ * [progressBar description]
+ * @param  {[Object]} {[Optional]} options [description]
+ * @return {[jQuery, Others]}         [description]
+###
 $.fn.progressBar = (options) ->
   self = this
   args = Array.prototype.slice.call arguments
@@ -11,6 +15,12 @@ $.fn.progressBar = (options) ->
   return result
 
 class $$.ProgressBar extends $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jquery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[ProgressBar]}         [description]
+  ###
   constructor: (self, options) ->
     progressBarObj = @
     if not (progressBarObj instanceof $$.ProgressBar)
@@ -31,6 +41,10 @@ class $$.ProgressBar extends $$.Widget
     opts = $.extend defaults, options
     progressBarObj.constructor.__super__.constructor.call progressBarObj, self, opts
     progressBarObj.init()
+  ###*
+   * [init description]
+   * @return {[ProgressBar]} [description]
+  ###
   init : () ->
     progressBarObj = @
     opts = progressBarObj.opts
@@ -40,6 +54,11 @@ class $$.ProgressBar extends $$.Widget
     if opts.type is 'scroll'
       progressBarObj.scroll true
     return progressBarObj
+  ###*
+   * [val description]
+   * @param  {[Float]} {[Optional]} value [description]
+   * @return {[ProgressBar, Float]}       [description]
+  ###
   val : (value) ->
     progressBarObj = @
     self = progressBarObj.jqObj
@@ -49,6 +68,11 @@ class $$.ProgressBar extends $$.Widget
     opts.value = if value > 1 then 1 else (if value < 0 then 0 else value)
     self.children('.progressValue').width opts.progressBarLength * opts.value
     return progressBarObj
+  ###*
+   * [scroll description]
+   * @param  {[Boolean]} {[Optional]} scrolling [description]
+   * @return {[ProgressBar]}           [description]
+  ###
   scroll : (scrolling) ->
     progressBarObj = @
     self = progressBarObj.jqObj
@@ -66,6 +90,11 @@ class $$.ProgressBar extends $$.Widget
         opts.scrolling = false
         progressBarObj.scroll self, opts, true
     return progressBarObj
+###*
+ * [initProgressBar description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initProgressBar = (self, opts) ->
   progressValue = $ '<div class="progressValue"></div>'
   marginValue = opts.marginValue || 2
@@ -76,3 +105,4 @@ initProgressBar = (self, opts) ->
       obj.css 'marginRight', opts.marginValue
     progressValue.append obj
   opts.progressBarLength = self.addClass("uiProgressBar uiWidget #{opts.progressBarClass}").append(progressValue).width()
+  return null

@@ -1,5 +1,9 @@
 $$ = window.BASE
 $ = window.jQuery
+###*
+ * [WIDGET_CALL_FUNCTION description]
+ * @type {[type]}
+###
 WIDGET_CALL_FUNCTION = $$.WIDGET_CALL_FUNCTION = {
   baseUrl : "./javascript/jquery.base.{key}.js"
 }

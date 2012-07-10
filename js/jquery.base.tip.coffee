@@ -1,6 +1,10 @@
 $ = window.jQuery
 $$ = window.BASE
-
+###*
+ * [tip description]
+ * @param  {[Object]} {[Optional]} options [description]
+ * @return {[jQuery]}         [description]
+###
 $.fn.tip = (options) ->
   self = this
   args = Array.prototype.slice.call arguments
@@ -11,6 +15,12 @@ $.fn.tip = (options) ->
   return result
 
 class $$.Tip extends $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[Tip]}         [description]
+  ###
   constructor: (self, options) ->
     tipObj = @
     if not (tipObj instanceof $$.Tip)
@@ -42,11 +52,21 @@ class $$.Tip extends $$.Widget
     opts = $.extend defaults, options
     tipObj.constructor.__super__.constructor.call tipObj, self, opts
     tipObj.init()
+  ###*
+   * [init description]
+   * @return {[Tip]} [description]
+  ###
   init : () ->
     tipObj = @
     tipObj.createWidget()
     initTip tipObj.jqObj, tipObj.opts
     return tipObj
+  ###*
+   * [content description]
+   * @param  {[String]} {[Optional]} content       [description]
+   * @param  {[Boolean]} {[Optional]} resetPosition [description]
+   * @return {[Tip]}               [description]
+  ###
   content : (content, resetPosition) ->
     tipObj = @
     self = tipObj.jqObj
@@ -58,6 +78,11 @@ class $$.Tip extends $$.Widget
     if resetPosition is true
       setPosition self, opts
     return tipObj
+  ###*
+   * [arrowPosition description]
+   * @param  {[Integer]} {[Optional]} value [description]
+   * @return {[Integer, Tip]}       [description]
+  ###
   arrowPosition : (value) ->
     tipObj = @
     self = tipObj.jqObj
@@ -71,12 +96,21 @@ class $$.Tip extends $$.Widget
       arrowList.css 'top', value
     opts.positionValue = value
     return tipObj
+  ###*
+   * [beforeDestroy description]
+   * @return {[Tip]} [description]
+  ###
   beforeDestroy : () ->
     tipObj = @
     self = tipObj.jqObj
     opts = tipObj.opts
     opts.targetObj.off ".#{opts.widgetKey}"
     return tipObj
+###*
+ * [initTip description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initTip = (self, opts) ->
   opts.targetObj = $ opts.target
   tip = $ opts.tipHTML
@@ -101,6 +135,12 @@ initTip = (self, opts) ->
   initEvent self, opts
   if opts.alawayshow is false
     self.hide()
+  return null
+###*
+ * [initEvent description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initEvent = (self, opts) ->
   targetObj = opts.targetObj
   if opts.alawayshow is false
@@ -117,10 +157,16 @@ initEvent = (self, opts) ->
           return false
         self.stop(true, true)[opts.hideAnimate] opts.animateTime, ()->
           opts.hide self, target, e
+  return null
+###*
+ * [setPosition description]
+ * @param {[jQuery]} self [description]
+ * @param {[Object]} opts [description]
+###
 setPosition = (self, opts) ->
   targetObj = opts.targetObj
   if targetObj.length is 0
-    return
+    return null
   targetObjOffset = targetObj.offset()
   leftValue = targetObjOffset.left
   topValue = targetObjOffset.top
@@ -194,3 +240,4 @@ setPosition = (self, opts) ->
     top : arrow2TopValue
     left : arrow2LeftValue
   }
+  return null

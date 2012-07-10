@@ -10,7 +10,7 @@
     /**
      * [constructor description]
      * @param  {[jQuery]} self    [description]
-     * @param  {[Obejct]} options [description]
+     * @param  {[Obejct]} {[Optional]} options [description]
      * @return {[type]}         [description]
     */
 

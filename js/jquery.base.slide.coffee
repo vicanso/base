@@ -1,6 +1,10 @@
 $ = window.jQuery
 $$ = window.BASE
-
+###*
+ * [slide description]
+ * @param  {[Object]} {[Optional]} options [description]
+ * @return {[jQuery, Others]}         [description]
+###
 $.fn.slide = (options) ->
   self = this
   args = Array.prototype.slice.call arguments
@@ -11,6 +15,12 @@ $.fn.slide = (options) ->
   return result
 
 class $$.Slide extends $$.Widget
+  ###*
+   * [constructor description]
+   * @param  {[jQuery]} self    [description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[Slide]}         [description]
+  ###
   constructor: (self, options) ->
     slideObj = @
     if not (slideObj instanceof $$.Slide)
@@ -46,11 +56,21 @@ class $$.Slide extends $$.Widget
     opts = $.extend defaults, options
     slideObj.constructor.__super__.constructor.call slideObj, self, opts
     slideObj.init()
+  ###*
+   * [init description]
+   * @return {[Slide]} [description]
+  ###
   init : () ->
     slideObj = @
     slideObj.createWidget()
     initSlide slideObj.jqObj, slideObj.opts
     return slideObj
+  ###*
+   * [val description]
+   * @param  {[Integer]} {[Optional]} value   [description]
+   * @param  {[Boolean]} {[Optional]} animate [description]
+   * @return {[Slide]}         [description]
+  ###
   val : (value, animate) ->
     slideObj = @
     self = slideObj.jqObj
@@ -61,11 +81,21 @@ class $$.Slide extends $$.Widget
       animate = true
     if not opts.slideDrag
       setSlide self, opts, value, animate, true
+  ###*
+   * [beforeDestroy description]
+   * @return {[Slide]} [description]
+  ###
   beforeDestroy : () ->
     slideObj = @
     self = slideObj.jqObj
     opts = slideObj.opts
     $(docuemnt).off ".#{opts.widgetKey}"
+    return slideObj
+###*
+ * [initSlide description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initSlide = (self, opts) ->
   if opts.mode is 'vertical'
     opts.slideClass = opts.slideClassVerticalMode
@@ -103,6 +133,12 @@ initSlide = (self, opts) ->
     initEvent self, opts
   if opts.slideValue isnt 0
     setSlide self, opts, opts.slideValue
+  return null
+###*
+ * [initEvent description]
+ * @param  {[jQuery]} self [description]
+ * @param  {[Object]} opts [description]
+###
 initEvent = (self, opts) ->
   documentObj = $ document
   panelObj = $ '>.uiPanel', self
@@ -140,6 +176,15 @@ initEvent = (self, opts) ->
     mouseUpEvent : (e) ->
       opts.slideDrag = false
   }
+  return null
+###*
+ * [setSlide description]
+ * @param {[jQuery]} self      [description]
+ * @param {[Object]} opts      [description]
+ * @param {[Integer]} value     [description]
+ * @param {[Boolean]} animate   [description]
+ * @param {[Boolean]} jumpToEnd [description]
+###
 setSlide = (self, opts, value, animate, jumpToEnd) ->
   obj = $ '>.uiPanel >.uiSlider', self
   value ?= 0
@@ -165,3 +210,4 @@ setSlide = (self, opts, value, animate, jumpToEnd) ->
     obj.css props
     sliderCross.css sliderCrossProps
     opts.slide self, obj, opts.slideValue
+  return null
