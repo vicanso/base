@@ -25,7 +25,6 @@ class $$.Tip extends $$.Widget
     tipObj = @
     if not (tipObj instanceof $$.Tip)
       return new $$.Tip self, options
-
     defaults =
       tipClass : 'uiCornerAll'
       borderColor : '#315389'

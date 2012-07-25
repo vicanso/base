@@ -25,7 +25,6 @@ class $$.Slide extends $$.Widget
     slideObj = @
     if not (slideObj instanceof $$.Slide)
       return new $$.Slide self, options
-
     defaults =
       mode : 'horizontal'
       slideClass : "#{$$.defaultGradientBG} uiCornerAll #{$$.defaultBorder}"

@@ -13,7 +13,6 @@ $.fn.accordion = (options) ->
   if result.jqObj? and options isnt 'widget'
     return self
   return result
-
 class $$.Accordion extends $$.Widget
   ###*
    * [constructor description]
@@ -29,7 +28,7 @@ class $$.Accordion extends $$.Widget
       accordionClass : "#{$$.defaultBorder} uiCornerAll #{$$.defaultBoxShadow}"
       titleBarClass : $$.defaultGradientBG
       activeClass : $$.defaultGradientBG
-      itemTitleBarClass : 'uiBlackGradientBG'
+      itemTitleBarClass : 'uiBlueGradientBG'
       active : [0]
       event : 'click'
       titleIcon : null

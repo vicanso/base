@@ -25,7 +25,6 @@ class $$.Tabs extends $$.Widget
     tabsObj = @
     if not (tabsObj instanceof $$.Tabs)
       return new $$.Tabs self, options
-
     defaults =
       tabsClass : "#{$$.defaultBorder} uiCornerAll #{$$.defaultBoxShadow}"
       titleBarClass : $$.defaultGradientBG

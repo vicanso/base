@@ -92,6 +92,9 @@
 .uiDraggable{cursor:move;}
 .uiMoveCursor{cursor:move;}
 .uiNwResize{cursor:nw-resize;}
+.uiAccordion{padding:0;margin:0;}.uiAccordion>.uiAccordionTitleBar{height:25px;line-height:25px;overflow:hidden;padding-left:10px;}.uiAccordion>.uiAccordionTitleBar>.uiTitleIcon{width:24px;display:block;height:100%;float:left;}
+.uiAccordion>.uiTitleBar{padding-left:10px;height:30px;line-height:30px;cursor:pointer;overflow:hidden;border-top:1px solid #0f0f0f;}.uiAccordion>.uiTitleBar>.uiUserBtn{float:right;margin:0 5px;}
+.uiAccordion>.uiContent{padding:5px;background:white;overflow:auto;}
 .uiButtonSet{display:inline-block;margin:0;padding:0;}.uiButtonSet>.uiButton{height:30px;line-height:30px;text-align:center;display:block;cursor:pointer;font-weight:500;overflow:hidden;padding:0 20px;float:left;}.uiButtonSet>.uiButton>.uiIcon{height:100%;float:left;width:24px;margin-right:5px;}
 .uiButtonSet>.uiButton>.uiIconFloatRight{float:right;margin-right:5px;}
 .uiButtonSet>.uiImgButton{height:30px;line-height:30px;text-align:center;display:block;cursor:pointer;font-weight:500;overflow:hidden;padding:0 20px;float:left;}
@@ -101,32 +104,23 @@
 .uiButtonSet>.uiImgCheckBoxChecked>.uiIcon{float:left;width:24px;}
 .uiButtonSet>.uiButtonPressed{line-height:35px;}
 .uiButtonSet{*display:inline;}
-.uiScrollBar{z-index:99;}
-.uiSlide>.uiPanel{margin:0;padding:0;position:relative;height:100%;width:100%;cursor:pointer;}.uiSlide>.uiPanel>.uiSliderCross{position:absolute;overflow:hidden;}
-.uiSlide>.uiPanel>.uiSlider{position:absolute;overflow:hidden;}
-.uiSlide>.uiPanel>.uiImageSlider{width:23px;height:24px;}
-.uiSlide>.uiPanel>.uiDefaultSliderBG{background:white;}
-.uiAccordion{padding:0;margin:0;}.uiAccordion>.uiAccordionTitleBar{height:25px;line-height:25px;overflow:hidden;padding-left:10px;}.uiAccordion>.uiAccordionTitleBar>.uiTitleIcon{width:24px;display:block;height:100%;float:left;}
-.uiAccordion>.uiTitleBar{padding-left:10px;height:30px;line-height:30px;cursor:pointer;overflow:hidden;border-top:1px solid #0f0f0f;}.uiAccordion>.uiTitleBar>.uiUserBtn{float:right;margin:0 5px;}
-.uiAccordion>.uiContent{padding:5px;background:white;overflow:auto;}
 .uiDialog{margin:0;padding:0;overflow:hidden;}.uiDialog>.uiTitleBar{height:30px;line-height:30px;margin:2px;position:relative;}.uiDialog>.uiTitleBar>.uiTitle{height:100%;padding-left:10px;margin-right:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.uiDialog>.uiTitleBar>.uiTitle>.uiTitleIcon{width:24px;height:30px;display:block;float:left;}
 .uiDialog>.uiTitleBar>.uiDialogButtonSet{position:absolute;right:5px;top:0;height:100%;}
 .uiDialog>.uiTitleBar>.uiButtonSet>.uiUserBtn{margin:0 1px;}
 .uiDialog>.uiContent{margin:5px;}
 .uiDialog>.uiButtonSet{float:right;margin:0px 10px 10px;}
-.uiTabs{margin:0;padding:0;overflow:hidden;}.uiTabs>.uiTitleBar{height:30px;position:relative;}.uiTabs>.uiTitleBar>.uiRightArrow,.uiTabs>.uiTitleBar>.uiLeftArrow{position:absolute;top:0px;width:9px;height:18px;z-index:99;display:none;cursor:pointer;}
-.uiTabs>.uiTitleBar>.uiRightArrow{right:0px;}
-.uiTabs>.uiTitleBar>.uiLeftArrow{left:0px;}
-.uiTabs>.uiTabsList{overflow:hidden;width:100%;}.uiTabs>.uiTabsList>.uiListContent{position:absolute;width:10000%;overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer{overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem{position:relative;display:inline-block;text-align:center;height:25px;line-height:25px;width:120px;margin:6px 0 0 20px;padding:2px;cursor:pointer;overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem>.uiCloseItemBtn{position:absolute;height:18px;width:18px;display:block;right:2px;top:2px;display:none;}
-.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.selected{background-color:white;color:#0f0f0f;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.selected>.uiCloseItemBtn{display:block;}
-.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem{*display:inline;}
-.uiTabs>.uiTabsContent{margin:5px;overflow:auto;}
 .uiDorpDownList{margin:0;padding:0;}.uiDorpDownList>.uiDropDown,.uiDorpDownList>.uiDropDown>span{height:30px;line-height:30px;}
 .uiDorpDownList>.uiDropDown{padding:0 5px;}.uiDorpDownList>.uiDropDown>span{display:block;overflow:hidden;}
 .uiDorpDownList>.uiDropDown>.uiDropDownBtn{float:right;padding:0 3px;width:12px;cursor:pointer;border-style:none;border-left-style:solid;}
 .uiDorpDownList>.uiDropDown>input{display:block;height:24px;line-height:24px;}
 .uiDorpDownList>.uiSelectList{position:absolute;margin:3px 0 0 0;z-index:9;overflow:hidden;padding:2px;list-style:none;text-align:center;}.uiDorpDownList>.uiSelectList>li{height:30px;cursor:pointer;display:block;padding:0 10px;width:100px;line-height:30px;overflow:hidden;}.uiDorpDownList>.uiSelectList>li>.uiSelected{display:none;}
 .uiDorpDownList>.uiSelectList>li.selected>.uiSelected{display:block;float:left;}
+.uiList{padding:0;margin:0;overflow:hidden;}.uiList ul{width:10%;overflow:auto;float:left;}
+.uiList li{list-style:none;height:30px;padding:0 5px;line-height:30px;border-bottom:1px solid #a0a0a0;cursor:pointer;}
+.uiList li.uiListMore>.uiListMoreBtn{display:block;float:right;margin:0 5px;height:100%;}
+.uiList>.uiListContent{width:1000%;}
+.uiList>.uiListTitleBar{height:25px;line-height:25px;overflow:hidden;padding-left:10px;position:relative;}.uiList>.uiListTitleBar>span{margin-right:65px;}.uiList>.uiListTitleBar>span.uiListBack{margin:0;cursor:pointer;position:absolute;text-align:center;width:42px;padding-left:8px;right:5px;overflow:hidden;display:none;}
+.uiList>.uiListTitleBar>.uiTitleIcon{width:24px;display:block;height:100%;float:left;}
 .uiMenu{height:30px;}.uiMenu>ul.uiTopLevel{margin:auto;}.uiMenu>ul.uiTopLevel>li{float:left;position:relative;}.uiMenu>ul.uiTopLevel>li>a{padding:0 40px;}
 .uiMenu a{text-decoration:none;outline:none;border:none;cursor:pointer;display:block;white-space:nowrap;}
 .uiMenu li{line-height:30px;list-style:none;}.uiMenu li:hover>ul{display:block;}
@@ -134,12 +128,18 @@
 .uiMenu .uiRightBorder{border-right:1px solid #a0a0a0;}
 .uiMenu .uiBottomBorder{border-bottom:1px solid #a0a0a0;}
 .uiProgressBar{margin:0;padding:0;overflow:hidden;}.uiProgressBar>.progressValue{height:100%;width:0;overflow:hidden;}.uiProgressBar>.progressValue>.progressBlock{height:100%;width:12px;margin:0 2px 0 0;float:left;}
-.uiList{padding:0;margin:0;overflow:hidden;}.uiList ul{width:10%;overflow:auto;float:left;}
-.uiList li{list-style:none;height:30px;padding:0 5px;line-height:30px;border-bottom:1px solid #a0a0a0;cursor:pointer;}
-.uiList li.uiListMore>.uiListMoreBtn{display:block;float:right;margin:0 5px;height:100%;}
-.uiList>.uiListContent{width:1000%;}
-.uiList>.uiListTitleBar{height:25px;line-height:25px;overflow:hidden;padding-left:10px;position:relative;}.uiList>.uiListTitleBar>span{margin-right:65px;}.uiList>.uiListTitleBar>span.uiListBack{margin:0;cursor:pointer;position:absolute;text-align:center;width:42px;padding-left:8px;right:5px;overflow:hidden;display:none;}
-.uiList>.uiListTitleBar>.uiTitleIcon{width:24px;display:block;height:100%;float:left;}
+.uiScrollBar{z-index:99;}
+.uiSlide>.uiPanel{margin:0;padding:0;position:relative;height:100%;width:100%;cursor:pointer;}.uiSlide>.uiPanel>.uiSliderCross{position:absolute;overflow:hidden;}
+.uiSlide>.uiPanel>.uiSlider{position:absolute;overflow:hidden;}
+.uiSlide>.uiPanel>.uiImageSlider{width:23px;height:24px;}
+.uiSlide>.uiPanel>.uiDefaultSliderBG{background:white;}
+.uiTabs{margin:0;padding:0;overflow:hidden;}.uiTabs>.uiTitleBar{height:30px;position:relative;}.uiTabs>.uiTitleBar>.uiRightArrow,.uiTabs>.uiTitleBar>.uiLeftArrow{position:absolute;top:0px;width:9px;height:18px;z-index:99;display:none;cursor:pointer;}
+.uiTabs>.uiTitleBar>.uiRightArrow{right:0px;}
+.uiTabs>.uiTitleBar>.uiLeftArrow{left:0px;}
+.uiTabs>.uiTabsList{overflow:hidden;width:100%;}.uiTabs>.uiTabsList>.uiListContent{position:absolute;width:10000%;overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer{overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem{position:relative;display:inline-block;text-align:center;height:25px;line-height:25px;width:120px;margin:6px 0 0 20px;padding:2px;cursor:pointer;overflow:hidden;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem>.uiCloseItemBtn{position:absolute;height:18px;width:18px;display:block;right:2px;top:2px;display:none;}
+.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.selected{background-color:white;color:#0f0f0f;}.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.selected>.uiCloseItemBtn{display:block;}
+.uiTabs>.uiTabsList>.uiListContent>.uiTabsItemContainer>.uiTabsItem{*display:inline;}
+.uiTabs>.uiTabsContent{margin:5px;overflow:auto;}
 .uiTip{margin:0;padding:0;display:inline-block;position:absolute;line-height:1.5;text-align:center;}.uiTip>.uiTipContent{margin:1px -2px;padding:0 6px;}
 .uiTip>.uiTipArrowStyle1{position:absolute;width:0;height:0;overflow:hidden;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:10px dotted transparent;border-right:10px dotted transparent;}
 .uiTip>.uiTipArrowStyle2{position:absolute;width:0;height:0;overflow:hidden;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px dotted transparent;border-bottom:10px dotted transparent;}

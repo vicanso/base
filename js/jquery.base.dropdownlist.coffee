@@ -13,7 +13,6 @@ $.fn.dropDownList = (options) ->
   if result.jqObj? and options isnt 'widget'
     return self
   return result
-
 class $$.DropDownList extends $$.Widget
   ###*
    * [constructor description]

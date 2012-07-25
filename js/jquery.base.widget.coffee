@@ -13,7 +13,6 @@ class $$.Widget
     if not (widgetObj instanceof $$.Widget)
       return new $$.Widget self, options
     widgetObj.jqObj = self
-
     defaults =
       widgetKey : null
       animateTime: $$.defaultAnimateDuration

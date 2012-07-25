@@ -24,7 +24,6 @@ class $$.Dialog extends $$.Widget
     dialogObj = @
     if not (dialogObj instanceof $$.Dialog)
       return new $$.Dialog self, options
-
     defaults = 
       dialogClass : "#{$$.defaultBorder} uiCornerAll #{$$.defaultBoxShadow}"
       titleBarClass : $$.defaultGradientBG

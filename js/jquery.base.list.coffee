@@ -25,7 +25,6 @@ class $$.List extends $$.Widget
     listObj = @
     if not (listObj instanceof $$.List)
       return new $$.List self, options
-
     defaults =
       title : null
       indexKey : "data-key"

@@ -25,7 +25,6 @@ class $$.ProgressBar extends $$.Widget
     progressBarObj = @
     if not (progressBarObj instanceof $$.ProgressBar)
       return new $$.ProgressBar self, options
-
     defaults =
       progressBarClass : "#{$$.defaultGradientBG} #{$$.defaultBorder}"
       progressBlockClass : $$.hoverGradientBG

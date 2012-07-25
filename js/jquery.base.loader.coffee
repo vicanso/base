@@ -27,6 +27,4 @@ for widget in WIDGET_LIST
               for args in argumentsList
                 $.fn[key].apply args.pop(), args
               delete WIDGET_CALL_FUNCTION[key]
-            error : (err, textStatus, errorThrown) ->
-
           }

@@ -6,8 +6,11 @@
   $ = window.jQuery;
 
   RandomString = (function() {
-
-    RandomString.name = 'RandomString';
+    /**
+     * [constructor 用于生成随机字符串（用于标识Widget ID）]
+     * @param  {[String]} {[Optional]} legalCharList [随机的字符串集]
+     * @return {[RandomString]} [返回RandomString对象]
+    */
 
     function RandomString(legalCharList) {
       var defaultLegalChar;
@@ -20,9 +23,18 @@
       this.legalListLength = this.legalCharList.length;
     }
 
+    /**
+     * [getRandomStr 获取随机字符串]
+     * @param  {[Integer]} {[Optional]} len [指定随机字符串的长度]
+     * @return {[String]}     [返回随机字符串]
+    */
+
+
     RandomString.prototype.getRandomStr = function(len) {
       var num;
-      if (len == null) len = 10;
+      if (len == null) {
+        len = 10;
+      }
       return ((function() {
         var _i, _results;
         _results = [];
@@ -32,6 +44,12 @@
         return _results;
       }).call(this)).join("");
     };
+
+    /**
+     * [getRandomChar 获取随机字符]
+     * @return {[Char]} [返回一个随机字符]
+    */
+
 
     RandomString.prototype.getRandomChar = function() {
       return this.legalCharList[Math.floor(Math.random() * this.legalListLength)];
@@ -45,9 +63,9 @@
     version: "0.8.1",
     msie6: $.browser.msie && $.browser.version === "6.0",
     defaultAnimateDuration: 300,
-    defaultBorder: "uiBlueBorder",
-    defaultBoxShadow: "uiBlueBoxShadow",
-    defaultGradientBG: "uiBlueGradientBG",
+    defaultBorder: "uiBlackBorder",
+    defaultBoxShadow: "uiBlackBoxShadow",
+    defaultGradientBG: "uiBlackGradientBG",
     hoverGradientBG: "uiLightBlueGradientBG",
     selectedGradientBG: "uiRedGradientBG",
     cssShow: {
@@ -69,49 +87,87 @@
       uiTree: "tree",
       uiGrid: "grid"
     },
+    /**
+     * [widgetDictionary 保存Widget对象的Map结构]
+     * @type {Object}
+    */
+
     widgetDictionary: {},
+    /**
+     * [randomKey RandomString的实例，用于返回随机的Widget ID]
+     * @type {RandomString}
+    */
+
     randomKey: new RandomString(),
+    /**
+     * [getWidget 获取Widget对象]
+     * @param  {[String]} key [Widget对象ID]
+     * @return {[Widget]}     [Widget对象]
+    */
+
     getWidget: function(key) {
       var widget;
       widget = this.widgetDictionary[key];
-      if (widget != null) return widget;
+      if (widget != null) {
+        return widget;
+      }
     },
+    /**
+     * [addWidget 添加Widget对象到widgetDictionary中]
+     * @param {[String]} key    [Widget对象的ID]
+     * @param {[Widget]} widget [Widget对象]
+    */
+
     addWidget: function(key, widget) {
       if ((key != null) && (widget != null)) {
         return this.widgetDictionary[key] = widget;
       }
     },
+    /**
+     * [removeWidget 删除Widget对象]
+     * @param  {[String]} key [Widget对象的ID]
+     * @return {[Boolean]}     [删除结果]
+    */
+
     removeWidget: function(key) {
       var opts, prop, widget;
       widget = this.widgetDictionary[key];
-      if (notdelete(this.widgetDictionary[key])) this.widgetDictionary[key] = null;
-      if (widget != null) opts = widget.opts;
+      if (!delete this.widgetDictionary[key]) {
+        this.widgetDictionary[key] = null;
+      }
+      if (widget != null) {
+        opts = widget.opts;
+      }
       for (prop in opts) {
-        if (opts.hasOwnProperty(prop)) if (!(delete opts[prop])) opts[prop] = null;
+        if (opts.hasOwnProperty(prop)) {
+          if (!(delete opts[prop])) {
+            opts[prop] = null;
+          }
+        }
       }
       for (prop in widget) {
         if (widget.hasOwnProperty(prop)) {
-          if (!(delete widget[prop])) widget[prop] = null;
+          if (!(delete widget[prop])) {
+            widget[prop] = null;
+          }
         }
       }
       return true;
     },
+    /**
+     * [getRandomKey 获取随机字符串]
+     * @param  {[Integer]} length [字符串长度]
+     * @return {[String]}        [返回该长度的随机字符串]
+    */
+
     getRandomKey: function(length) {
       return this.randomKey.getRandomStr(length);
     },
-    inherit: function(subClass, superClass, subFunction) {
-      var tmpClass;
-      if (!($.isFunction(subClass)) || !($.isFunction(superClass))) {
-        $.error("继承出错");
-      }
-      tmpClass = function() {};
-      tmpClass.prototype = superClass.prototype;
-      subClass.prototype = new tmpClass();
-      subClass.prototype.constructor = subClass;
-      subClass.prototype.superClass = superClass;
-      $.extend(subClass.prototype, subFunction);
-      return true;
-    },
+    /**
+     * [createWidgetByJQuery 通过jQuery方法创建Widget对象]
+     * @return {[Widget]} [返回jQuery对象]
+    */
+
     createWidgetByJQuery: function() {
       var args, constructor, options, self, widgetKey, widgetObj;
       self = this;
@@ -130,6 +186,257 @@
       return self;
     }
   });
+
+}).call(this);
+(function() {
+  var $, $$, widgetDestroy;
+
+  $$ = window.BASE = window.BASE || {};
+
+  $ = window.jQuery;
+
+  $$.Widget = (function() {
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Obejct]} {[Optional]} options [description]
+     * @return {[type]}         [description]
+    */
+
+    function Widget(self, options) {
+      var defaults, widgetObj;
+      widgetObj = this;
+      if (!(widgetObj instanceof $$.Widget)) {
+        return new $$.Widget(self, options);
+      }
+      widgetObj.jqObj = self;
+      defaults = {
+        widgetKey: null,
+        animateTime: $$.defaultAnimateDuration,
+        disabled: false,
+        minPosition: "bottom",
+        clone: null
+      };
+      widgetObj.opts = $.extend(defaults, options);
+    }
+
+    /**
+     * [selectHandle description]
+     * @return {[type]} [description]
+    */
+
+
+    Widget.prototype.selectHandle = function() {
+      var args, func, widgetObj;
+      args = Array.prototype.slice.call(arguments);
+      widgetObj = this;
+      func = args.shift();
+      if ($.isFunction(widgetObj[func])) {
+        return widgetObj[func].apply(widgetObj, args);
+      }
+      return null;
+    };
+
+    /**
+     * [self description]
+     * @return {[jQuery]} [description]
+    */
+
+
+    Widget.prototype.self = function() {
+      return this.jqObj;
+    };
+
+    /**
+     * [createWidget description]
+     * @return {[Widget]} [description]
+    */
+
+
+    Widget.prototype.createWidget = function() {
+      var opts, self, widgetObj;
+      widgetObj = this;
+      opts = widgetObj.opts;
+      self = widgetObj.jqObj;
+      opts.clone = self.clone();
+      opts.widgetKey = $$.getRandomKey();
+      self.attr('widget', opts.widgetKey);
+      widgetObj.widget(opts.widgetKey, widgetObj);
+      return widgetObj;
+    };
+
+    /**
+     * [widget description]
+     * @return {[Widget]} [description]
+    */
+
+
+    Widget.prototype.widget = function() {
+      if (arguments.length === 2) {
+        return $$.addWidget(arguments[0], arguments[1]);
+      } else if (arguments.length === 1) {
+        return $$.getWidget(arguments[0]);
+      }
+      return this;
+    };
+
+    /**
+     * [removeWidget description]
+     * @param  {[String]} key [description]
+     * @return {[Boolean]}     [description]
+    */
+
+
+    Widget.prototype.removeWidget = function(key) {
+      if (key != null) {
+        $$.removeWidget(key);
+      }
+      return true;
+    };
+
+    /**
+     * [disable description]
+     * @return {[Widget]} [description]
+    */
+
+
+    Widget.prototype.disable = function() {
+      var widgetObj;
+      widgetObj = this;
+      widgetObj.opts.disabled = true;
+      widgetObj.jqObj.addClass('uiWidgetDisalbed');
+      return widgetObj;
+    };
+
+    /**
+     * [enable description]
+     * @return {[Widget]} [description]
+    */
+
+
+    Widget.prototype.enable = function() {
+      var widgetObj;
+      widgetObj = this;
+      widgetObj.opts.disabled = false;
+      widgetObj.jqObj.removeClass('uiWidgetDisalbed');
+      return widgetObj;
+    };
+
+    /**
+     * [destroy description]
+     * @param  {[Boolean]} revert [description]
+     * @return {[Widget]}        [description]
+    */
+
+
+    Widget.prototype.destroy = function(revert) {
+      var opts, self, widgetObj;
+      widgetObj = this;
+      self = widgetObj.jqObj;
+      opts = widgetObj.opts;
+      self.find('.uiWidget').each(function() {
+        var key, obj, widget;
+        obj = $(this);
+        key = obj.attr('widget');
+        widget = widgetObj.widget(key);
+        if (widget != null) {
+          widgetDestroy(widget, revert);
+        }
+        return true;
+      });
+      widgetDestroy(widgetObj, revert);
+      return widgetObj;
+    };
+
+    return Widget;
+
+  })();
+
+  /**
+   * [widgetDestroy description]
+   * @param  {[Widget]} widget [description]
+   * @param  {[Boolean]} revert [description]
+  */
+
+
+  widgetDestroy = function(widget, revert) {
+    var opts, self, widgetKey;
+    self = widget.jqObj;
+    opts = widget.opts;
+    if (!(self.hasClass('uiWidget'))) {
+      self = opts.targetWidget;
+    }
+    if (self.hasClass('uiDraggable') || self.find('.uiDraggable').length !== 0) {
+      self.draggable('destroy');
+    }
+    if (self.find('.uiResizable').length !== 0) {
+      self.resizable('destroy');
+    }
+    if ($.isFunction(widget.beforeDestroy)) {
+      widget.beforeDestroy();
+    }
+    widgetKey = self.removeClass('uiWidget').attr('widget');
+    widget.removeWidget(widgetKey);
+    if (revert) {
+      opts.clone.insertAfter(self);
+    }
+    self.remove();
+    delete opts.clone;
+    return opts = null;
+  };
+
+}).call(this);
+(function() {
+  var $, $$, WIDGET_CALL_FUNCTION, WIDGET_LIST, widget, _fn, _i, _len;
+
+  $$ = window.BASE;
+
+  $ = window.jQuery;
+
+  /**
+   * [WIDGET_CALL_FUNCTION description]
+   * @type {[type]}
+  */
+
+
+  WIDGET_CALL_FUNCTION = $$.WIDGET_CALL_FUNCTION = {
+    baseUrl: "./javascript/jquery.base.{key}.js"
+  };
+
+  WIDGET_LIST = 'accordion buttonSet datePicker dialog dropDownList grid list menu progressBar slide tabs tip tree'.split(' ');
+
+  _fn = function(widget) {
+    var argumentsList, key, widgetJSON;
+    if (!$.isFunction($.fn[widget])) {
+      argumentsList = [];
+      key = widget;
+      widgetJSON = {
+        argumentsList: argumentsList,
+        loading: false
+      };
+      WIDGET_CALL_FUNCTION[key] = widgetJSON;
+      return $.fn[key] = function() {
+        if (!widgetJSON.loading) {
+          return $.ajax({
+            url: WIDGET_CALL_FUNCTION.baseUrl.replace('{key}', key),
+            dataType: 'script',
+            success: function(data) {
+              var args, _j, _len1;
+              for (_j = 0, _len1 = argumentsList.length; _j < _len1; _j++) {
+                args = argumentsList[_j];
+                $.fn[key].apply(args.pop(), args);
+              }
+              return delete WIDGET_CALL_FUNCTION[key];
+            }
+          });
+        }
+      };
+    }
+  };
+  for (_i = 0, _len = WIDGET_LIST.length; _i < _len; _i++) {
+    widget = WIDGET_LIST[_i];
+    _fn(widget);
+  }
 
 }).call(this);
 (function() {
@@ -154,7 +461,9 @@
 
   getRGB = function(color) {
     var result;
-    if (color && color.constructor === Array && color.length === 3) return color;
+    if (color && color.constructor === Array && color.length === 3) {
+      return color;
+    }
     if (result = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(color)) {
       return [parseInt(result[1], 10), parseInt(result[2], 10), parseInt(result[3], 10)];
     }
@@ -167,7 +476,9 @@
     if (result = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(color)) {
       return [parseInt(result[1] + result[1], 16), parseInt(result[2] + result[2], 16), parseInt(result[3] + result[3], 16)];
     }
-    if (result = /rgba\(0, 0, 0, 0\)/.exec(color)) return colors['transparent'];
+    if (result = /rgba\(0, 0, 0, 0\)/.exec(color)) {
+      return colors['transparent'];
+    }
     return colors[($.trim(color)).toLowerCase()];
   };
 
@@ -186,134 +497,18 @@
 
 }).call(this);
 (function() {
-  var $, $$, widgetDestroy;
-
-  $$ = window.BASE = window.BASE || {};
-
-  $ = window.jQuery;
-
-  $$.Widget = (function() {
-
-    Widget.name = 'Widget';
-
-    function Widget(self, options) {
-      var defaults, widgetObj;
-      widgetObj = this;
-      if (!(widgetObj instanceof $$.Widget)) return new $$.Widget(self, options);
-      widgetObj.jqObj = self;
-      defaults = {
-        widgetKey: null,
-        animateTime: $$.defaultAnimateDuration,
-        disabled: false,
-        minPosition: "bottom",
-        clone: null
-      };
-      widgetObj.opts = $.extend(defaults, options);
-    }
-
-    Widget.prototype.selectHandle = function() {
-      var args, func, widgetObj;
-      args = Array.prototype.slice.call(arguments);
-      widgetObj = this;
-      func = args.shift();
-      if ($.isFunction(widgetObj[func])) {
-        return widgetObj[func].apply(widgetObj, args);
-      }
-      return null;
-    };
-
-    Widget.prototype.self = function() {
-      return this.jqObj;
-    };
-
-    Widget.prototype.createWidget = function() {
-      var opts, self, widgetObj;
-      widgetObj = this;
-      opts = widgetObj.opts;
-      self = widgetObj.jqObj;
-      opts.clone = self.clone();
-      opts.widgetKey = $$.getRandomKey();
-      self.attr('widget', opts.widgetKey);
-      widgetObj.widget(opts.widgetKey, widgetObj);
-      return widgetObj;
-    };
-
-    Widget.prototype.widget = function() {
-      if (arguments.length === 2) {
-        return $$.addWidget(arguments[0], arguments[1]);
-      } else if (arguments.length === 1) {
-        return $$.getWidget(arguments[0]);
-      }
-      return this;
-    };
-
-    Widget.prototype.removeWidget = function(key) {
-      if (key != null) $$.removeWidget(key);
-      return true;
-    };
-
-    Widget.prototype.disable = function() {
-      var widgetObj;
-      widgetObj = this;
-      widgetObj.opts.disabled = true;
-      widgetObj.jqObj.addClass('uiWidgetDisalbed');
-      return widgetObj;
-    };
-
-    Widget.prototype.enable = function() {
-      var widgetObj;
-      widgetObj = this;
-      widgetObj.opts.disabled = false;
-      widgetObj.jqObj.removeClass('uiWidgetDisalbed');
-      return widgetObj;
-    };
-
-    Widget.prototype.destroy = function(revert) {
-      var opts, self, widgetObj;
-      widgetObj = this;
-      self = widgetObj.jqObj;
-      opts = widgetObj.opts;
-      self.find('.uiWidget').each(function() {
-        var key, obj, widget;
-        obj = $(this);
-        key = obj.attr('widget');
-        widget = widgetObj.widget(key);
-        if (widget != null) widgetDestroy(widget, revert);
-        return true;
-      });
-      widgetDestroy(widgetObj(revert));
-      return widgetObj;
-    };
-
-    return Widget;
-
-  })();
-
-  widgetDestroy = function(widget, revert) {
-    var opts, self, widgetKey;
-    self = widget.jqObj;
-    opts = widget.opts;
-    if (!(self.hasClass('uiWidget'))) self = opts.targetWidget;
-    if (self.hasClass('uiDraggable') || self.find('.uiDraggable').length !== 0) {
-      self.draggable('destroy');
-    }
-    if (self.find('.uiResizable').length !== 0) self.resizable('destroy');
-    if ($.isFunction(widget.beforeDestroy)) widget.beforeDestroy();
-    widgetKey = self.removeClass('uiWidget').attr('widget');
-    widget.removeWidget(widgetKey);
-    if (revert) opts.clone.insertAfter(self);
-    self.remove();
-    delete opts.clone;
-    return opts = null;
-  };
-
-}).call(this);
-(function() {
   var $, $$, setPosByObject, setPosByStr;
 
   $ = window.jQuery;
 
   $$ = window.BASE;
+
+  /**
+   * [moveToPos description]
+   * @param  {[Object]} options [description]
+   * @return {[jQuery]}         [description]
+  */
+
 
   $.fn.moveToPos = function(options) {
     var positionObj, self;
@@ -324,8 +519,12 @@
   };
 
   $$.Position = (function() {
-
-    Position.name = 'Position';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[Position]}         [description]
+    */
 
     function Position(self, options) {
       var defaults, positionObj;
@@ -341,6 +540,13 @@
       $.extend(positionObj.opts, defaults, options);
       positionObj.jqObj = self;
     }
+
+    /**
+     * [moveToPos description]
+     * @param  {[Object]} position [description]
+     * @return {[Object]}          [description]
+    */
+
 
     Position.prototype.moveToPos = function(position) {
       var oldPos, opts, positionObj, returnValue, self;
@@ -363,7 +569,9 @@
       } else {
         returnValue = positionObj;
       }
-      if (position === void 0) position = opts.position;
+      if (position === void 0) {
+        position = opts.position;
+      }
       if (typeof position === 'string') {
         setPosByStr(self, position);
       } else if ($.isPlainObject(position)) {
@@ -375,6 +583,13 @@
     return Position;
 
   })();
+
+  /**
+   * [setPosByStr description]
+   * @param {[jQuery]} self   [description]
+   * @param {[String]} posStr [description]
+  */
+
 
   setPosByStr = function(self, posStr) {
     var parentHeight, parentObj, parentOffset, parentWidth, posSetting, propFunc, targetHeight, targetWidth, windowHeight, windowObj, windowWidth;
@@ -398,7 +613,9 @@
       bottom: null
     };
     parentOffset = self.parent().offset();
-    if ((self.css('position')) === 'fixed') posSetting.position = 'fixed';
+    if ((self.css('position')) === 'fixed') {
+      posSetting.position = 'fixed';
+    }
     switch (posStr.toLowerCase()) {
       case 'center':
         parentWidth = Math.max(Math.min(parentWidth, windowWidth), targetWidth);
@@ -425,6 +642,13 @@
     return null;
   };
 
+  /**
+   * [setPosByObject description]
+   * @param {[jQuery]} self [description]
+   * @param {[Object]} pos  [description]
+  */
+
+
   setPosByObject = function(self, pos) {
     var posSetting;
     posSetting = {
@@ -435,7 +659,9 @@
       bottom: null
     };
     $.extend(posSetting, pos);
-    if (self.css('position' === 'fixed')) posSetting.position = "fixed";
+    if (self.css('position' === 'fixed')) {
+      posSetting.position = "fixed";
+    }
     self.css(posSetting);
     return null;
   };
@@ -443,16 +669,20 @@
 }).call(this);
 (function() {
   var $, $$, Interaction, checkArea, complete, setInteractionMask, setInteractionSetting,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = window.jQuery;
 
   $$ = window.BASE;
 
   Interaction = (function() {
-
-    Interaction.name = 'Interaction';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} options [description]
+     * @return {[Interaction]}         [description]
+    */
 
     function Interaction(self, options) {
       var defaults, interactionObj;
@@ -481,6 +711,12 @@
       interactionObj.opts.widgetKey = $$.getRandomKey();
     }
 
+    /**
+     * [init description]
+     * @return {[Interaction]} [description]
+    */
+
+
     Interaction.prototype.init = function() {
       var interactionObj, mouseDownEvent, mouseMoveEvent, mouseUpEvent, obj, opts, self;
       interactionObj = this;
@@ -489,17 +725,23 @@
       if (opts.type === 'resize') {
         obj = self.find('.uiResizable');
         if (obj.length === 0) {
-          if (self.css('position' === 'static')) self.css('position', 'relative');
+          if (self.css('position' === 'static')) {
+            self.css('position', 'relative');
+          }
           obj = ($('<div class="uiResizable"></div>')).appendTo(self);
         }
       } else if (opts.type === 'drag') {
         obj = self.find('.uiDraggable');
-        if (obj.length === 0) obj = self.addClass('uiDraggable');
+        if (obj.length === 0) {
+          obj = self.addClass('uiDraggable');
+        }
       }
       mouseDownEvent = "mousedown." + opts.type;
       obj.on(mouseDownEvent, function(e) {
         setInteractionSetting(self, opts, e);
-        if (opts.type === 'resize') return false;
+        if (opts.type === 'resize') {
+          return false;
+        }
         return !opts.stopMouseDownPropagation;
       });
       mouseMoveEvent = "mousemove." + opts.widgetKey;
@@ -508,7 +750,9 @@
         var maskItem, newHeight, newWidth, offsetX, offsetY, position;
         if (opts.start) {
           if (opts.mask === null) {
-            if ((setInteractionMask(self, opts, e)) === false) return;
+            if ((setInteractionMask(self, opts, e)) === false) {
+              return;
+            }
           }
           maskItem = opts.mask;
           opts.doing = true;
@@ -518,16 +762,24 @@
             newWidth = opts.originWidth + offsetX;
             newHeight = opts.originHeight + offsetY;
             if (opts.maxWidth !== null) {
-              if (newWidth > opts.maxWidth) newWidth = opts.maxWidth;
+              if (newWidth > opts.maxWidth) {
+                newWidth = opts.maxWidth;
+              }
             }
             if (opts.minWidth !== null) {
-              if (newWidth < opts.minWidth) newWidth = opts.minWidth;
+              if (newWidth < opts.minWidth) {
+                newWidth = opts.minWidth;
+              }
             }
             if (opts.maxHeight !== null) {
-              if (newHeight > opts.maxHeight) newHeight = opts.maxHeight;
+              if (newHeight > opts.maxHeight) {
+                newHeight = opts.maxHeight;
+              }
             }
             if (opts.minHeight !== null) {
-              if (newHeight < opts.minHeight) newHeight = opts.minHeight;
+              if (newHeight < opts.minHeight) {
+                newHeight = opts.minHeight;
+              }
             }
             if ((opts.event.doing(self, maskItem, newWidth, newHeight)) === false) {
               return;
@@ -538,7 +790,9 @@
               left: opts.originPosition.left + offsetX,
               top: opts.originPosition.top + offsetY
             };
-            if ((opts.event.doing(self, maskItem, position)) === false) return;
+            if ((opts.event.doing(self, maskItem, position)) === false) {
+              return;
+            }
             maskItem.css(position);
             if (opts.dest !== null) {
               if ((checkArea(opts, position, opts.destPosition)) === true) {
@@ -567,25 +821,43 @@
 
   })();
 
+  /**
+   * [complete description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
   complete = function(self, opts) {
     var maskItem, offset;
     if (opts.doing === false) {
       opts.start = false;
-      return;
+      return null;
     }
     maskItem = opts.mask;
     opts.start = opts.doing = false;
     if (opts.type === 'resize') {
       if ((opts.event.stop(self, maskItem, maskItem.width(), maskItem.height())) === false) {
-        return;
+        return null;
       }
     } else if (opts.type === 'drag') {
       offset = maskItem.offset();
-      if ((opts.event.stop(self, maskItem, offset)) === false) return;
+      if ((opts.event.stop(self, maskItem, offset)) === false) {
+        return null;
+      }
     }
     maskItem.remove();
-    return opts.mask = null;
+    opts.mask = null;
+    return null;
   };
+
+  /**
+   * [setInteractionSetting description]
+   * @param {[jQuery]} self [description]
+   * @param {[Object]} opts [description]
+   * @param {[Event]} e    [description]
+  */
+
 
   setInteractionSetting = function(self, opts, e) {
     opts.start = true;
@@ -593,7 +865,17 @@
       opts.start = false;
       return false;
     }
+    return null;
   };
+
+  /**
+   * [setInteractionMask description]
+   * @param {[jQuery]} self [description]
+   * @param {[Object]} opts [description]
+   * @param {[Event]} e    [description]
+   * @return {[Boolean]}  [description]
+  */
+
 
   setInteractionMask = function(self, opts, e) {
     var dest, marginLeftValue, marginTopValue, maskHeight, maskPosition, maskWidth;
@@ -651,6 +933,15 @@
     return true;
   };
 
+  /**
+   * [checkArea description]
+   * @param  {[Object]} opts            [description]
+   * @param  {[Object]} position        [description]
+   * @param  {[Array]} destPositionArr [description]
+   * @return {[Boolean]}                 [description]
+  */
+
+
   checkArea = function(opts, position, destPositionArr) {
     var bottom, check, crossFlag, left, pos, right, top, _i, _len;
     left = position.left;
@@ -675,18 +966,32 @@
     return crossFlag;
   };
 
+  /**
+   * [draggable description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[jQuery]}         [description]
+  */
+
+
   $.fn.draggable = function(options) {
     var draggableObj, self;
     self = this;
     draggableObj = new $$.Draggable(self, options);
-    return draggableObj.init(self, draggableObj.opts);
+    draggableObj.init(self, draggableObj.opts);
+    return self;
   };
 
   $$.Draggable = (function(_super) {
 
     __extends(Draggable, _super);
 
-    Draggable.name = 'Draggable';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[Draggable]}         [description]
+    */
+
 
     function Draggable(self, options) {
       var defaults, draggableObj, opts;
@@ -723,18 +1028,32 @@
 
   })(Interaction);
 
+  /**
+   * [resizable description]
+   * @param  {[Object]} options [description]
+   * @return {[jQuery]}         [description]
+  */
+
+
   $.fn.resizable = function(options) {
     var resizableObj, self;
     self = this;
     resizableObj = new $$.Resizable(self, options);
-    return resizableObj.init(self, resizableObj.opts);
+    resizableObj.init(self, resizableObj.opts);
+    return self;
   };
 
   $$.Resizable = (function(_super) {
 
     __extends(Resizable, _super);
 
-    Resizable.name = 'Resizable';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[Resizable]}         [description]
+    */
+
 
     function Resizable(self, options) {
       var defaults, opts, resizableObj;
@@ -760,7 +1079,9 @@
       if (opts.event.stop === $.noop) {
         opts.event.stop = function(resizeObj, mask, width, height) {
           var content, otherItemHeightTotal, outerOffset;
-          if ((opts.resizeStop(self)) === false) return false;
+          if ((opts.resizeStop(self)) === false) {
+            return false;
+          }
           height = Math.min(Math.max(opts.minHeight, height), opts.maxHeight);
           width = Math.min(Math.max(opts.minWidth, width), opts.maxWidth);
           otherItemHeightTotal = 0;
@@ -786,12 +1107,19 @@
 }).call(this);
 (function() {
   var $, $$, changeButtonStatus, getOriginClass, initButtonSet, initEvent, removeStatusClass, setOriginClass, setStatusClass,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = window.jQuery;
 
   $$ = window.BASE;
+
+  /**
+   * [buttonSet description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[jQuery, Others]}         [description]
+  */
+
 
   $.fn.buttonSet = function(options) {
     var args, result, self;
@@ -799,7 +1127,9 @@
     args = Array.prototype.slice.call(arguments);
     args.push($$.ButtonSet);
     result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
     return result;
   };
 
@@ -807,7 +1137,13 @@
 
     __extends(ButtonSet, _super);
 
-    ButtonSet.name = 'ButtonSet';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[ButtonSet]}         [description]
+    */
+
 
     function ButtonSet(self, options) {
       var buttonSetObj, defaults, opts;
@@ -840,6 +1176,12 @@
       buttonSetObj.init();
     }
 
+    /**
+     * [init description]
+     * @return {[ButtonSet]} [description]
+    */
+
+
     ButtonSet.prototype.init = function() {
       var buttonSetObj;
       buttonSetObj = this;
@@ -848,61 +1190,117 @@
       return buttonSetObj;
     };
 
+    /**
+     * [clickButton description]
+     * @param  {[Integer]} {[Optional]} index [description]
+     * @return {[ButtonSet]}       [description]
+    */
+
+
     ButtonSet.prototype.clickButton = function(index) {
       var buttonSetObj, obj, opts, self;
       buttonSetObj = this;
       self = buttonSetObj.jqObj;
       opts = buttonSetObj.opts;
-      if (index == null) index = 0;
+      if (index == null) {
+        index = 0;
+      }
       obj = self.children().eq(index).click();
       return buttonSetObj;
     };
+
+    /**
+     * [button description]
+     * @param  {[Integer]} {[Optional]} index [description]
+     * @return {[jQuery]}       [description]
+    */
+
 
     ButtonSet.prototype.button = function(index) {
       var buttonSetObj, opts, self;
       buttonSetObj = this;
       self = buttonSetObj.jqObj;
       opts = buttonSetObj.opts;
-      if (index == null) index = 0;
+      if (index == null) {
+        index = 0;
+      }
       return self.children().eq(index);
     };
+
+    /**
+     * [buttonText description]
+     * @param  {[Integer]} {[Optional]} index [description]
+     * @param  {[String]} {[Optional]} text  [description]
+     * @return {[String, ButtonSet]}       [description]
+    */
+
 
     ButtonSet.prototype.buttonText = function(index, text) {
       var buttonSetObj, iconObj, obj, opts, self;
       buttonSetObj = this;
       self = buttonSetObj.jqObj;
       opts = buttonSetObj.opts;
-      if (index == null) index = 0;
+      if (index == null) {
+        index = 0;
+      }
       obj = self.children().eq(index);
-      if (arguments.length !== 2) return obj.text();
+      if (arguments.length !== 2) {
+        return obj.text();
+      }
       iconObj = obj.children('.uiIcon');
       obj.html(text).prepend(iconObj);
       return buttonSetObj;
     };
+
+    /**
+     * [buttonIcon description]
+     * @param  {[Integer]} {[Optional]} index [description]
+     * @param  {[String]} {[Optional]} icon  [description]
+     * @return {[String, ButtonSet]}       [description]
+    */
+
 
     ButtonSet.prototype.buttonIcon = function(index, icon) {
       var buttonSetObj, iconArrayTotal, iconClass, obj, opts, self;
       buttonSetObj = this;
       self = buttonSetObj.jqObj;
       opts = buttonSetObj.opts;
-      if (index == null) index = 0;
-      if (!$.isArray(opts.iconArray)) return '';
+      if (index == null) {
+        index = 0;
+      }
+      if (!$.isArray(opts.iconArray)) {
+        return '';
+      }
       obj = self.children().eq(index);
       iconArrayTotal = opts.iconArray.length - 1;
-      if (index > iconArrayTotal) index = iconArrayTotal;
+      if (index > iconArrayTotal) {
+        index = iconArrayTotal;
+      }
       iconClass = opts.iconArray[index];
-      if (arguments.length < 2) return iconClass;
+      if (arguments.length < 2) {
+        return iconClass;
+      }
       obj.children('.uiIcon').removeClass(iconClass).addClass(icon);
       opts.iconArray[index] = icon;
       return buttonSetObj;
     };
+
+    /**
+     * [val description]
+     * @param  {[Integer]} {[Optional]} index   [description]
+     * @param  {[Boolean]} {[Optional]} checked [description]
+     * @return {[Boolean, ButtonSet]}         [description]
+    */
+
 
     ButtonSet.prototype.val = function(index, checked) {
       var buttonSetObj, hasStatus, obj, opts, self;
       buttonSetObj = this;
       self = buttonSetObj.jqObj;
       opts = buttonSetObj.opts;
-      if (index == null) index = 0;
+      if (index == null) {
+        index = 0;
+      }
       obj = self.children().eq(index);
       hasStatus = false;
       $.each('uiCheckBox uiRadio uiImgRadio uiImgCheckBox'.split(' '), function(n, value) {
@@ -911,9 +1309,13 @@
           return false;
         }
       });
-      if (!hasStatus) return false;
+      if (!hasStatus) {
+        return false;
+      }
       if (arguments.length < 2) {
-        if (obj.hasClass(opts.buttonSelectedClass)) return true;
+        if (obj.hasClass(opts.buttonSelectedClass)) {
+          return true;
+        }
         return false;
       }
       if (checked === true) {
@@ -928,19 +1330,37 @@
       return buttonSetObj;
     };
 
+    /**
+     * [removeButton description]
+     * @param  {[Integer]} {[Optional]} index [description]
+     * @return {[JQuery]}       [description]
+    */
+
+
     ButtonSet.prototype.removeButton = function(index) {
       var buttonSetObj, opts, self;
       buttonSetObj = this;
       self = buttonSetObj.jqObj;
       opts = buttonSetObj.opts;
-      if (index == null) index = 0;
-      if ($.isArray(opts.iconArray)) opts.iconArray.splice(index, 1);
+      if (index == null) {
+        index = 0;
+      }
+      if ($.isArray(opts.iconArray)) {
+        opts.iconArray.splice(index, 1);
+      }
       return self.children('.uiButton').eq(index).remove();
     };
 
     return ButtonSet;
 
   })($$.Widget);
+
+  /**
+   * [initButtonSet description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
 
   initButtonSet = function(self, opts) {
     var buttonTypeClass, groupStr;
@@ -967,7 +1387,9 @@
     self.addClass('uiButtonSet uiWidget uiNoSelectText').children().each(function(n) {
       var buttonClass, floatClass, index, marginAttr, obj;
       obj = $(this).addClass(buttonTypeClass);
-      if (groupStr.length !== 0) obj.attr('group', groupStr);
+      if (groupStr.length !== 0) {
+        obj.attr('group', groupStr);
+      }
       if (opts.buttonMargin > 0) {
         buttonClass = "uiButton uiCornerAll " + opts.buttonClass + " " + opts.buttonBorderClass;
       } else {
@@ -998,7 +1420,9 @@
       if ($.isArray(opts.iconArray)) {
         index = n;
         floatClass = '';
-        if (index >= opts.iconArray.length) index = opts.iconArray.length - 1;
+        if (index >= opts.iconArray.length) {
+          index = opts.iconArray.length - 1;
+        }
         if ($.isArray(opts.iconFloatArray)) {
           if (n >= opts.iconFloatArray.length) {
             floatClass = opts.iconFloatArray[opts.iconFloatArray.length - 1];
@@ -1014,18 +1438,29 @@
         }
         obj.wrapInner('<span />').prepend("<span class=\"uiIcon " + opts.iconArray[index] + " " + floatClass + "\"></span>");
       }
-      if (opts.buttonWidth !== 0) return obj.width(opts.buttonWidth);
+      if (opts.buttonWidth !== 0) {
+        return obj.width(opts.buttonWidth);
+      }
     });
     if (opts.buttonMargin === 0) {
       self.addClass("" + opts.buttonSetClass + " " + opts.buttonSetBorderClass);
     }
-    if (opts.vertical) self.width(self.children().outerWidth(true));
+    if (opts.vertical) {
+      self.width(self.children().outerWidth(true));
+    }
     initEvent(self, opts);
     if (opts.defaultSelectedItem > -1) {
       changeButtonStatus(self.children().eq(opts.defaultSelectedItem), opts);
     }
     return null;
   };
+
+  /**
+   * [initEvent description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
 
   initEvent = function(self, opts) {
     var mouseDownFlag;
@@ -1034,7 +1469,9 @@
       var obj;
       obj = $(this);
       if (e.type === 'click') {
-        if ((opts.click(self, obj, e)) === false) return;
+        if ((opts.click(self, obj, e)) === false) {
+          return;
+        }
         changeButtonStatus(obj, opts);
       }
       switch (e.type) {
@@ -1050,6 +1487,13 @@
     });
     return null;
   };
+
+  /**
+   * [changeButtonStatus description]
+   * @param  {[jQuery]} obj  [description]
+   * @param  {[Object]} opts [description]
+  */
+
 
   changeButtonStatus = function(obj, opts) {
     var group, siblingsObj;
@@ -1076,500 +1520,92 @@
     } else {
       obj.removeClass(opts.buttonHoverClass).addClass(opts.buttonClass);
     }
-    return $.each(opts.statusClass, function(key, value) {
+    $.each(opts.statusClass, function(key, value) {
       return opts.statusClass[key] = null;
     });
+    return null;
   };
+
+  /**
+   * [setOriginClass description]
+   * @param {[jQuery]} obj         [description]
+   * @param {[Object]} opts        [description]
+   * @param {[String]} statusClass [description]
+  */
+
 
   setOriginClass = function(obj, opts, statusClass) {
-    return $.each([opts.buttonClass, opts.buttonSelectedClass, opts.buttonHoverClass, opts.buttonPressClass], function(n, value) {
-      if (obj.hasClass(value)) opts.statusClass[statusClass] = value;
+    $.each([opts.buttonClass, opts.buttonSelectedClass, opts.buttonHoverClass, opts.buttonPressClass], function(n, value) {
+      if (obj.hasClass(value)) {
+        opts.statusClass[statusClass] = value;
+      }
       return obj.removeClass(value);
     });
+    return null;
   };
 
+  /**
+   * [getOriginClass description]
+   * @param  {[jQuery]} obj         [description]
+   * @param  {[Object]} opts        [description]
+   * @param  {[String]} statusClass [description]
+  */
+
+
   getOriginClass = function(obj, opts, statusClass) {
-    if (opts.statusClass[statusClass] === null) return;
+    if (opts.statusClass[statusClass] === null) {
+      return;
+    }
     $.each([opts.buttonClass, opts.buttonSelectedClass, opts.buttonHoverClass, opts.buttonPressClass], function(n, value) {
       return obj.removeClass(value);
     });
-    return obj.addClass(opts.statusClass[statusClass]);
+    obj.addClass(opts.statusClass[statusClass]);
+    return null;
   };
+
+  /**
+   * [setStatusClass description]
+   * @param {[jQuery]} obj         [description]
+   * @param {[Object]} opts        [description]
+   * @param {[String]} statusClass [description]
+  */
+
 
   setStatusClass = function(obj, opts, statusClass) {
     setOriginClass(obj, opts, statusClass);
-    return obj.addClass(statusClass);
+    obj.addClass(statusClass);
+    return null;
   };
+
+  /**
+   * [removeStatusClass description]
+   * @param  {[jQuery]} obj         [description]
+   * @param  {[Object]} opts        [description]
+   * @param  {[String]} statusClass [description]
+  */
+
 
   removeStatusClass = function(obj, opts, statusClass) {
-    return getOriginClass(obj, opts, statusClass);
-  };
-
-}).call(this);
-(function() {
-  var $, $$, checkItemViewStatus, initEvent, initTabs,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
-  $ = window.jQuery;
-
-  $$ = window.BASE;
-
-  $.fn.tabs = function(options) {
-    var args, result, self;
-    self = this;
-    args = Array.prototype.slice.call(arguments);
-    args.push($$.Tabs);
-    result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
-    return result;
-  };
-
-  $$.Tabs = (function(_super) {
-
-    __extends(Tabs, _super);
-
-    Tabs.name = 'Tabs';
-
-    function Tabs(self, options) {
-      var defaults, opts, tabsObj;
-      tabsObj = this;
-      if (!(tabsObj instanceof $$.Tabs)) return new $$.Tabs(self, options);
-      defaults = {
-        tabsClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
-        titleBarClass: $$.defaultGradientBG,
-        tabsItemWidth: -1,
-        tabsItemMargin: -1,
-        closableArray: "all",
-        activateIndex: 0,
-        tabsItemHoverClass: $$.hoverGradientBG,
-        tabsItemSelectedClass: "selected",
-        titleList: null,
-        change: $.noop,
-        close: $.noop,
-        leftClick: $.noop,
-        rightClick: $.noop,
-        tabsItemTotal: 0,
-        tabsItemOuterWidth: 0,
-        tabsItemViewTotal: 0,
-        tabsItemViewIndex: 0,
-        titleBarHTML: '<div class="uiTitleBar uiTabsList uiNoSelectText"><div class="uiListContent"><div class="uiTabsItemContainer"></div></div></div>',
-        tabsItemHTML: '<div class="uiTabsItem uiCornerTop"></div>',
-        contentHTML: '<div class="uiContent"></div>',
-        controlHTML: '<div class="uiLeftArrow uiSmallIcon uiArrowLeftIcon"></div><div class="uiRightArrow uiSmallIcon uiArrowRightIcon""></div>',
-        closeHTML: '<div class="uiCloseItemBtn uiSmallIcon uiSmallcloseButtonIcon"></div>'
-      };
-      opts = $.extend(defaults, options);
-      tabsObj.constructor.__super__.constructor.call(tabsObj, self, opts);
-      tabsObj.init();
-    }
-
-    Tabs.prototype.init = function() {
-      var tabsObj;
-      tabsObj = this;
-      tabsObj.createWidget();
-      initTabs(tabsObj.jqObj, tabsObj.opts);
-      return tabsObj;
-    };
-
-    Tabs.prototype.addItem = function(content, title, index) {
-      var contentObj, contentTarget, insertFunc, itemTarget, opts, self, tabsObj;
-      tabsObj = this;
-      self = tabsObj.jqObj;
-      opts = tabsObj.opts;
-      contentObj = this(content);
-      if (title == null) title = contentObj.attr('title');
-      if (isNaN(parseInt(index))) {
-        itemTarget = $('> .uiTabsList > .uiListContent > .uiTabsItemContainer', self);
-        contentTarget = self;
-        insertFunc = 'appendTo';
-      } else {
-        itemTarget = ($('> .uiTabsList > .uiListContent > .uiTabsItemContainer > .uiTabsItem', self)).eq(index);
-        contentTarget = (self.childdren('.uiTabsContent')).eq(index);
-        insertFunc = 'insertBefore';
-      }
-      $(opts.tabsItemHTML).html(title + opts.closeHTML)[insertFunc](itemTarget);
-      $(opts.contentHTML).addClass('uiTabsContent uiHidden').append(contentObj)[insertFunc](itemTarget);
-      opts.tabsItemTotal++;
-      return tabsObj;
-    };
-
-    Tabs.prototype.activate = function(index) {
-      var opts, self, tabsObj;
-      tabsObj = this;
-      self = tabsObj.jqObj;
-      opts = tabsObj.opts;
-      if (arguments.length === 0) return opts.activateIndex;
-      $('>.uiTitleBar >.uiListContent .uiTabsItem', self).eq(index).trigger('click.uiTabs');
-      return tabsObj;
-    };
-
-    Tabs.prototype.item = function(index, content, title) {
-      var item, opts, self, tabsObj, titleBar;
-      tabsObj = this;
-      self = tabsObj.jqObj;
-      opts = tabsObj.opts;
-      if (index == null) index = 0;
-      item = $('>.uiTabsContent', self).eq(index);
-      titleBar = $('> .uiTabsList > .uiListContent > .uiTabsItemContainer >.uiTabsItem', self).eq(index);
-      if (typeof content === 'undefined') return item;
-      if (content != null) item.html(content);
-      if (typeof title === 'undefined') return titleBar;
-      titleBar.html(title);
-      return tabsObj;
-    };
-
-    return Tabs;
-
-  })($$.Widget);
-
-  initTabs = function(self, opts) {
-    var contentObj, selfHeight, tabsItemList, titleBarHeight, titleBarObj;
-    titleBarObj = $(opts.titleBarHTML).addClass(opts.titleBarClass).append(opts.controlHTML);
-    self.addClas("uiTabs uiWidget " + opts.tabsClass).children().each(function(n) {
-      var closeHTML, contentObj, title;
-      closeHTML = '';
-      if (opts.closableArray === 'all' || (($.isArray(opts.closableArray)) && ($.inArray(n, opts.closableArray)) !== -1)) {
-        closeHTML = opts.closeHTML;
-      }
-      contentObj = ($(this)).addClass('uiTabsContent uiHidden');
-      if ($.isArray(opts.titleList)) title = opts.titleList[n];
-      if (title == null) title = content.attr('title');
-      $(opts.tabsItemHTML).html(title + closeHTML).appendTo($('>.uiListContent >.uiTabsItemContainer', titleBarObj));
-      return opts.tabsItemTotal++;
-    });
-    self.prepend(titleBarObj);
-    tabsItemList = $('> .uiTabsList > .uiListContent .uiTabsItem', self);
-    if (opts.tabsItemWidth > 0) tabsItemList.width(opts.tabsItemWidth);
-    if (opts.tabsItemMargin > -1) {
-      tabsItemList.css('marginLeft', opts.tabsItemMargin);
-    }
-    opts.tabsItemOuterWidth = tabsItemList.outerWidth(true);
-    opts.tabsItemViewTotal = Math.floor(($('>.uiTabsList', self)).width() / opts.tabsItemOuterWidth);
-    if (opts.tabsItemTotal > opts.tabsItemViewTotal) {
-      $('> .uiTitleBar > .uiRightArrow', self).show();
-    }
-    selfHeight = self.height();
-    titleBarHeight = titleBarObj.height();
-    if (selfHeight > titleBarHeight) {
-      contentObj = self.children('.uiTabsContent');
-      contentObj.height(selfHeight - titleBarHeight - (parseInt(contentObj.css('marginTop'))) - (parseInt(contentObj.css('marginBotto'))));
-    }
-    return initEvent(self, opts);
-  };
-
-  initEvent = function(self, opts) {
-    $('> .uiTabsList > .uiListContent > .uiTabsItemContainer', self).on('click.uiTabs', function(e) {
-      var content, index, nextObj, obj, target;
-      target = $(e.target);
-      if (target.hasClass('uiCloseItemBtn')) {
-        obj = target.parent('.uiTabsItem');
-        if ((opts.close(self, obj, e)) === false) return false;
-        nextObj = obj.next();
-        if (nextObj.length !== 0) {
-          nextObj.click();
-        } else {
-          obj.prev().click();
-        }
-        index = obj.index();
-        self.children('.uiTabsContent').eq(index).remove();
-        obj.remove();
-        opts.tabsItemTotal--;
-        checkItemViewStatus(self, opts);
-        return false;
-      } else if (target.hasClass('uiTabsItem')) {
-        index = target.addClass(opts.tabsItemSelectedClass).siblings('.selected').removeClass(opts.tabsItemSelectedClass).end().index();
-        content = (self.children('.uiTabsContent')).eq(index);
-        if ((opts.change(self, target, content, e)) === false) return false;
-        content.removeClass('uiHidden').siblings('.uiTabsContent').addClass('uiHidden');
-        return opts.activateIndex = index;
-      }
-    });
-    $('>.uiTitleBar', self).on('click.uiTabs', function(e) {
-      var clickFunc, scrollLeftValue, target;
-      target = $(e.target);
-      if (target.hasClass('uiRightArrow')) {
-        clickFunc = 'rightClick';
-        opts.tabsItemViewIndex++;
-      } else if (target.hasClass('uiLeftArrow')) {
-        clickFunc = 'leftClick';
-        opts.tabsItemViewIndex--;
-      }
-      if (opts.tabsItemViewIndex < 0) {
-        opts.tabsItemViewIndex = 0;
-        return;
-      } else if (opts.tabsItemTotal - opts.tabsItemViewTotal < opts.tabsItemViewIndex) {
-        opts.tabsItemViewIndex = opts.tabsItemTotal - opts.tabsItemViewTotal;
-        return;
-      }
-      if (clickFunc != null) {
-        if ((opts[clickFunc](self, target, e)) === false) return false;
-        scrollLeftValue = opts.tabsItemOuterWidth * opts.tabsItemViewIndex;
-        target.siblings('.uiListContent').stop().animate({
-          left: -scrollLeftValue
-        }, opts.animateTime);
-        return checkItemViewStatus(self, opts);
-      }
-    });
-    $('>.uiTabsList', self).on('mousewheel.uiTabs', function(e, delta) {
-      if (delta > 0) {
-        $('>.uiLeftArrow', this).click();
-      } else {
-        $('>.uiRightArrow', this).click();
-      }
-      return false;
-    });
-    return $('> .uiTabsList > .uiListContent > .uiTabsItemContainer > .uiTabsItem', self).hover(function() {
-      return $(this).addClass(opts.tabsItemHoverClass);
-    }, function() {
-      return $(this).removeClass(opts.tabsItemHoverClass);
-    });
-  };
-
-  checkItemViewStatus = function(self, opts) {
-    var arrowLeftObj, arrowRightObj;
-    arrowRightObj = $('> .uiTitleBar > .uiRightArrow', self);
-    arrowLeftObj = $('> .uiTitleBar > .uiLeftArrow', self);
-    if (opts.tabsItemTotal - opts.tabsItemViewTotal <= opts.tabsItemViewIndex) {
-      arrowRightObj.hide();
-    } else {
-      arrowRightObj.show();
-    }
-    if (opts.tabsItemViewIndex <= 0) {
-      return arrowLeftObj.hide();
-    } else {
-      return arrowLeftObj.show();
-    }
-  };
-
-}).call(this);
-(function() {
-  var $, $$, initEvent, initSlide, setSlide,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
-  $ = window.jQuery;
-
-  $$ = window.BASE;
-
-  $.fn.slide = function(options) {
-    var args, result, self;
-    self = this;
-    args = Array.prototype.slice.call(arguments);
-    args.push($$.Slide);
-    result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
-    return result;
-  };
-
-  $$.Slide = (function(_super) {
-
-    __extends(Slide, _super);
-
-    Slide.name = 'Slide';
-
-    function Slide(self, options) {
-      var defaults, opts, slideObj;
-      slideObj = this;
-      if (!(slideObj instanceof $$.Slide)) return new $$.Slide(self, options);
-      defaults = {
-        mode: 'horizontal',
-        slideClass: "" + $$.defaultGradientBG + " uiCornerAll " + $$.defaultBorder,
-        sliderCrossClass: $$.hoverGradientBG,
-        slideClassVerticalMode: "uiBlackGradientBG uiBlackBorder uiCornerAll",
-        sliderCrossClassVerticalMode: "uiBlueGradientBG",
-        sliderClass: "uiBlackBorder uiDefaultSliderBG uiCornerAll",
-        sliderLength: 8,
-        sliderTop: -5,
-        sliderLeft: -5,
-        noUserEvent: false,
-        userImageSlider: false,
-        min: 0,
-        max: 100,
-        step: 0.2,
-        animation: true,
-        click: $.noop,
-        slide: $.noop,
-        slideLength: 0,
-        slideValue: 0,
-        slideMax: 0,
-        slideBegin: 0,
-        panelHTML: '<div class="uiPanel"></div>',
-        sliderCrossHTML: '<div class="uiSliderCross"></div>',
-        sliderHTML: '<div class="uiSlider"></div>',
-        slideDrag: false
-      };
-      opts = $.extend(defaults, options);
-      slideObj.constructor.__super__.constructor.call(slideObj, self, opts);
-      slideObj.init();
-    }
-
-    Slide.prototype.init = function() {
-      var slideObj;
-      slideObj = this;
-      slideObj.createWidget();
-      initSlide(slideObj.jqObj, slideObj.opts);
-      return slideObj;
-    };
-
-    Slide.prototype.val = function(value, animate) {
-      var opts, self, slideObj;
-      slideObj = this;
-      self = slideObj.jqObj;
-      opts = slideObj.opts;
-      if (arguments.length === 0) return opts.slideValue;
-      if (arguments.length === 1) animate = true;
-      if (!opts.slideDrag) return setSlide(self, opts, value, animate, true);
-    };
-
-    Slide.prototype.beforeDestroy = function() {
-      var opts, self, slideObj;
-      slideObj = this;
-      self = slideObj.jqObj;
-      opts = slideObj.opts;
-      return $(docuemnt).off("." + opts.widgetKey);
-    };
-
-    return Slide;
-
-  })($$.Widget);
-
-  initSlide = function(self, opts) {
-    var slider, sliderCross;
-    if (opts.mode === 'vertical') {
-      opts.slideClass = opts.slideClassVerticalMode;
-      opts.sliderCrossClass = opts.sliderCrossClassVerticalMode;
-    }
-    slider = $(opts.sliderHTML);
-    sliderCross = $(opts.sliderCrossHTML).addClass(opts.sliderCrossClass);
-    if (opts.userImageSlider) {
-      slider.addClass('uiImageSlider uiIcon uiCicleIcon');
-    } else {
-      slider.addClass(opts.sliderClass);
-    }
-    self.addClass("uiSlide uiWidget uiNoSelectText " + opts.slideClass).append($(opts.panelHTML).append(sliderCross).append(slider));
-    if (opts.userImageSlider) opts.sliderLength = slider.width();
-    if (opts.mode === 'vertical') {
-      opts.slideBegin = opts.sliderTop = self.offset().top;
-      slider.css('left', opts.sliderLeft - 1);
-      sliderCross.width('100%');
-      if (!opts.userImageSlider) {
-        slider.width(self.width() - 2 * opts.sliderLeft).height(opts.sliderLength);
-      } else {
-        slider.css('top', -(opts.sliderLength >> 2));
-      }
-    } else {
-      opts.slideBegin = opts.sliderLeft = self.offset().left;
-      slider.css('top', opts.sliderTop - 1);
-      sliderCross.height('100%');
-      if (!opts.userImageSlider) {
-        slider.height(self.height() - 2 * opts.sliderTop).width(opts.sliderLength);
-      } else {
-        self.css('left', -(opts.sliderLength >> 2));
-      }
-      opts.slideLength = self.width();
-    }
-    opts.slideMax = opts.slideLength;
-    if (!opts.userImageSlider) opts.slideMax -= opts.sliderLength - 2;
-    if (!opts.noUserEvent) initEvent(self, opts);
-    if (opts.slideValue !== 0) return setSlide(self, opts, opts.slideValue);
-  };
-
-  initEvent = function(self, opts) {
-    var documentObj, mouseMoveEvent, mouseUpEvent, panelObj;
-    documentObj = $(document);
-    panelObj = $('>.uiPanel', self);
-    panelObj.on('click.uiSlide', function(e) {
-      var beginValue, percent;
-      if ($(e.target).hasClass('uiSlider')) return false;
-      if ((opts.click(self, $(this, e))) === false) return false;
-      if (opts.mode === 'vertical') {
-        beginValue = e.clientY + documentObj.scrollTop() + self.parent().scrollTop();
-      } else {
-        beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft();
-      }
-      percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax;
-      return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), opts.animation);
-    });
-    panelObj.on('mousewheel.uiSlide', function(e, delta) {
-      var percent, positionStr;
-      positionStr = 'left';
-      if (opts.mode === 'vertical') positionStr = 'top';
-      percent = (parseInt($('>.uiSlider', this).css(positionStr))) / opts.slideMax;
-      setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), false);
-      return false;
-    });
-    $('>.uiSlider', panelObj).on('mousedown.uiSlide', function(e) {
-      return opts.slideDrag = true;
-    });
-    mouseMoveEvent = "mousemove." + opts.widgetKey;
-    mouseUpEvent = "mouseup." + opts.widgetKey;
-    return documentObj.on({
-      mouseMoveEvent: function(e) {
-        var beginValue, percent;
-        if (opts.slideDrag) {
-          if (opts.mode === 'vertical') {
-            beginValue = e.clientY + documentObj.scrollTop() + self.parent().scrollTop();
-          } else {
-            beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft();
-          }
-          percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax;
-          return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), false);
-        }
-      },
-      mouseUpEvent: function(e) {
-        return opts.slideDrag = false;
-      }
-    });
-  };
-
-  setSlide = function(self, opts, value, animate, jumpToEnd) {
-    var obj, percent, props, sliderCross, sliderCrossProps, sliderCrossValue;
-    obj = $('>.uiPanel >.uiSlider', self);
-    if (value == null) value = 0;
-    value = value > opts.max ? opts.max : (value < 0 ? 0 : value);
-    opts.slideValue = value;
-    percent = (value - opts.min) / (opts.max - opts.min);
-    value = opts.slideMax * percent;
-    if (opts.userImageSlider && value === 0) value = -(opts.sliderLength >> 2);
-    sliderCross = $('>.uiPanel >.uiSliderCross', self);
-    sliderCrossValue = value + 2;
-    if (opts.mode === 'vertical') {
-      props = {
-        top: value
-      };
-      sliderCrossProps = {
-        height: sliderCrossValue
-      };
-    } else {
-      props = {
-        left: value
-      };
-      sliderCrossProps = {
-        width: sliderCrossValue
-      };
-    }
-    if (animate) {
-      obj.stop(true, jumpToEnd).animate(props, opts.animateTime, function() {
-        return opts.slide(self, obj, opts.slideValue);
-      });
-      return sliderCross.stop(true, jumpToEnd).animate(sliderCrossProps, opts.animateTime);
-    } else {
-      obj.css(props);
-      sliderCross.css(sliderCrossProps);
-      return opts.slide(self, obj, opts.slideValue);
-    }
+    getOriginClass(obj, opts, statusClass);
+    return null;
   };
 
 }).call(this);
 (function() {
   var $, $$, initAccordion, initEvent, setContentHeight,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = window.jQuery;
 
   $$ = window.BASE;
+
+  /**
+   * [accordion description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[jQuery, Others]}         [description]
+  */
+
 
   $.fn.accordion = function(options) {
     var args, result, self;
@@ -1577,7 +1613,9 @@
     args = Array.prototype.slice.call(arguments);
     args.push($$.Accordion);
     result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
     return result;
   };
 
@@ -1585,7 +1623,13 @@
 
     __extends(Accordion, _super);
 
-    Accordion.name = 'Accordion';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[Accordion]}         [description]
+    */
+
 
     function Accordion(self, options) {
       var accordionObj, defaults, opts;
@@ -1597,7 +1641,7 @@
         accordionClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
         titleBarClass: $$.defaultGradientBG,
         activeClass: $$.defaultGradientBG,
-        itemTitleBarClass: 'uiBlackGradientBG',
+        itemTitleBarClass: 'uiBlueGradientBG',
         active: [0],
         event: 'click',
         titleIcon: null,
@@ -1618,6 +1662,12 @@
       accordionObj.init();
     }
 
+    /**
+     * [init description]
+     * @return {[Accordion]} [description]
+    */
+
+
     Accordion.prototype.init = function() {
       var accordionObj;
       accordionObj = this;
@@ -1625,6 +1675,13 @@
       initAccordion(accordionObj.jqObj, accordionObj.opts);
       return accordionObj;
     };
+
+    /**
+     * [activate description]
+     * @param  {[Integer]} {[Optional]} index [description]
+     * @return {[Array, Accordion]}       [description]
+    */
+
 
     Accordion.prototype.activate = function(index) {
       var accordionObj, activateArr, obj, opts, self, titleBarList;
@@ -1635,24 +1692,41 @@
         activateArr = [];
         titleBarList = $('> .uiTitleBar', self);
         titleBarList.each(function(n) {
-          if ($(this).hasClass(opts.activeClass)) return activateArr.push(n);
+          if ($(this).hasClass(opts.activeClass)) {
+            return activateArr.push(n);
+          }
         });
         return activateArr;
       }
       obj = $('> .uiTitleBar', self).eq(index);
-      if (!obj.hasClass(opts.activeClass)) obj.trigger(opts.event);
+      if (!obj.hasClass(opts.activeClass)) {
+        obj.trigger(opts.event);
+      }
       return accordionObj;
     };
+
+    /**
+     * [item description]
+     * @param  {[Integer]} {[Optional]} index   [description]
+     * @param  {[String]} {[Optional]} content [description]
+     * @param  {[String]} {[Optional]} title   [description]
+     * @return {[jQuery, Accordion]}         [description]
+    */
+
 
     Accordion.prototype.item = function(index, content, title) {
       var accordionObj, contentObj, opts, self, titleBarObj;
       accordionObj = this;
       self = accordionObj.jqObj;
       opts = accordionObj.opts;
-      if (index == null) index = 0;
+      if (index == null) {
+        index = 0;
+      }
       titleBarObj = $('> .uiTitleBar', self).eq(index);
       contentObj = titleBarObj.next();
-      if (arguments.length === 1) return contentObj;
+      if (arguments.length === 1) {
+        return contentObj;
+      }
       if (arguments.length === 2) {
         if (content != null) {
           contentObj.html(content);
@@ -1661,9 +1735,20 @@
         return titleBarObj;
       }
       titleBarObj.children('.uiTitle').html(title);
-      if (content != null) contentObj.html(content);
+      if (content != null) {
+        contentObj.html(content);
+      }
       return accordionObj;
     };
+
+    /**
+     * [addItem description]
+     * @param {[HTML, DOM, jQuery]} item  [description]
+     * @param {[String]} {[Optional]} title [description]
+     * @param {[Integer]} {[Optional]} index [description]
+     * @return {[Accordion]} [description]
+    */
+
 
     Accordion.prototype.addItem = function(item, title, index) {
       var accordionObj, itemObj, obj, opts, self, titleBarObj;
@@ -1671,7 +1756,9 @@
       self = accordionObj.jqObj;
       opts = accordionObj.opts;
       itemObj = $(item);
-      if (title == null) title = itemObj.attr('title');
+      if (title == null) {
+        title = itemObj.attr('title');
+      }
       titleBarObj = $(opts.itemTitleBarHTML).addClass(opts.itemTitleBarClass).children('.uiTitle').html(title).end();
       itemObj.addClass('uiContent uiHidden').height(opts.height);
       if (arguments.length === 2) {
@@ -1684,14 +1771,30 @@
       return accordionObj;
     };
 
+    /**
+     * [removeItem description]
+     * @param  {[Integer]} {[Optional]} index [description]
+     * @return {[jQuery]}       [description]
+    */
+
+
     Accordion.prototype.removeItem = function(index) {
       var accordionObj, opts, self;
       accordionObj = this;
       self = accordionObj.jqObj;
       opts = accordionObj.opts;
-      if (index == null) index = 0;
+      if (index == null) {
+        index = 0;
+      }
       return $('>.uiTitleBar', self).eq(index).next().andSelf().remove();
     };
+
+    /**
+     * [title description]
+     * @param  {[String]} {[Optional]} title [description]
+     * @return {[String, Accordion]}       [description]
+    */
+
 
     Accordion.prototype.title = function(title) {
       var accordionObj, obj, opts, self;
@@ -1699,17 +1802,28 @@
       self = accordionObj.jqObj;
       opts = accordionObj.opts;
       obj = $('>.uiAccordionTitleBar > .title', self);
-      if (arguments.length === 0) return obj.text();
+      if (arguments.length === 0) {
+        return obj.text();
+      }
       obj.text(title);
       return accordionObj;
     };
+
+    /**
+     * [titleIcon description]
+     * @param  {[String]} {[Optional]} titleIcon [description]
+     * @return {[String, Accordion]}           [description]
+    */
+
 
     Accordion.prototype.titleIcon = function(titleIcon) {
       var accordionObj, obj, opts, self;
       accordionObj = this;
       self = accordionObj.jqObj;
       opts = accordionObj.opts;
-      if (arguments.length === 0) return opts.titleIcon;
+      if (arguments.length === 0) {
+        return opts.titleIcon;
+      }
       if (opts.titleIcon === null) {
         $('>.uiAccordionTitleBar', self).prepend($('<span class="uiTitleIcon" />'));
       }
@@ -1721,6 +1835,13 @@
     return Accordion;
 
   })($$.Widget);
+
+  /**
+   * [initAccordion description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
 
   initAccordion = function(self, opts) {
     var title, titleBar;
@@ -1743,38 +1864,69 @@
         buttonClass = 'uiArrowUpIcon uiArrowDownIcon';
       }
       title = null;
-      if ($.isArray(opts.itemTitleList)) title = opts.itemTitleList[n];
-      if (title == null) title = obj.attr('title');
+      if ($.isArray(opts.itemTitleList)) {
+        title = opts.itemTitleList[n];
+      }
+      if (title == null) {
+        title = obj.attr('title');
+      }
       itemTitleBarObj = $(opts.itemTitleBarHTML).addClass(titleBarClass);
       itemTitleBarObj.children('.uiUserBtn').toggleClass(buttonClass).siblings('.uiTitle').html(title);
       return itemTitleBarObj.insertBefore(obj.addClass("uiContent " + contentClass).height(opts.height));
     });
     self.prepend(titleBar);
-    return initEvent(self, opts);
+    initEvent(self, opts);
+    return null;
   };
+
+  /**
+   * [initEvent description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
 
   initEvent = function(self, opts) {
     self.on("" + opts.event + ".uiAccordion", function(e) {
       var changeObjList, selectedList, target;
-      if (opts.disabled || opts.animating) return;
+      if (opts.disabled || opts.animating) {
+        return;
+      }
       target = $(e.target);
       if (!target.hasClass('uiTitleBar')) {
         target = target.parent('.uiTitleBar');
-        if (target.length === 0) return;
+        if (target.length === 0) {
+          return;
+        }
       }
-      if (!opts.toggle) if (target.hasClass(opts.activeClass)) return;
-      if ((opts.changeStart(self, target, e)) === false) return false;
+      if (!opts.toggle) {
+        if (target.hasClass(opts.activeClass)) {
+          return;
+        }
+      }
+      if ((opts.changeStart(self, target, e)) === false) {
+        return false;
+      }
       opts.animating = true;
       selectedList = opts.hideOthers === true ? $(">.uiTitleBar." + opts.activeClass, self).not(target).removeClass("" + opts.activeClass + " uiActive").addClass(opts.itemTitleBarClass) : null;
       changeObjList = target.toggleClass("" + opts.itemTitleBarClass + " " + opts.activeClass + " uiActive").add(selectedList);
       changeObjList.children('.uiUserBtn').toggleClass('uiArrowUpIcon uiArrowDownIcon');
       return changeObjList.next('.uiContent').stop(true, true)[opts.animation](opts.animateTime, function() {
-        if ($(this).is(':visible')) opts.change(self, target, e);
+        if ($(this).is(':visible')) {
+          opts.change(self, target, e);
+        }
         return opts.animating = false;
       });
     });
     return null;
   };
+
+  /**
+   * [setContentHeight description]
+   * @param {[jQuery]} self [description]
+   * @param {[Object]} opts [description]
+  */
+
 
   setContentHeight = function(self, opts) {
     var completeLoad, content, contentHeight, imgList, imgTotal, otherItemHeightTotal, outerOffset;
@@ -1816,259 +1968,20 @@
 
 }).call(this);
 (function() {
-  var $, $$, initDropDownList, initEvent,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
-  $ = window.jQuery;
-
-  $$ = window.BASE;
-
-  $.fn.dropDownList = function(options) {
-    var args, result, self;
-    self = this;
-    args = Array.prototype.slice.call(arguments);
-    args.push($$.DropDownList);
-    result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
-    return result;
-  };
-
-  $$.DropDownList = (function(_super) {
-
-    __extends(DropDownList, _super);
-
-    DropDownList.name = 'DropDownList';
-
-    function DropDownList(self, options) {
-      var defaults, dropDownListObj, opts;
-      dropDownListObj = this;
-      if (!(dropDownListObj instanceof $$.DropDownList)) {
-        return new $$.DropDownList(self, options);
-      }
-      defaults = {
-        dropDownListClass: "" + $$.defaultGradientBG + "  uiCornerAll " + $$.defaultBorder,
-        selectListClass: "" + $$.defaultGradientBG + " uiCornerAll uiBlackBorder uiBlackBoxShadow",
-        pageSize: 5,
-        showAll: false,
-        multiple: false,
-        dropListType: 'normal',
-        searchTip: '查找/search',
-        hasScrollBar: false,
-        listItemHoverClass: $$.hoverGradientBG,
-        divideChar: ";",
-        click: $.noop,
-        change: $.noop,
-        input: $.noop,
-        blur: $.noop,
-        focus: $.noop,
-        selectItemTotal: 0,
-        listItemOuterHeight: 0,
-        dropDownHTML: '<div class="uiDropDown">\
-                      <div class="uiDropDownBtn uiSmallIcon uiDropdownButtonIcon uiBlackBorder"></div>\
-                  </div>',
-        selectListHTML: '<div class="uiSelectList"></div>',
-        noListDataHTML: '<li style="font-size:12px;">无数据项..</li>'
-      };
-      opts = $.extend({}, defaults, options);
-      dropDownListObj.constructor.__super__.constructor.call(dropDownListObj, self, opts);
-      dropDownListObj.init();
-    }
-
-    DropDownList.prototype.init = function() {
-      var dropDownListObj;
-      dropDownListObj = this;
-      dropDownListObj.createWidget();
-      initDropDownList(dropDownListObj.jqObj, dropDownListObj.opts);
-      return dropDownListObj;
-    };
-
-    DropDownList.prototype.selectedItem = function(index) {
-      var dropDownListObj, opts, self;
-      dropDownListObj = this;
-      self = dropDownListObj.jqObj;
-      opts = dropDownListObj.opts;
-      if (arguments.length === 0) return $('>.uiSelectList>.selected', self);
-      $("> .uiSelectList > li:eq(" + index + ")", self).click();
-      return dropDownListObj;
-    };
-
-    DropDownList.prototype.list = function(list) {
-      var dropDownListObj, item, listItemObj, listShowTotal, opts, selectList, self, _i, _len;
-      dropDownListObj = this;
-      self = dropDownListObj.jqObj;
-      opts = dropDownListObj.opts;
-      selectList = $('.uiSelectList', self);
-      if (arguments.length === 0) return selectList.children();
-      selectList.empty();
-      if (typeof list === 'string') {
-        selectList.html(list);
-      } else if ($.isArray(list)) {
-        if (list.length === 0) {
-          selectList.append(opts.noListDataHTML);
-        } else {
-          for (_i = 0, _len = list.length; _i < _len; _i++) {
-            item = list[_i];
-            selectList.append("<li>" + item + "</li>");
-          }
-        }
-      } else {
-        selectList.append(list);
-      }
-      listItemObj = selectList.find('>li');
-      opts.selectItemTotal = listItemObj.length;
-      if (opts.multiple) {
-        listItemObj.prepend('<span class="uiSmallIcon uiSelectedIcon uiSelected"></span>');
-      }
-      listShowTotal = opts.pageSize;
-      if (opts.showAll || opts.pageSize > opts.selectItemTotal) {
-        listShowTotal = opts.selectItemTotal;
-      }
-      if (opts.listItemOuterHeight === 0) {
-        opts.listItemOuterHeight = listItemObj.outerHeight(true);
-      }
-      selectList.height(opts.listItemOuterHeight * listShowTotal);
-      $('>.uiSelectList >li', self).hover(function() {
-        return ($(this)).addClass(opts.listItemHoverClass);
-      }, function() {
-        return ($(this)).removeClass(opts.listItemHoverClass);
-      });
-      return dropDownListObj;
-    };
-
-    DropDownList.prototype.showSelectList = function() {
-      var dropDownListObj, opts, self;
-      dropDownListObj = this;
-      self = dropDownListObj.jqObj;
-      opts = dropDownListObj.opts;
-      self.children('.uiSelectList').show();
-      return dropDownListObj;
-    };
-
-    DropDownList.prototype.hideSelectList = function() {
-      var dropDownListObj, opts, self;
-      dropDownListObj = this;
-      self = dropDownListObj.jqObj;
-      opts = dropDownListObj.opts;
-      self.children('.uiSelectList').hide();
-      return dropDownListObj;
-    };
-
-    DropDownList.prototype.val = function() {
-      var dropDownListObj, opts, selectedValue, self;
-      dropDownListObj = this;
-      self = dropDownListObj.jqObj;
-      opts = dropDownListObj.opts;
-      selectedValue = [];
-      self.find('>.uiSelectList >.selected').each(function() {
-        return selectedValue.push($(this).text());
-      });
-      return selectedValue;
-    };
-
-    return DropDownList;
-
-  })($$.Widget);
-
-  initDropDownList = function(self, opts) {
-    var dropDown, liItemList, multiple, selectList;
-    multiple = opts.multiple ? 'uiMultiple' : '';
-    selectList = self.children().addClass("" + multiple + " uiSelectList " + opts.selectListClass);
-    liItemList = $('>li', selectList);
-    opts.selectItemTotal = liItemList.length;
-    dropDown = $(opts.dropDownHTML);
-    if (opts.dropListType === 'search') {
-      dropDown.append("<input type=\"text\" value=\"" + opts.searchTip + "\" class=\"uiCornerAll\" />");
-    } else {
-      dropDown.append('<span></span>');
-    }
-    if (opts.multiple) {
-      liItemList.prepend('<span class="uiSmallIcon uiSelectedIcon uiSelected"></span>');
-    }
-    self.prepend(dropDown).addClass("uiDorpDownList uiWidget " + opts.dropDownListClass);
-    if (opts.dropListType === 'search') {
-      dropDown.children('input').width(dropDown.width() - 2 * parseInt(dropDown.css('paddingLeft')) - dropDown.children('.uiDropDownBtn').outerWidth(true));
-    }
-    if (opts.showAll) {
-      opts.pageSize = opts.selectItemTotal;
-    } else {
-      opts.listItemOuterHeight = liItemList.outerHeight();
-      selectList.height(opts.listItemOuterHeight * opts.pageSize);
-    }
-    selectList.hide();
-    initEvent(self, opts);
-    return null;
-  };
-
-  initEvent = function(self, opts) {
-    var selectList, selectedContent;
-    selectedContent = $('> .uiDropDown > span, > .uiDropDown > input', self);
-    $('>.uiDropDown', self).on('click.uiDorpDownList', function(e) {
-      var obj;
-      obj = $(this);
-      if ((opts.click(self, obj, e)) === false) return false;
-      return obj.siblings('.uiSelectList').slideToggle(opts.animateTime);
-    });
-    selectList = $('>.uiSelectList', self);
-    if (opts.hasScrollBar) {
-      selectList.scrollBar();
-    } else {
-      selectList.on('mousewheel.uiDorpDownList', function(e, delta) {
-        var obj, showLiItem;
-        obj = $(this);
-        if ($('>li', obj).length <= opts.pageSize) return;
-        if (delta < 0) {
-          showLiItem = $('>li:not(:hidden):first', obj);
-          if (showLiItem.nextAll('li').length >= opts.pageSize) showLiItem.hide();
-        } else {
-          $('>li:hidden:last', obj).show();
-        }
-        return false;
-      });
-    }
-    selectList.on('click.uiDorpDownList', function(e) {
-      var obj, propFunc, selectedValue, target;
-      obj = $(this);
-      target = $(e.target);
-      propFunc = $.prop ? 'prop' : 'attr';
-      if (target[propFunc]('tagName').toUpperCase() !== 'LI') {
-        target = target.parent('li');
-        if (target.length === 0) return;
-      }
-      selectedValue = target.toggleClass('selected').text();
-      if (opts.multiple) {
-        selectedValue = '';
-        obj.children('.selected').each(function() {
-          return selectedValue += $(this).text() + opts.divideChar;
-        });
-        selectedValue = selectedValue.substring(0, selectedValue.length - 1);
-      } else {
-        obj.slideUp();
-      }
-      if (opts.dropListType === 'search') {
-        selectedContent.val(selectedValue);
-      } else {
-        selectedContent.html(selectedValue);
-      }
-      if ((opts.change(self, obj, selectedValue, e)) === false) return false;
-    });
-    $('> .uiSelectList > li', self).hover(function() {
-      return $(this).addClass(opts.listItemHoverClass);
-    }, function() {
-      return $(this).removeClass(opts.listItemHoverClass);
-    });
-    return null;
-  };
-
-}).call(this);
-(function() {
   var $, $$, initDialog, initEvent, setContentHeight,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = window.jQuery;
 
   $$ = window.BASE;
+
+  /**
+   * [dialog description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[jQuery, Others]}         [description]
+  */
+
 
   $.fn.dialog = function(options) {
     var args, result, self;
@@ -2076,7 +1989,9 @@
     args = Array.prototype.slice.call(arguments);
     args.push($$.Dialog);
     result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
     return result;
   };
 
@@ -2084,12 +1999,20 @@
 
     __extends(Dialog, _super);
 
-    Dialog.name = 'Dialog';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[Dialog]}         [description]
+    */
+
 
     function Dialog(self, options) {
       var defaults, dialogObj, opts;
       dialogObj = this;
-      if (!(dialogObj instanceof $$.Dialog)) return new $$.Dialog(self, options);
+      if (!(dialogObj instanceof $$.Dialog)) {
+        return new $$.Dialog(self, options);
+      }
       defaults = {
         dialogClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
         titleBarClass: $$.defaultGradientBG,
@@ -2145,6 +2068,12 @@
       dialogObj.init();
     }
 
+    /**
+     * [init description]
+     * @return {[Dialog]} [description]
+    */
+
+
     Dialog.prototype.init = function() {
       var dialogObj;
       dialogObj = this;
@@ -2153,23 +2082,42 @@
       return dialogObj;
     };
 
+    /**
+     * [title description]
+     * @param  {[String]} {[Optional]} title [description]
+     * @return {[String, Dialog]}       [description]
+    */
+
+
     Dialog.prototype.title = function(title) {
       var dialogObj, obj, opts, self;
       dialogObj = this;
       self = dialogObj.jqObj;
       opts = dialogObj.opts;
       obj = $('>.uiTitleBar >.uiTitle', self);
-      if (arguments.length === 0) return obj.text();
+      if (arguments.length === 0) {
+        return obj.text();
+      }
       opts.title = title;
-      return obj.html(obj.html().replace(obj.text(), title));
+      obj.html(obj.html().replace(obj.text(), title));
+      return dialogObj;
     };
+
+    /**
+     * [titleIcon description]
+     * @param  {[String]} {[Optional]} titleIcon [description]
+     * @return {[String, Dialog]}           [description]
+    */
+
 
     Dialog.prototype.titleIcon = function(titleIcon) {
       var dialogObj, obj, opts, self;
       dialogObj = this;
       self = dialogObj.jqObj;
       opts = dialogObj.opts;
-      if (arguments.length === 0) return opts.titleIcon;
+      if (arguments.length === 0) {
+        return opts.titleIcon;
+      }
       if (opts.titleIcon !== '') {
         $('>.uiTitleBar >.uiTitle', self).prepend('<span class="uiTitleIcon" />');
       }
@@ -2178,14 +2126,70 @@
       return dialogObj;
     };
 
+    /**
+     * [content description]
+     * @param  {[String]} {[Optional]} content [description]
+     * @return {[jQuery, Dialog]}         [description]
+    */
+
+
     Dialog.prototype.content = function(content) {
       var contentObj, dialogObj, opts, self;
       dialogObj = this;
       self = dialogObj.jqObj;
       opts = dialogObj.opts;
       contentObj = self.children('.uiContent');
-      if (arguments.length === 0) return contentObj;
+      if (arguments.length === 0) {
+        return contentObj;
+      }
       contentObj.empty().append($(content));
+      return dialogObj;
+    };
+
+    /**
+     * [close description]
+     * @return {[Dialog]} [description]
+    */
+
+
+    Dialog.prototype.close = function() {
+      var dialogObj, opts, self;
+      dialogObj = this;
+      self = dialogObj.jqObj;
+      opts = dialogObj.opts;
+      if (opts.beforeClose(self) === false) {
+        return dialogObj;
+      }
+      self[opts.closeAnimate](function() {
+        if (opts.close(self) === false) {
+          return;
+        }
+        if (opts.destroyOnClose) {
+          return dialogObj.destroy();
+        }
+      });
+      return dialogObj;
+    };
+
+    /**
+     * [open description]
+     * @return {[Dialog]} [description]
+    */
+
+
+    Dialog.prototype.open = function() {
+      var dialogObj, opts, self;
+      dialogObj = this;
+      self = dialogObj.jqObj;
+      opts = dialogObj.opts;
+      if (opts.beforeOpen(self) === false) {
+        return dialogObj;
+      }
+      self[opts.openAnimate](function() {
+        if (opts.open(self) === false) {
+
+        }
+      });
       return dialogObj;
     };
 
@@ -2193,15 +2197,31 @@
 
   })($$.Widget);
 
+  /**
+   * [initDialog description]
+   * @param  {[Dialog]} dialogObj [description]
+   * @param  {[jQuery]} self      [description]
+   * @param  {[Object]} opts      [description]
+  */
+
+
   initDialog = function(dialogObj, self, opts) {
     var buttonSetHTML, buttonSetObj, contentObj, controlButton, key, maskObj, titleBar, titleBarClass, value, _ref;
     titleBarClass = "" + opts.titleBarClass + " uiCornerAll";
-    if (opts.title === '') opts.title = (self.attr('title')) || '';
-    if (opts.draggable) titleBarClass += ' uiDraggable';
+    if (opts.title === '') {
+      opts.title = (self.attr('title')) || '';
+    }
+    if (opts.draggable) {
+      titleBarClass += ' uiDraggable';
+    }
     if (opts.controlButton) {
       controlButton = $(opts.controlButtonSetHTML);
-      if (!opts.minimize) controlButton.children('.uiMinBtn').hide();
-      if (!opts.closable) controlButton.children('.uiCloseBtn').hide();
+      if (!opts.minimize) {
+        controlButton.children('.uiMinBtn').hide();
+      }
+      if (!opts.closable) {
+        controlButton.children('.uiCloseBtn').hide();
+      }
     }
     contentObj = self.children().addClass('uiContent');
     if (!opts.noTitleBar) {
@@ -2224,7 +2244,9 @@
       }
       if ($$.msie6) {
         opts.selectList = $('select:visible').filter(function() {
-          if ($(this).css('visibility' !== 'hidden')) return true;
+          if ($(this).css('visibility' !== 'hidden')) {
+            return true;
+          }
         });
         opts.selectList.css('visibility', 'hidden');
         maskObj.height($(document).height());
@@ -2240,7 +2262,9 @@
       buttonSetHTML += '</div>';
       buttonSetObj = $(buttonSetHTML).buttonSet({
         click: function(target) {
-          if ((opts.buttonSet[target.text()](this)) === false) return false;
+          if ((opts.buttonSet[target.text()](this)) === false) {
+            return false;
+          }
           return dialogObj.close(self, opts, target);
         }
       });
@@ -2248,14 +2272,27 @@
     }
     if (opts.resizable) {
       self.append(opts.resizeHTML);
-      if (self.css('position') === 'static') self.css('position', 'relative');
+      if (self.css('position') === 'static') {
+        self.css('position', 'relative');
+      }
     }
     opts.minHeight = Math.min(self.height(), opts.minHeight);
     opts.minWidth = Math.min(self.width(), opts.minWidth);
     setContentHeight(self, opts);
     initEvent(dialogObj, self, opts);
-    if (!opts.autoOpen) return self.hide();
+    if (!opts.autoOpen) {
+      self.hide();
+    }
+    return null;
   };
+
+  /**
+   * [initEvent description]
+   * @param  {[Dialog]} dialogObj [description]
+   * @param  {[jQuery]} self      [description]
+   * @param  {[Object]} opts      [description]
+  */
+
 
   initEvent = function(dialogObj, self, opts) {
     var dragStopFunction, posStr, resizeStopFunc;
@@ -2271,14 +2308,18 @@
         func = 'close';
       }
       if (func != null) {
-        if (self.is(':animated')) return false;
+        if (self.is(':animated')) {
+          return false;
+        }
         dialogObj[func](self, opts, obj, e);
         return false;
       }
     });
     if (opts.draggable) {
       dragStopFunction = function(dragObj, mask, offset) {
-        if ((opts.dragStop(self)) === false) return false;
+        if ((opts.dragStop(self)) === false) {
+          return false;
+        }
         return self.offset(offset);
       };
       self.draggable({
@@ -2292,7 +2333,9 @@
     if (opts.resizable) {
       resizeStopFunc = function(resizeObj, mask, width, height) {
         var content, otherItemHeightTotal, outerOffset;
-        if ((opts.resizeStop(self)) === false) return false;
+        if ((opts.resizeStop(self)) === false) {
+          return false;
+        }
         height = Math.min(Math.max(opts.minHeight, height), opts.maxHeight);
         width = Math.min(Math.max(opts.minWidth, width), opts.maxWidth);
         otherItemHeightTotal = 0;
@@ -2307,7 +2350,7 @@
         outerOffset = content.outerHeight(true - content.height());
         return content.height(height - otherItemHeightTotal - outerOffset);
       };
-      return self.resizable({
+      self.resizable({
         event: {
           start: opts.resizeStart,
           doing: opts.resizing,
@@ -2319,7 +2362,15 @@
         maxWidth: opts.maxWidth
       });
     }
+    return null;
   };
+
+  /**
+   * [setContentHeight description]
+   * @param {[jQuery]} self [description]
+   * @param {[Object]} opts [description]
+  */
+
 
   setContentHeight = function(self, opts) {
     var completeLoad, content, contentHeight, imgList, imgTotal, otherItemHeightTotal, outerOffset;
@@ -2360,13 +2411,536 @@
 
 }).call(this);
 (function() {
-  var $, $$, initEvent, initMenu,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var $, $$, initDropDownList, initEvent,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = window.jQuery;
 
   $$ = window.BASE;
+
+  /**
+   * [dropDownList description]
+   * @param  {[Obejct]} options [description]
+   * @return {[jQuery, Others]}         [description]
+  */
+
+
+  $.fn.dropDownList = function(options) {
+    var args, result, self;
+    self = this;
+    args = Array.prototype.slice.call(arguments);
+    args.push($$.DropDownList);
+    result = $$.createWidgetByJQuery.apply(self, args);
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
+    return result;
+  };
+
+  $$.DropDownList = (function(_super) {
+
+    __extends(DropDownList, _super);
+
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[DropDownList]}         [description]
+    */
+
+
+    function DropDownList(self, options) {
+      var defaults, dropDownListObj, opts;
+      dropDownListObj = this;
+      if (!(dropDownListObj instanceof $$.DropDownList)) {
+        return new $$.DropDownList(self, options);
+      }
+      defaults = {
+        dropDownListClass: "" + $$.defaultGradientBG + "  uiCornerAll " + $$.defaultBorder,
+        selectListClass: "" + $$.defaultGradientBG + " uiCornerAll uiBlackBorder uiBlackBoxShadow",
+        pageSize: 5,
+        showAll: false,
+        multiple: false,
+        dropListType: 'normal',
+        searchTip: '查找/search',
+        hasScrollBar: false,
+        listItemHoverClass: $$.hoverGradientBG,
+        divideChar: ";",
+        click: $.noop,
+        change: $.noop,
+        input: $.noop,
+        blur: $.noop,
+        focus: $.noop,
+        selectItemTotal: 0,
+        listItemOuterHeight: 0,
+        dropDownHTML: '<div class="uiDropDown">\
+                      <div class="uiDropDownBtn uiSmallIcon uiDropdownButtonIcon uiBlackBorder"></div>\
+                  </div>',
+        selectListHTML: '<div class="uiSelectList"></div>',
+        noListDataHTML: '<li style="font-size:12px;">无数据项..</li>'
+      };
+      opts = $.extend({}, defaults, options);
+      dropDownListObj.constructor.__super__.constructor.call(dropDownListObj, self, opts);
+      dropDownListObj.init();
+    }
+
+    /**
+     * [init description]
+     * @return {[DropDownList]} [description]
+    */
+
+
+    DropDownList.prototype.init = function() {
+      var dropDownListObj;
+      dropDownListObj = this;
+      dropDownListObj.createWidget();
+      initDropDownList(dropDownListObj.jqObj, dropDownListObj.opts);
+      return dropDownListObj;
+    };
+
+    /**
+     * [selectedItem description]
+     * @param  {[Integer]} {[Optional]} index [description]
+     * @return {[jQuery, DropDownList]}       [description]
+    */
+
+
+    DropDownList.prototype.selectedItem = function(index) {
+      var dropDownListObj, opts, self;
+      dropDownListObj = this;
+      self = dropDownListObj.jqObj;
+      opts = dropDownListObj.opts;
+      if (arguments.length === 0) {
+        return $('>.uiSelectList>.selected', self);
+      }
+      $("> .uiSelectList > li:eq(" + index + ")", self).click();
+      return dropDownListObj;
+    };
+
+    /**
+     * [list description]
+     * @param  {[String, Array, DOM, jQuery]} list [description]
+     * @return {[jQuery, DropDownList]}      [description]
+    */
+
+
+    DropDownList.prototype.list = function(list) {
+      var dropDownListObj, item, listItemObj, listShowTotal, opts, selectList, self, _i, _len;
+      dropDownListObj = this;
+      self = dropDownListObj.jqObj;
+      opts = dropDownListObj.opts;
+      selectList = $('.uiSelectList', self);
+      if (arguments.length === 0) {
+        return selectList.children();
+      }
+      selectList.empty();
+      if (typeof list === 'string') {
+        selectList.html(list);
+      } else if ($.isArray(list)) {
+        if (list.length === 0) {
+          selectList.append(opts.noListDataHTML);
+        } else {
+          for (_i = 0, _len = list.length; _i < _len; _i++) {
+            item = list[_i];
+            selectList.append("<li>" + item + "</li>");
+          }
+        }
+      } else {
+        selectList.append(list);
+      }
+      listItemObj = selectList.find('>li');
+      opts.selectItemTotal = listItemObj.length;
+      if (opts.multiple) {
+        listItemObj.prepend('<span class="uiSmallIcon uiSelectedIcon uiSelected"></span>');
+      }
+      listShowTotal = opts.pageSize;
+      if (opts.showAll || opts.pageSize > opts.selectItemTotal) {
+        listShowTotal = opts.selectItemTotal;
+      }
+      if (opts.listItemOuterHeight === 0) {
+        opts.listItemOuterHeight = listItemObj.outerHeight(true);
+      }
+      selectList.height(opts.listItemOuterHeight * listShowTotal);
+      $('>.uiSelectList >li', self).hover(function() {
+        return ($(this)).addClass(opts.listItemHoverClass);
+      }, function() {
+        return ($(this)).removeClass(opts.listItemHoverClass);
+      });
+      return dropDownListObj;
+    };
+
+    /**
+     * [showSelectList description]
+     * @return {[DropDownList]} [description]
+    */
+
+
+    DropDownList.prototype.showSelectList = function() {
+      var dropDownListObj, opts, self;
+      dropDownListObj = this;
+      self = dropDownListObj.jqObj;
+      opts = dropDownListObj.opts;
+      self.children('.uiSelectList').show();
+      return dropDownListObj;
+    };
+
+    /**
+     * [hideSelectList description]
+     * @return {[DropDownList]} [description]
+    */
+
+
+    DropDownList.prototype.hideSelectList = function() {
+      var dropDownListObj, opts, self;
+      dropDownListObj = this;
+      self = dropDownListObj.jqObj;
+      opts = dropDownListObj.opts;
+      self.children('.uiSelectList').hide();
+      return dropDownListObj;
+    };
+
+    /**
+     * [val description]
+     * @return {[Array]} [description]
+    */
+
+
+    DropDownList.prototype.val = function() {
+      var dropDownListObj, opts, selectedValue, self;
+      dropDownListObj = this;
+      self = dropDownListObj.jqObj;
+      opts = dropDownListObj.opts;
+      selectedValue = [];
+      self.find('>.uiSelectList >.selected').each(function() {
+        return selectedValue.push($(this).text());
+      });
+      return selectedValue;
+    };
+
+    return DropDownList;
+
+  })($$.Widget);
+
+  /**
+   * [initDropDownList description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
+  initDropDownList = function(self, opts) {
+    var dropDown, liItemList, multiple, selectList;
+    multiple = opts.multiple ? 'uiMultiple' : '';
+    selectList = self.children().addClass("" + multiple + " uiSelectList " + opts.selectListClass);
+    liItemList = $('>li', selectList);
+    opts.selectItemTotal = liItemList.length;
+    dropDown = $(opts.dropDownHTML);
+    if (opts.dropListType === 'search') {
+      dropDown.append("<input type=\"text\" value=\"" + opts.searchTip + "\" class=\"uiCornerAll\" />");
+    } else {
+      dropDown.append('<span></span>');
+    }
+    if (opts.multiple) {
+      liItemList.prepend('<span class="uiSmallIcon uiSelectedIcon uiSelected"></span>');
+    }
+    self.prepend(dropDown).addClass("uiDorpDownList uiWidget " + opts.dropDownListClass);
+    if (opts.dropListType === 'search') {
+      dropDown.children('input').width(dropDown.width() - 2 * parseInt(dropDown.css('paddingLeft')) - dropDown.children('.uiDropDownBtn').outerWidth(true));
+    }
+    if (opts.showAll) {
+      opts.pageSize = opts.selectItemTotal;
+    } else {
+      opts.listItemOuterHeight = liItemList.outerHeight();
+      selectList.height(opts.listItemOuterHeight * opts.pageSize);
+    }
+    selectList.hide();
+    initEvent(self, opts);
+    return null;
+  };
+
+  /**
+   * [initEvent description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
+  initEvent = function(self, opts) {
+    var selectList, selectedContent;
+    selectedContent = $('> .uiDropDown > span, > .uiDropDown > input', self);
+    $('>.uiDropDown', self).on('click.uiDorpDownList', function(e) {
+      var obj;
+      obj = $(this);
+      if ((opts.click(self, obj, e)) === false) {
+        return false;
+      }
+      return obj.siblings('.uiSelectList').slideToggle(opts.animateTime);
+    });
+    selectList = $('>.uiSelectList', self);
+    if (opts.hasScrollBar) {
+      selectList.scrollBar();
+    } else {
+      selectList.on('mousewheel.uiDorpDownList', function(e, delta) {
+        var obj, showLiItem;
+        obj = $(this);
+        if ($('>li', obj).length <= opts.pageSize) {
+          return;
+        }
+        if (delta < 0) {
+          showLiItem = $('>li:not(:hidden):first', obj);
+          if (showLiItem.nextAll('li').length >= opts.pageSize) {
+            showLiItem.hide();
+          }
+        } else {
+          $('>li:hidden:last', obj).show();
+        }
+        return false;
+      });
+    }
+    selectList.on('click.uiDorpDownList', function(e) {
+      var obj, propFunc, selectedValue, target;
+      obj = $(this);
+      target = $(e.target);
+      propFunc = $.prop ? 'prop' : 'attr';
+      if (target[propFunc]('tagName').toUpperCase() !== 'LI') {
+        target = target.parent('li');
+        if (target.length === 0) {
+          return;
+        }
+      }
+      selectedValue = target.toggleClass('selected').text();
+      if (opts.multiple) {
+        selectedValue = '';
+        obj.children('.selected').each(function() {
+          return selectedValue += $(this).text() + opts.divideChar;
+        });
+        selectedValue = selectedValue.substring(0, selectedValue.length - 1);
+      } else {
+        obj.slideUp();
+      }
+      if (opts.dropListType === 'search') {
+        selectedContent.val(selectedValue);
+      } else {
+        selectedContent.html(selectedValue);
+      }
+      if ((opts.change(self, obj, selectedValue, e)) === false) {
+        return false;
+      }
+    });
+    $('> .uiSelectList > li', self).hover(function() {
+      return $(this).addClass(opts.listItemHoverClass);
+    }, function() {
+      return $(this).removeClass(opts.listItemHoverClass);
+    });
+    return null;
+  };
+
+}).call(this);
+(function() {
+  var $, $$, initEvent, initList,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  $ = window.jQuery;
+
+  $$ = window.BASE;
+
+  /**
+   * [list description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[jQuery]}         [description]
+  */
+
+
+  $.fn.list = function(options) {
+    var args, result, self;
+    self = this;
+    args = Array.prototype.slice.call(arguments);
+    args.push($$.List);
+    result = $$.createWidgetByJQuery.apply(self, args);
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
+    return result;
+  };
+
+  $$.List = (function(_super) {
+
+    __extends(List, _super);
+
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[List]}         [description]
+    */
+
+
+    function List(self, options) {
+      var defaults, listObj, opts;
+      listObj = this;
+      if (!(listObj instanceof $$.List)) {
+        return new $$.List(self, options);
+      }
+      defaults = {
+        title: null,
+        indexKey: "data-key",
+        titleBarClass: $$.defaultGradientBG,
+        titleIcon: null,
+        listClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
+        listItemClass: "uiListItem",
+        listItemHoverClass: "uiLightBlueGradientBG",
+        listItemSelectedClass: "uiBlueGradientBG",
+        click: $.noop,
+        listBackIndexArr: [],
+        showListItem: null,
+        listWidth: 0,
+        titleBarHTML: '<div class="uiListTitleBar uiNoSelectText"><span></span><span class="uiListBack uiIcon uiBackIcon">Back</span></div>',
+        moreItemHTML: '<span class="uiListMoreBtn uiArrowRightIcon uiSmallIcon"></span>'
+      };
+      opts = $.extend(defaults, options);
+      listObj.constructor.__super__.constructor.call(listObj, self, opts);
+      listObj.init();
+    }
+
+    /**
+     * [init description]
+     * @return {[List]} [description]
+    */
+
+
+    List.prototype.init = function() {
+      var listObj;
+      listObj = this;
+      listObj.createWidget();
+      initList(listObj.jqObj, listObj.opts);
+      return listObj;
+    };
+
+    return List;
+
+  })($$.Widget);
+
+  /**
+   * [initList description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
+  initList = function(self, opts) {
+    var title, titleBar, ulHeight;
+    title = opts.title || (self.attr('title')) || '';
+    self.addClass("uiList uiWidget " + opts.listClass).children('div:first').addClass('uiListContent');
+    if (title) {
+      titleBar = $(opts.titleBarHTML).addClass(opts.titleBarClass).children('span:first').html(title).end();
+      if (opts.titleIcon) {
+        titleBar.prepend($('<span class="uiTitleIcon" />').addClass(opts.titleIcon));
+      }
+      self.prepend(titleBar);
+    }
+    self.find('li').each(function() {
+      var obj;
+      obj = $(this);
+      obj.addClass(opts.listItemClass);
+      if (obj.attr(opts.indexKey)) {
+        return obj.addClass('uiListMore').prepend(opts.moreItemHTML);
+      }
+    });
+    ulHeight = self.height() - $('>.uiListTitleBar', self).outerHeight(true);
+    opts.listWidth = $('>.uiListContent > ul', self).filter(':gt(0)').hide().end().height(ulHeight).width();
+    initEvent(self, opts);
+    return null;
+  };
+
+  /**
+   * [initEvent description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
+  initEvent = function(self, opts) {
+    $('>.uiListTitleBar >.uiListBack', self).on('click.uiList', function(e) {
+      var marginLeftValue, number, obj;
+      number = opts.listBackIndexArr.pop();
+      if (opts.listBackIndexArr.length === 0) {
+        $(this).fadeOut(opts.defaultAnimateDuration);
+      }
+      obj = $('>.uiListContent > ul', self).filter("[" + opts.indexKey + "=\"" + number + "\"]");
+      if (obj.length === 0) {
+        return;
+      }
+      marginLeftValue = obj.css('marginLeft');
+      return obj.css('marginLeft', -opts.listWidth).show().animate({
+        marginLeft: 0
+      }, opts.defaultAnimateDuration, function() {
+        if (opts.showListItem != null) {
+          opts.showListItem.show();
+        }
+        return $(this).css('marginLeft', marginLeftValue);
+      });
+    });
+    $('>.uiListContent > ul', self).on('click.uiList mouseover.uiList mouseout.uiList', function(e) {
+      var currentNumber, currentObj, jQueryProp, marginLeftValue, number, obj, target;
+      target = $(e.target);
+      jQueryProp = self.prop ? 'prop' : 'attr';
+      if (target[jQueryProp]('tagName').toUpperCase() !== 'LI') {
+        target = target.parent();
+      }
+      if (event.type === 'click') {
+        if (target.hasClass('uiListMore')) {
+          number = target.attr(opts.indexKey);
+          currentObj = $(this);
+          currentNumber = currentObj.attr(opts.indexKey);
+          obj = currentObj.siblings("[" + opts.indexKey + "=\"" + number + "\"]").show();
+          if (obj.length === 0) {
+            return;
+          }
+          $('>.uiListTitleBar >.uiListBack', self).fadeIn(opts.defaultAnimateDuration);
+          opts.listBackIndexArr.push(currentNumber);
+          marginLeftValue = currentObj.css('marginLeft');
+          return currentObj.animate({
+            marginLeft: -opts.listWidth
+          }, opts.defaultAnimateDuration, function() {
+            opts.showListItem = obj;
+            return $(this).hide().css('marginLeft', marginLeftValue);
+          });
+        } else {
+          target.removeClass(opts.listItemHoverClass).addClass(opts.listItemSelectedClass);
+          target.siblings("." + opts.listItemSelectedClass).toggleClass("" + opts.listItemClass + " " + opts.listItemSelectedClass);
+          return opts.click(self, target, e);
+        }
+      } else if (event.type === 'mouseover') {
+        if (target.hasClass(opts.listItemClass)) {
+          return target.removeClass(opts.listItemClass).addClass(opts.listItemHoverClass);
+        }
+      } else if (event.type === 'mouseout') {
+        if (target.hasClass(opts.listItemHoverClass)) {
+          return target.removeClass(opts.listItemHoverClass).addClass(opts.listItemClass);
+        }
+      }
+    });
+    return null;
+  };
+
+}).call(this);
+(function() {
+  var $, $$, initEvent, initMenu,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  $ = window.jQuery;
+
+  $$ = window.BASE;
+
+  /**
+   * [menu description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[jQuery, Others]}         [description]
+  */
+
 
   $.fn.menu = function(options) {
     var args, result, self;
@@ -2374,7 +2948,9 @@
     args = Array.prototype.slice.call(arguments);
     args.push($$.Menu);
     result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
     return result;
   };
 
@@ -2382,12 +2958,20 @@
 
     __extends(Menu, _super);
 
-    Menu.name = 'Menu';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[Menu]}         [description]
+    */
+
 
     function Menu(self, options) {
       var defaults, menuObj, opts;
       menuObj = this;
-      if (!(menuObj instanceof $$.Menu)) return new $$.Menu(self, options);
+      if (!(menuObj instanceof $$.Menu)) {
+        return new $$.Menu(self, options);
+      }
       defaults = {
         topMenuClass: $$.defaultGradientBG,
         subMenuClass: "" + $$.defaultGradientBG + " uiCornerAll " + $$.defaultBorder,
@@ -2397,6 +2981,12 @@
       menuObj.constructor.__super__.constructor.call(menuObj, self, opts);
       menuObj.init();
     }
+
+    /**
+     * [init description]
+     * @return {[Menu]} [description]
+    */
+
 
     Menu.prototype.init = function() {
       var menuObj;
@@ -2410,6 +3000,13 @@
 
   })($$.Widget);
 
+  /**
+   * [initMenu description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
   initMenu = function(self, opts) {
     var topLevelListObj, topMenuWidth;
     topLevelListObj = self.addClass("uiMenu uiWidget " + opts.topMenuClass).children('ul');
@@ -2420,26 +3017,42 @@
       return topMenuWidth += ($(this)).outerWidth(true);
     });
     topLevelListObj.width(topMenuWidth);
-    return initEvent(self, opts);
+    initEvent(self, opts);
+    return null;
   };
 
+  /**
+   * [initEvent description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
   initEvent = function(self, opts) {
-    return self.find('li').hover(function() {
+    self.find('li').hover(function() {
       return $(this).addClass(opts.hoverClass);
     }, function() {
       return $(this).removeClass(opts.hoverClass);
     });
+    return null;
   };
 
 }).call(this);
 (function() {
   var $, $$, initProgressBar,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = window.jQuery;
 
   $$ = window.BASE;
+
+  /**
+   * [progressBar description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[jQuery, Others]}         [description]
+  */
+
 
   $.fn.progressBar = function(options) {
     var args, result, self;
@@ -2447,7 +3060,9 @@
     args = Array.prototype.slice.call(arguments);
     args.push($$.ProgressBar);
     result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
     return result;
   };
 
@@ -2455,7 +3070,13 @@
 
     __extends(ProgressBar, _super);
 
-    ProgressBar.name = 'ProgressBar';
+    /**
+     * [constructor description]
+     * @param  {[jquery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[ProgressBar]}         [description]
+    */
+
 
     function ProgressBar(self, options) {
       var defaults, opts, progressBarObj;
@@ -2480,6 +3101,12 @@
       progressBarObj.init();
     }
 
+    /**
+     * [init description]
+     * @return {[ProgressBar]} [description]
+    */
+
+
     ProgressBar.prototype.init = function() {
       var opts, progressBarObj;
       progressBarObj = this;
@@ -2487,20 +3114,38 @@
       progressBarObj.createWidget();
       initProgressBar(progressBarObj.jqObj, progressBarObj.opts);
       progressBarObj.val(opts.scrollValue);
-      if (opts.type === 'scroll') progressBarObj.scroll(true);
+      if (opts.type === 'scroll') {
+        progressBarObj.scroll(true);
+      }
       return progressBarObj;
     };
+
+    /**
+     * [val description]
+     * @param  {[Float]} {[Optional]} value [description]
+     * @return {[ProgressBar, Float]}       [description]
+    */
+
 
     ProgressBar.prototype.val = function(value) {
       var opts, progressBarObj, self;
       progressBarObj = this;
       self = progressBarObj.jqObj;
       opts = progressBarObj.opts;
-      if (arguments.length === 0) return opts.value;
+      if (arguments.length === 0) {
+        return opts.value;
+      }
       opts.value = value > 1 ? 1 : (value < 0 ? 0 : value);
       self.children('.progressValue').width(opts.progressBarLength * opts.value);
       return progressBarObj;
     };
+
+    /**
+     * [scroll description]
+     * @param  {[Boolean]} {[Optional]} scrolling [description]
+     * @return {[ProgressBar]}           [description]
+    */
+
 
     ProgressBar.prototype.scroll = function(scrolling) {
       var marginLeftValue, obj, opts, progressBarObj, self;
@@ -2531,6 +3176,13 @@
 
   })($$.Widget);
 
+  /**
+   * [initProgressBar description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
   initProgressBar = function(self, opts) {
     var blockTotal, i, marginValue, obj, progressValue, _i;
     progressValue = $('<div class="progressValue"></div>');
@@ -2538,165 +3190,672 @@
     blockTotal = Math.ceil(self.width() / (opts.blockWidth + marginValue));
     for (i = _i = 1; 1 <= blockTotal ? _i <= blockTotal : _i >= blockTotal; i = 1 <= blockTotal ? ++_i : --_i) {
       obj = $('<div class="progressBlock"></div>').addClass(opts.progressBlockClass).width(opts.blockWidth);
-      if (opts.marginValue !== null) obj.css('marginRight', opts.marginValue);
+      if (opts.marginValue !== null) {
+        obj.css('marginRight', opts.marginValue);
+      }
       progressValue.append(obj);
     }
-    return opts.progressBarLength = self.addClass("uiProgressBar uiWidget " + opts.progressBarClass).append(progressValue).width();
+    opts.progressBarLength = self.addClass("uiProgressBar uiWidget " + opts.progressBarClass).append(progressValue).width();
+    return null;
   };
 
 }).call(this);
 (function() {
-  var $, $$, initEvent, initList,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var $, $$, initEvent, initSlide, setSlide,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = window.jQuery;
 
   $$ = window.BASE;
 
-  $.fn.list = function(options) {
+  /**
+   * [slide description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[jQuery, Others]}         [description]
+  */
+
+
+  $.fn.slide = function(options) {
     var args, result, self;
     self = this;
     args = Array.prototype.slice.call(arguments);
-    args.push($$.List);
+    args.push($$.Slide);
     result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
     return result;
   };
 
-  $$.List = (function(_super) {
+  $$.Slide = (function(_super) {
 
-    __extends(List, _super);
+    __extends(Slide, _super);
 
-    List.name = 'List';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[Slide]}         [description]
+    */
 
-    function List(self, options) {
-      var defaults, listObj, opts;
-      listObj = this;
-      if (!(listObj instanceof $$.List)) return new $$.List(self, options);
+
+    function Slide(self, options) {
+      var defaults, opts, slideObj;
+      slideObj = this;
+      if (!(slideObj instanceof $$.Slide)) {
+        return new $$.Slide(self, options);
+      }
       defaults = {
-        title: null,
-        indexKey: "data-key",
-        titleBarClass: $$.defaultGradientBG,
-        titleIcon: null,
-        listClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
-        listItemClass: "uiListItem",
-        listItemHoverClass: "uiLightBlueGradientBG",
-        listItemSelectedClass: "uiBlueGradientBG",
+        mode: 'horizontal',
+        slideClass: "" + $$.defaultGradientBG + " uiCornerAll " + $$.defaultBorder,
+        sliderCrossClass: $$.hoverGradientBG,
+        slideClassVerticalMode: "uiBlackGradientBG uiBlackBorder uiCornerAll",
+        sliderCrossClassVerticalMode: "uiBlueGradientBG",
+        sliderClass: "uiBlackBorder uiDefaultSliderBG uiCornerAll",
+        sliderLength: 8,
+        sliderTop: -5,
+        sliderLeft: -5,
+        noUserEvent: false,
+        userImageSlider: false,
+        min: 0,
+        max: 100,
+        step: 0.2,
+        animation: true,
         click: $.noop,
-        listBackIndexArr: [],
-        showListItem: null,
-        listWidth: 0,
-        titleBarHTML: '<div class="uiListTitleBar uiNoSelectText"><span></span><span class="uiListBack uiIcon uiBackIcon">Back</span></div>',
-        moreItemHTML: '<span class="uiListMoreBtn uiArrowRightIcon uiSmallIcon"></span>'
+        slide: $.noop,
+        slideLength: 0,
+        slideValue: 0,
+        slideMax: 0,
+        slideBegin: 0,
+        panelHTML: '<div class="uiPanel"></div>',
+        sliderCrossHTML: '<div class="uiSliderCross"></div>',
+        sliderHTML: '<div class="uiSlider"></div>',
+        slideDrag: false
       };
       opts = $.extend(defaults, options);
-      listObj.constructor.__super__.constructor.call(listObj, self, opts);
-      listObj.init();
+      slideObj.constructor.__super__.constructor.call(slideObj, self, opts);
+      slideObj.init();
     }
 
-    List.prototype.init = function() {
-      var listObj;
-      listObj = this;
-      listObj.createWidget();
-      initList(listObj.jqObj, listObj.opts);
-      return listObj;
+    /**
+     * [init description]
+     * @return {[Slide]} [description]
+    */
+
+
+    Slide.prototype.init = function() {
+      var slideObj;
+      slideObj = this;
+      slideObj.createWidget();
+      initSlide(slideObj.jqObj, slideObj.opts);
+      return slideObj;
     };
 
-    return List;
+    /**
+     * [val description]
+     * @param  {[Integer]} {[Optional]} value   [description]
+     * @param  {[Boolean]} {[Optional]} animate [description]
+     * @return {[Slide]}         [description]
+    */
+
+
+    Slide.prototype.val = function(value, animate) {
+      var opts, self, slideObj;
+      slideObj = this;
+      self = slideObj.jqObj;
+      opts = slideObj.opts;
+      if (arguments.length === 0) {
+        return opts.slideValue;
+      }
+      if (arguments.length === 1) {
+        animate = true;
+      }
+      if (!opts.slideDrag) {
+        return setSlide(self, opts, value, animate, true);
+      }
+    };
+
+    /**
+     * [beforeDestroy description]
+     * @return {[Slide]} [description]
+    */
+
+
+    Slide.prototype.beforeDestroy = function() {
+      var opts, self, slideObj;
+      slideObj = this;
+      self = slideObj.jqObj;
+      opts = slideObj.opts;
+      $(docuemnt).off("." + opts.widgetKey);
+      return slideObj;
+    };
+
+    return Slide;
 
   })($$.Widget);
 
-  initList = function(self, opts) {
-    var title, titleBar, ulHeight;
-    title = opts.title || (self.attr('title')) || '';
-    self.addClass("uiList uiWidget " + opts.listClass).children('div:first').addClass('uiListContent');
-    if (title) {
-      titleBar = $(opts.titleBarHTML).addClass(opts.titleBarClass).children('span:first').html(title).end();
-      if (opts.titleIcon) {
-        titleBar.prepend($('<span class="uiTitleIcon" />').addClass(opts.titleIcon));
-      }
-      self.prepend(titleBar);
+  /**
+   * [initSlide description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
+  initSlide = function(self, opts) {
+    var slider, sliderCross;
+    if (opts.mode === 'vertical') {
+      opts.slideClass = opts.slideClassVerticalMode;
+      opts.sliderCrossClass = opts.sliderCrossClassVerticalMode;
     }
-    self.find('li').each(function() {
-      var obj;
-      obj = $(this);
-      obj.addClass(opts.listItemClass);
-      if (obj.attr(opts.indexKey)) {
-        return obj.addClass('uiListMore').prepend(opts.moreItemHTML);
+    slider = $(opts.sliderHTML);
+    sliderCross = $(opts.sliderCrossHTML).addClass(opts.sliderCrossClass);
+    if (opts.userImageSlider) {
+      slider.addClass('uiImageSlider uiIcon uiCicleIcon');
+    } else {
+      slider.addClass(opts.sliderClass);
+    }
+    self.addClass("uiSlide uiWidget uiNoSelectText " + opts.slideClass).append($(opts.panelHTML).append(sliderCross).append(slider));
+    if (opts.userImageSlider) {
+      opts.sliderLength = slider.width();
+    }
+    if (opts.mode === 'vertical') {
+      opts.slideBegin = opts.sliderTop = self.offset().top;
+      slider.css('left', opts.sliderLeft - 1);
+      sliderCross.width('100%');
+      if (!opts.userImageSlider) {
+        slider.width(self.width() - 2 * opts.sliderLeft).height(opts.sliderLength);
+      } else {
+        slider.css('top', -(opts.sliderLength >> 2));
       }
-    });
-    ulHeight = self.height() - $('>.uiListTitleBar', self).outerHeight(true);
-    opts.listWidth = $('>.uiListContent > ul', self).filter(':gt(0)').hide().end().height(ulHeight).width();
-    return initEvent(self, opts);
+    } else {
+      opts.slideBegin = opts.sliderLeft = self.offset().left;
+      slider.css('top', opts.sliderTop - 1);
+      sliderCross.height('100%');
+      if (!opts.userImageSlider) {
+        slider.height(self.height() - 2 * opts.sliderTop).width(opts.sliderLength);
+      } else {
+        self.css('left', -(opts.sliderLength >> 2));
+      }
+      opts.slideLength = self.width();
+    }
+    opts.slideMax = opts.slideLength;
+    if (!opts.userImageSlider) {
+      opts.slideMax -= opts.sliderLength - 2;
+    }
+    if (!opts.noUserEvent) {
+      initEvent(self, opts);
+    }
+    if (opts.slideValue !== 0) {
+      setSlide(self, opts, opts.slideValue);
+    }
+    return null;
   };
 
+  /**
+   * [initEvent description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
   initEvent = function(self, opts) {
-    $('>.uiListTitleBar >.uiListBack', self).on('click.uiList', function(e) {
-      var marginLeftValue, number, obj;
-      number = opts.listBackIndexArr.pop();
-      if (opts.listBackIndexArr.length === 0) {
-        $(this).fadeOut(opts.defaultAnimateDuration);
+    var documentObj, mouseMoveEvent, mouseUpEvent, panelObj;
+    documentObj = $(document);
+    panelObj = $('>.uiPanel', self);
+    panelObj.on('click.uiSlide', function(e) {
+      var beginValue, percent;
+      if ($(e.target).hasClass('uiSlider')) {
+        return false;
       }
-      obj = $('>.uiListContent > ul', self).filter("[" + opts.indexKey + "=\"" + number + "\"]");
-      if (obj.length === 0) return;
-      marginLeftValue = obj.css('marginLeft');
-      return obj.css('marginLeft', -opts.listWidth).show().animate({
-        marginLeft: 0
-      }, opts.defaultAnimateDuration, function() {
-        if (opts.showListItem != null) opts.showListItem.show();
-        return $(this).css('marginLeft', marginLeftValue);
+      if ((opts.click(self, $(this, e))) === false) {
+        return false;
+      }
+      if (opts.mode === 'vertical') {
+        beginValue = e.clientY + documentObj.scrollTop() + self.parent().scrollTop();
+      } else {
+        beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft();
+      }
+      percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax;
+      return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), opts.animation);
+    });
+    panelObj.on('mousewheel.uiSlide', function(e, delta) {
+      var percent, positionStr;
+      positionStr = 'left';
+      if (opts.mode === 'vertical') {
+        positionStr = 'top';
+      }
+      percent = (parseInt($('>.uiSlider', this).css(positionStr))) / opts.slideMax;
+      setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), false);
+      return false;
+    });
+    $('>.uiSlider', panelObj).on('mousedown.uiSlide', function(e) {
+      return opts.slideDrag = true;
+    });
+    mouseMoveEvent = "mousemove." + opts.widgetKey;
+    mouseUpEvent = "mouseup." + opts.widgetKey;
+    documentObj.on({
+      mouseMoveEvent: function(e) {
+        var beginValue, percent;
+        if (opts.slideDrag) {
+          if (opts.mode === 'vertical') {
+            beginValue = e.clientY + documentObj.scrollTop() + self.parent().scrollTop();
+          } else {
+            beginValue = e.clientX + documentObj.scrollLeft() + self.parent().scrollLeft();
+          }
+          percent = (beginValue - opts.slideBegin - (opts.sliderLength >> 1)) / opts.slideMax;
+          return setSlide(self, opts, Math.floor(percent * (opts.max - opts.min) + opts.min), false);
+        }
+      },
+      mouseUpEvent: function(e) {
+        return opts.slideDrag = false;
+      }
+    });
+    return null;
+  };
+
+  /**
+   * [setSlide description]
+   * @param {[jQuery]} self      [description]
+   * @param {[Object]} opts      [description]
+   * @param {[Integer]} value     [description]
+   * @param {[Boolean]} animate   [description]
+   * @param {[Boolean]} jumpToEnd [description]
+  */
+
+
+  setSlide = function(self, opts, value, animate, jumpToEnd) {
+    var obj, percent, props, sliderCross, sliderCrossProps, sliderCrossValue;
+    obj = $('>.uiPanel >.uiSlider', self);
+    if (value == null) {
+      value = 0;
+    }
+    value = value > opts.max ? opts.max : (value < 0 ? 0 : value);
+    opts.slideValue = value;
+    percent = (value - opts.min) / (opts.max - opts.min);
+    value = opts.slideMax * percent;
+    if (opts.userImageSlider && value === 0) {
+      value = -(opts.sliderLength >> 2);
+    }
+    sliderCross = $('>.uiPanel >.uiSliderCross', self);
+    sliderCrossValue = value + 2;
+    if (opts.mode === 'vertical') {
+      props = {
+        top: value
+      };
+      sliderCrossProps = {
+        height: sliderCrossValue
+      };
+    } else {
+      props = {
+        left: value
+      };
+      sliderCrossProps = {
+        width: sliderCrossValue
+      };
+    }
+    if (animate) {
+      obj.stop(true, jumpToEnd).animate(props, opts.animateTime, function() {
+        return opts.slide(self, obj, opts.slideValue);
       });
+      sliderCross.stop(true, jumpToEnd).animate(sliderCrossProps, opts.animateTime);
+    } else {
+      obj.css(props);
+      sliderCross.css(sliderCrossProps);
+      opts.slide(self, obj, opts.slideValue);
+    }
+    return null;
+  };
+
+}).call(this);
+(function() {
+  var $, $$, checkItemViewStatus, initEvent, initTabs,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  $ = window.jQuery;
+
+  $$ = window.BASE;
+
+  /**
+   * [tabs description]
+   * @param  {[Object]} options [description]
+   * @return {[jQuery]}         [description]
+  */
+
+
+  $.fn.tabs = function(options) {
+    var args, result, self;
+    self = this;
+    args = Array.prototype.slice.call(arguments);
+    args.push($$.Tabs);
+    result = $$.createWidgetByJQuery.apply(self, args);
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
+    return result;
+  };
+
+  $$.Tabs = (function(_super) {
+
+    __extends(Tabs, _super);
+
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[Tabs]}         [description]
+    */
+
+
+    function Tabs(self, options) {
+      var defaults, opts, tabsObj;
+      tabsObj = this;
+      if (!(tabsObj instanceof $$.Tabs)) {
+        return new $$.Tabs(self, options);
+      }
+      defaults = {
+        tabsClass: "" + $$.defaultBorder + " uiCornerAll " + $$.defaultBoxShadow,
+        titleBarClass: $$.defaultGradientBG,
+        tabsItemWidth: -1,
+        tabsItemMargin: -1,
+        closableArray: "all",
+        activateIndex: 0,
+        tabsItemHoverClass: $$.hoverGradientBG,
+        tabsItemSelectedClass: "selected",
+        titleList: null,
+        change: $.noop,
+        close: $.noop,
+        leftClick: $.noop,
+        rightClick: $.noop,
+        tabsItemTotal: 0,
+        tabsItemOuterWidth: 0,
+        tabsItemViewTotal: 0,
+        tabsItemViewIndex: 0,
+        titleBarHTML: '<div class="uiTitleBar uiTabsList uiNoSelectText"><div class="uiListContent"><div class="uiTabsItemContainer"></div></div></div>',
+        tabsItemHTML: '<div class="uiTabsItem uiCornerTop"></div>',
+        contentHTML: '<div class="uiContent"></div>',
+        controlHTML: '<div class="uiLeftArrow uiSmallIcon uiArrowLeftIcon"></div><div class="uiRightArrow uiSmallIcon uiArrowRightIcon""></div>',
+        closeHTML: '<div class="uiCloseItemBtn uiSmallIcon uiSmallcloseButtonIcon"></div>'
+      };
+      opts = $.extend(defaults, options);
+      tabsObj.constructor.__super__.constructor.call(tabsObj, self, opts);
+      tabsObj.init();
+    }
+
+    /**
+     * [init description]
+     * @return {[Tabs]} [description]
+    */
+
+
+    Tabs.prototype.init = function() {
+      var tabsObj;
+      tabsObj = this;
+      tabsObj.createWidget();
+      initTabs(tabsObj.jqObj, tabsObj.opts);
+      return tabsObj;
+    };
+
+    /**
+     * [addItem description]
+     * @param {[String, DOM, jQuery]} content [description]
+     * @param {[String]} {[Optional]} title   [description]
+     * @param {[Integer]} {[Optional]} index   [description]
+     * @return {[Tabs]} [description]
+    */
+
+
+    Tabs.prototype.addItem = function(content, title, index) {
+      var contentObj, contentTarget, insertFunc, itemTarget, opts, self, tabsObj;
+      tabsObj = this;
+      self = tabsObj.jqObj;
+      opts = tabsObj.opts;
+      contentObj = $(content);
+      if (title == null) {
+        title = contentObj.attr('title');
+      }
+      if (isNaN(parseInt(index))) {
+        itemTarget = $('> .uiTabsList > .uiListContent > .uiTabsItemContainer', self);
+        contentTarget = self;
+        insertFunc = 'appendTo';
+      } else {
+        itemTarget = ($('> .uiTabsList > .uiListContent > .uiTabsItemContainer > .uiTabsItem', self)).eq(index);
+        contentTarget = (self.childdren('.uiTabsContent')).eq(index);
+        insertFunc = 'insertBefore';
+      }
+      $(opts.tabsItemHTML).html(title + opts.closeHTML)[insertFunc](itemTarget);
+      $(opts.contentHTML).addClass('uiTabsContent uiHidden').append(contentObj)[insertFunc](itemTarget);
+      opts.tabsItemTotal++;
+      return tabsObj;
+    };
+
+    /**
+     * [activate description]
+     * @param  {[Integer]} {[Optional]} index [description]
+     * @return {[Tabs]}       [description]
+    */
+
+
+    Tabs.prototype.activate = function(index) {
+      var opts, self, tabsObj;
+      tabsObj = this;
+      self = tabsObj.jqObj;
+      opts = tabsObj.opts;
+      if (arguments.length === 0) {
+        return opts.activateIndex;
+      }
+      $('>.uiTitleBar >.uiListContent .uiTabsItem', self).eq(index).trigger('click.uiTabs');
+      return tabsObj;
+    };
+
+    /**
+     * [item description]
+     * @param  {[Integer]} {[Optional]} index   [description]
+     * @param  {[String]} {[Optional]} content [description]
+     * @param  {[String]} {[Optional]} title   [description]
+     * @return {[jQuery, Tabs]}         [description]
+    */
+
+
+    Tabs.prototype.item = function(index, content, title) {
+      var item, opts, self, tabsObj, titleBar;
+      tabsObj = this;
+      self = tabsObj.jqObj;
+      opts = tabsObj.opts;
+      if (index == null) {
+        index = 0;
+      }
+      item = $('>.uiTabsContent', self).eq(index);
+      titleBar = $('> .uiTabsList > .uiListContent > .uiTabsItemContainer >.uiTabsItem', self).eq(index);
+      if (typeof content === 'undefined') {
+        return item;
+      }
+      if (content != null) {
+        item.html(content);
+      }
+      if (typeof title === 'undefined') {
+        return titleBar;
+      }
+      titleBar.html(title);
+      return tabsObj;
+    };
+
+    return Tabs;
+
+  })($$.Widget);
+
+  /**
+   * [initTabs description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
+  initTabs = function(self, opts) {
+    var contentObj, selfHeight, tabsItemList, titleBarHeight, titleBarObj;
+    titleBarObj = $(opts.titleBarHTML).addClass(opts.titleBarClass).append(opts.controlHTML);
+    self.addClas("uiTabs uiWidget " + opts.tabsClass).children().each(function(n) {
+      var closeHTML, contentObj, title;
+      closeHTML = '';
+      if (opts.closableArray === 'all' || (($.isArray(opts.closableArray)) && ($.inArray(n, opts.closableArray)) !== -1)) {
+        closeHTML = opts.closeHTML;
+      }
+      contentObj = ($(this)).addClass('uiTabsContent uiHidden');
+      if ($.isArray(opts.titleList)) {
+        title = opts.titleList[n];
+      }
+      if (title == null) {
+        title = content.attr('title');
+      }
+      $(opts.tabsItemHTML).html(title + closeHTML).appendTo($('>.uiListContent >.uiTabsItemContainer', titleBarObj));
+      return opts.tabsItemTotal++;
     });
-    return $('>.uiListContent > ul', self).on('click.uiList mouseover.uiList mouseout.uiList', function(e) {
-      var currentNumber, currentObj, jQueryProp, marginLeftValue, number, obj, target;
+    self.prepend(titleBarObj);
+    tabsItemList = $('> .uiTabsList > .uiListContent .uiTabsItem', self);
+    if (opts.tabsItemWidth > 0) {
+      tabsItemList.width(opts.tabsItemWidth);
+    }
+    if (opts.tabsItemMargin > -1) {
+      tabsItemList.css('marginLeft', opts.tabsItemMargin);
+    }
+    opts.tabsItemOuterWidth = tabsItemList.outerWidth(true);
+    opts.tabsItemViewTotal = Math.floor(($('>.uiTabsList', self)).width() / opts.tabsItemOuterWidth);
+    if (opts.tabsItemTotal > opts.tabsItemViewTotal) {
+      $('> .uiTitleBar > .uiRightArrow', self).show();
+    }
+    selfHeight = self.height();
+    titleBarHeight = titleBarObj.height();
+    if (selfHeight > titleBarHeight) {
+      contentObj = self.children('.uiTabsContent');
+      contentObj.height(selfHeight - titleBarHeight - (parseInt(contentObj.css('marginTop'))) - (parseInt(contentObj.css('marginBotto'))));
+    }
+    initEvent(self, opts);
+    return null;
+  };
+
+  /**
+   * [initEvent description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
+  initEvent = function(self, opts) {
+    $('> .uiTabsList > .uiListContent > .uiTabsItemContainer', self).on('click.uiTabs', function(e) {
+      var content, index, nextObj, obj, target;
       target = $(e.target);
-      jQueryProp = self.prop ? 'prop' : 'attr';
-      if (target[jQueryProp]('tagName').toUpperCase() !== 'LI') {
-        target = target.parent();
-      }
-      if (event.type === 'click') {
-        if (target.hasClass('uiListMore')) {
-          number = target.attr(opts.indexKey);
-          currentObj = $(this);
-          currentNumber = currentObj.attr(opts.indexKey);
-          obj = currentObj.siblings("[" + opts.indexKey + "=\"" + number + "\"]").show();
-          if (obj.length === 0) return;
-          $('>.uiListTitleBar >.uiListBack', self).fadeIn(opts.defaultAnimateDuration);
-          opts.listBackIndexArr.push(currentNumber);
-          marginLeftValue = currentObj.css('marginLeft');
-          return currentObj.animate({
-            marginLeft: -opts.listWidth
-          }, opts.defaultAnimateDuration, function() {
-            opts.showListItem = obj;
-            return $(this).hide().css('marginLeft', marginLeftValue);
-          });
+      if (target.hasClass('uiCloseItemBtn')) {
+        obj = target.parent('.uiTabsItem');
+        if ((opts.close(self, obj, e)) === false) {
+          return false;
+        }
+        nextObj = obj.next();
+        if (nextObj.length !== 0) {
+          nextObj.click();
         } else {
-          target.removeClass(opts.listItemHoverClass).addClass(opts.listItemSelectedClass);
-          target.siblings("." + opts.listItemSelectedClass).toggleClass("" + opts.listItemClass + " " + opts.listItemSelectedClass);
-          return opts.click(self, target, e);
+          obj.prev().click();
         }
-      } else if (event.type === 'mouseover') {
-        if (target.hasClass(opts.listItemClass)) {
-          return target.removeClass(opts.listItemClass).addClass(opts.listItemHoverClass);
+        index = obj.index();
+        self.children('.uiTabsContent').eq(index).remove();
+        obj.remove();
+        opts.tabsItemTotal--;
+        checkItemViewStatus(self, opts);
+        return false;
+      } else if (target.hasClass('uiTabsItem')) {
+        index = target.addClass(opts.tabsItemSelectedClass).siblings('.selected').removeClass(opts.tabsItemSelectedClass).end().index();
+        content = (self.children('.uiTabsContent')).eq(index);
+        if ((opts.change(self, target, content, e)) === false) {
+          return false;
         }
-      } else if (event.type === 'mouseout') {
-        if (target.hasClass(opts.listItemHoverClass)) {
-          return target.removeClass(opts.listItemHoverClass).addClass(opts.listItemClass);
-        }
+        content.removeClass('uiHidden').siblings('.uiTabsContent').addClass('uiHidden');
+        return opts.activateIndex = index;
       }
     });
+    $('>.uiTitleBar', self).on('click.uiTabs', function(e) {
+      var clickFunc, scrollLeftValue, target;
+      target = $(e.target);
+      if (target.hasClass('uiRightArrow')) {
+        clickFunc = 'rightClick';
+        opts.tabsItemViewIndex++;
+      } else if (target.hasClass('uiLeftArrow')) {
+        clickFunc = 'leftClick';
+        opts.tabsItemViewIndex--;
+      }
+      if (opts.tabsItemViewIndex < 0) {
+        opts.tabsItemViewIndex = 0;
+        return;
+      } else if (opts.tabsItemTotal - opts.tabsItemViewTotal < opts.tabsItemViewIndex) {
+        opts.tabsItemViewIndex = opts.tabsItemTotal - opts.tabsItemViewTotal;
+        return;
+      }
+      if (clickFunc != null) {
+        if ((opts[clickFunc](self, target, e)) === false) {
+          return false;
+        }
+        scrollLeftValue = opts.tabsItemOuterWidth * opts.tabsItemViewIndex;
+        target.siblings('.uiListContent').stop().animate({
+          left: -scrollLeftValue
+        }, opts.animateTime);
+        return checkItemViewStatus(self, opts);
+      }
+    });
+    $('>.uiTabsList', self).on('mousewheel.uiTabs', function(e, delta) {
+      if (delta > 0) {
+        $('>.uiLeftArrow', this).click();
+      } else {
+        $('>.uiRightArrow', this).click();
+      }
+      return false;
+    });
+    $('> .uiTabsList > .uiListContent > .uiTabsItemContainer > .uiTabsItem', self).hover(function() {
+      return $(this).addClass(opts.tabsItemHoverClass);
+    }, function() {
+      return $(this).removeClass(opts.tabsItemHoverClass);
+    });
+    return null;
+  };
+
+  /**
+   * [checkItemViewStatus description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
+
+  checkItemViewStatus = function(self, opts) {
+    var arrowLeftObj, arrowRightObj;
+    arrowRightObj = $('> .uiTitleBar > .uiRightArrow', self);
+    arrowLeftObj = $('> .uiTitleBar > .uiLeftArrow', self);
+    if (opts.tabsItemTotal - opts.tabsItemViewTotal <= opts.tabsItemViewIndex) {
+      arrowRightObj.hide();
+    } else {
+      arrowRightObj.show();
+    }
+    if (opts.tabsItemViewIndex <= 0) {
+      arrowLeftObj.hide();
+    } else {
+      arrowLeftObj.show();
+    }
+    return null;
   };
 
 }).call(this);
 (function() {
   var $, $$, initEvent, initTip, setPosition,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = window.jQuery;
 
   $$ = window.BASE;
+
+  /**
+   * [tip description]
+   * @param  {[Object]} {[Optional]} options [description]
+   * @return {[jQuery]}         [description]
+  */
+
 
   $.fn.tip = function(options) {
     var args, result, self;
@@ -2704,7 +3863,9 @@
     args = Array.prototype.slice.call(arguments);
     args.push($$.Tip);
     result = $$.createWidgetByJQuery.apply(self, args);
-    if ((result.jqObj != null) && options !== 'widget') return self;
+    if ((result.jqObj != null) && options !== 'widget') {
+      return self;
+    }
     return result;
   };
 
@@ -2712,12 +3873,20 @@
 
     __extends(Tip, _super);
 
-    Tip.name = 'Tip';
+    /**
+     * [constructor description]
+     * @param  {[jQuery]} self    [description]
+     * @param  {[Object]} {[Optional]} options [description]
+     * @return {[Tip]}         [description]
+    */
+
 
     function Tip(self, options) {
       var defaults, opts, tipObj;
       tipObj = this;
-      if (!(tipObj instanceof $$.Tip)) return new $$.Tip(self, options);
+      if (!(tipObj instanceof $$.Tip)) {
+        return new $$.Tip(self, options);
+      }
       defaults = {
         tipClass: 'uiCornerAll',
         borderColor: '#315389',
@@ -2746,6 +3915,12 @@
       tipObj.init();
     }
 
+    /**
+     * [init description]
+     * @return {[Tip]} [description]
+    */
+
+
     Tip.prototype.init = function() {
       var tipObj;
       tipObj = this;
@@ -2754,17 +3929,36 @@
       return tipObj;
     };
 
+    /**
+     * [content description]
+     * @param  {[String]} {[Optional]} content       [description]
+     * @param  {[Boolean]} {[Optional]} resetPosition [description]
+     * @return {[Tip]}               [description]
+    */
+
+
     Tip.prototype.content = function(content, resetPosition) {
       var contentObj, opts, self, tipObj;
       tipObj = this;
       self = tipObj.jqObj;
       opts = tipObj.opts;
       contentObj = self.children('.uiTipContent');
-      if (!content) return contentObj;
+      if (!content) {
+        return contentObj;
+      }
       contentObj.html(content);
-      if (resetPosition === true) setPosition(self, opts);
+      if (resetPosition === true) {
+        setPosition(self, opts);
+      }
       return tipObj;
     };
+
+    /**
+     * [arrowPosition description]
+     * @param  {[Integer]} {[Optional]} value [description]
+     * @return {[Integer, Tip]}       [description]
+    */
+
 
     Tip.prototype.arrowPosition = function(value) {
       var arrowList, opts, self, tipObj;
@@ -2772,7 +3966,9 @@
       self = tipObj.jqObj;
       opts = tipObj.opts;
       arrowList = self.children('.uiTipArrowStyle1, .uiTipArrowStyle2');
-      if (arguments.length === 0) return opts.positionValue;
+      if (arguments.length === 0) {
+        return opts.positionValue;
+      }
       if (opts.tipStyle === 1) {
         arrowList.css('left', value);
       } else {
@@ -2781,6 +3977,12 @@
       opts.positionValue = value;
       return tipObj;
     };
+
+    /**
+     * [beforeDestroy description]
+     * @return {[Tip]} [description]
+    */
+
 
     Tip.prototype.beforeDestroy = function() {
       var opts, self, tipObj;
@@ -2794,6 +3996,13 @@
     return Tip;
 
   })($$.Widget);
+
+  /**
+   * [initTip description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
 
   initTip = function(self, opts) {
     var contentObj, cssShow, tip;
@@ -2822,8 +4031,18 @@
       return setPosition(self, opts);
     });
     initEvent(self, opts);
-    if (opts.alawayshow === false) return self.hide();
+    if (opts.alawayshow === false) {
+      self.hide();
+    }
+    return null;
   };
+
+  /**
+   * [initEvent description]
+   * @param  {[jQuery]} self [description]
+   * @param  {[Object]} opts [description]
+  */
+
 
   initEvent = function(self, opts) {
     var targetObj;
@@ -2833,27 +4052,41 @@
         targetObj.on("mouseenter." + opts.widgetKey, function(e) {
           var target;
           target = $(this);
-          if ((opts.beforeShow(self, target, e)) === false) return false;
+          if ((opts.beforeShow(self, target, e)) === false) {
+            return false;
+          }
           return self.stop(true, true)[opts.showAnimate](opts.animateTime, function() {
             return opts.show(self, target, e);
           });
         });
-        return targetObj.on("mouseleave." + opts.widgetKey, function(e) {
+        targetObj.on("mouseleave." + opts.widgetKey, function(e) {
           var target;
           target = $(this);
-          if ((opts.beforeHide(self, target, e)) === false) return false;
+          if ((opts.beforeHide(self, target, e)) === false) {
+            return false;
+          }
           return self.stop(true, true)[opts.hideAnimate](opts.animateTime, function() {
             return opts.hide(self, target, e);
           });
         });
       }
     }
+    return null;
   };
+
+  /**
+   * [setPosition description]
+   * @param {[jQuery]} self [description]
+   * @param {[Object]} opts [description]
+  */
+
 
   setPosition = function(self, opts) {
     var arrow1, arrow1LeftValue, arrow1TopValue, arrow2, arrow2LeftValue, arrow2TopValue, arrowList, leftValue, setting, targetHeight, targetObj, targetObjOffset, targetWidth, tipHeight, tipWidth, topValue;
     targetObj = opts.targetObj;
-    if (targetObj.length === 0) return;
+    if (targetObj.length === 0) {
+      return null;
+    }
     targetObjOffset = targetObj.offset();
     leftValue = targetObjOffset.left;
     topValue = targetObjOffset.top;
@@ -2935,10 +4168,11 @@
       top: arrow1TopValue,
       left: arrow1LeftValue
     });
-    return arrow2.css({
+    arrow2.css({
       top: arrow2TopValue,
       left: arrow2LeftValue
     });
+    return null;
   };
 
 }).call(this);

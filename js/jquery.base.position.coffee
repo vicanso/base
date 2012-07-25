@@ -22,11 +22,9 @@ class $$.Position
     if not (positionObj instanceof $$.Position)
       return new $$.Position self, options
     positionObj.opts = {};
-
     defaults =
       returnOldPos : false
       oldPos : null
-    
     $.extend positionObj.opts, defaults, options
     positionObj.jqObj = self;
   ###*

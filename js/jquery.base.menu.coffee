@@ -29,7 +29,6 @@ class $$.Menu extends $$.Widget
       topMenuClass : $$.defaultGradientBG
       subMenuClass : "#{$$.defaultGradientBG} uiCornerAll #{$$.defaultBorder}"
       hoverClass : $$.hoverGradientBG
-    
     opts = $.extend defaults, options
     menuObj.constructor.__super__.constructor.call menuObj, self, opts
     menuObj.init()

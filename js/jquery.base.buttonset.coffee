@@ -13,7 +13,6 @@ $.fn.buttonSet = (options) ->
   if result.jqObj? and options isnt 'widget'
     return self
   return result
-
 class $$.ButtonSet extends $$.Widget
   ###*
    * [constructor description]

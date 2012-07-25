@@ -27,14 +27,14 @@ class RandomString
   ###
   getRandomChar :() ->
     @legalCharList[Math.floor Math.random() * @legalListLength]
-
+    
 $.extend $$, {
   version :"0.8.1"
   msie6 :$.browser.msie && $.browser.version == "6.0"
   defaultAnimateDuration :300
-  defaultBorder :"uiBlueBorder"
-  defaultBoxShadow :"uiBlueBoxShadow"
-  defaultGradientBG :"uiBlueGradientBG"
+  defaultBorder :"uiBlackBorder"
+  defaultBoxShadow :"uiBlackBoxShadow"
+  defaultGradientBG :"uiBlackGradientBG"
   hoverGradientBG :"uiLightBlueGradientBG"
   selectedGradientBG :"uiRedGradientBG"
   cssShow :

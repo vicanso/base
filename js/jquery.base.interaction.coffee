@@ -12,7 +12,6 @@ class Interaction
     interactionObj = @
     interactionObj.jqObj = self
     interactionObj.opts = {}
-
     defaults =
       disable : false
       getUserMask : null

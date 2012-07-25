@@ -23,7 +23,6 @@ getRGB = (color) ->
     return [parseInt(result[1] + result[1], 16), parseInt(result[2] + result[2], 16), parseInt(result[3] + result[3], 16)];
   if result = /rgba\(0, 0, 0, 0\)/.exec color
     return colors['transparent'];
-
   return colors[($.trim color).toLowerCase()];
 getColor = (elem, attr) ->
   while elem?

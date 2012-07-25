@@ -20,7 +20,9 @@
 
   getRGB = function(color) {
     var result;
-    if (color && color.constructor === Array && color.length === 3) return color;
+    if (color && color.constructor === Array && color.length === 3) {
+      return color;
+    }
     if (result = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(color)) {
       return [parseInt(result[1], 10), parseInt(result[2], 10), parseInt(result[3], 10)];
     }
@@ -33,7 +35,9 @@
     if (result = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(color)) {
       return [parseInt(result[1] + result[1], 16), parseInt(result[2] + result[2], 16), parseInt(result[3] + result[3], 16)];
     }
-    if (result = /rgba\(0, 0, 0, 0\)/.exec(color)) return colors['transparent'];
+    if (result = /rgba\(0, 0, 0, 0\)/.exec(color)) {
+      return colors['transparent'];
+    }
     return colors[($.trim(color)).toLowerCase()];
   };
 
