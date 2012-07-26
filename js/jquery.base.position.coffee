@@ -117,3 +117,4 @@ setPosByObject = (self, pos) ->
     posSetting.position = "fixed"
   self.css posSetting
   return null
+  

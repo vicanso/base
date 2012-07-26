@@ -67,3 +67,4 @@ initEvent = (self, opts) ->
   ,() ->
     $(@).removeClass opts.hoverClass
   return null
+  

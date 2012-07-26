@@ -123,3 +123,4 @@ initEvent = (self, opts) ->
       if target.hasClass opts.listItemHoverClass
         target.removeClass(opts.listItemHoverClass).addClass opts.listItemClass
   return null
+

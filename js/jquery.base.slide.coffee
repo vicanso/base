@@ -210,3 +210,4 @@ setSlide = (self, opts, value, animate, jumpToEnd) ->
     sliderCross.css sliderCrossProps
     opts.slide self, obj, opts.slideValue
   return null
+  

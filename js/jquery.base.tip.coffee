@@ -240,3 +240,4 @@ setPosition = (self, opts) ->
     left : arrow2LeftValue
   }
   return null
+  

@@ -128,3 +128,4 @@ widgetDestroy = (widget, revert) ->
   self.remove()
   delete opts.clone
   opts = null
+

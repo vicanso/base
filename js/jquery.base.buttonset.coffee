@@ -329,4 +329,3 @@ setStatusClass = (obj, opts, statusClass) ->
 removeStatusClass = (obj, opts, statusClass) ->
   getOriginClass obj, opts, statusClass
   return null
-

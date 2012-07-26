@@ -124,3 +124,4 @@ $.extend $$, {
       widgetObj = new constructor self, options
     return self
 }
+

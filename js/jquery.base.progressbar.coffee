@@ -105,3 +105,4 @@ initProgressBar = (self, opts) ->
     progressValue.append obj
   opts.progressBarLength = self.addClass("uiProgressBar uiWidget #{opts.progressBarClass}").append(progressValue).width()
   return null
+  

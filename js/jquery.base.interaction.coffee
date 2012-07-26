@@ -309,4 +309,3 @@ class $$.Resizable extends Interaction
         outerOffset = (content.outerHeight true) - content.height()
         content.height height - otherItemHeightTotal - outerOffset
         return null
-

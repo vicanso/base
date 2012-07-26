@@ -32,3 +32,4 @@ getColor = (elem, attr) ->
     attr = "backgroundColor";
     elem = elem.parentNode
   return getRGB color
+  

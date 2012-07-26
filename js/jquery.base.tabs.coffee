@@ -233,3 +233,4 @@ checkItemViewStatus = (self, opts) ->
   else
     arrowLeftObj.show()
   return null
+  
